@@ -78,6 +78,9 @@ export default {
     },
     uid() {
       return this.$store.getters.uid
+    },
+    we() {
+      return alert(1)
     }
   },
 

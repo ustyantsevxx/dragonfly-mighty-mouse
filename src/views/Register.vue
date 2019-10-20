@@ -80,7 +80,7 @@ export default {
       return this.$store.getters.uid
     },
     we() {
-      return alert(1)
+      return alert(1);
     }
   },
 

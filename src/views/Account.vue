@@ -80,6 +80,7 @@ export default {
     }
   },
 
+
   methods: {
     updateData() {
       this.$store.dispatch('updateData', {

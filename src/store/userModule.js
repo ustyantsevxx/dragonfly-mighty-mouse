@@ -117,12 +117,12 @@ const actions = {
   },
 
   // смена пароля
-  async updatePassword({ commit }, password) {
+  async updatePassword({ commit, state }, passwords) {
     try {
-      let user = firebase.auth().currentUser
-      await user.updatePassword(password)
+      let user = await firebase.auth().signInWithEmailAndPassword(state.email, passwords.old)
+      await firebase.auth().currentUser.updatePassword(passwords.new)
 
-      commit('setAuthData', user)
+      commit('setAuthData', user.user)
       commit('setSuccess', 'Пароль успешно изменен.')
     }
 

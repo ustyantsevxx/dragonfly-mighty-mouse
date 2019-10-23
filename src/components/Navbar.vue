@@ -11,7 +11,7 @@
           <b-nav-item to="/register">Регистрация</b-nav-item>
         </template>
         <template v-else>
-          <b-nav-item to="/account">{{`${name} ${surname}`}}</b-nav-item>
+          <b-nav-item to="/account">{{name + ' ' + surname}}</b-nav-item>
           <b-nav-item @click="signOut">Выйти</b-nav-item>
         </template>
       </b-navbar-nav>
@@ -32,6 +32,7 @@ export default {
       return this.$store.getters.signed
     }
   },
+
   methods: {
     signOut() {
       this.$store.dispatch('signOut')
@@ -39,6 +40,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

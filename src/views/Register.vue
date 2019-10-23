@@ -76,17 +76,14 @@ export default {
     loading() {
       return this.$store.getters.loading
     },
-    uid() {
-      return this.$store.getters.uid
+    signed() {
+      return this.$store.getters.signed
     },
-    we() {
-      return alert(1);
-    }
   },
 
   watch: {
-    uid() {
-      if (this.uid !== null)
+    signed() {
+      if (this.signed)
         this.$router.replace('/')
     }
   },

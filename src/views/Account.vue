@@ -36,38 +36,25 @@
         </b-card>
       </b-col>
       <b-col lg="5" xl="4">
-        <b-card class="p-3">
-          <h1>Смена пароля</h1>
-          <hr />
-          <b-form>
-            <b-form-group label="Старый пароль" label-for="old-pass-field">
-              <b-form-input id="old-pass-field" required />
-            </b-form-group>
-
-            <b-form-group label="Новый пароль" label-for="new-pass-field">
-              <b-form-input id="new-pass-field" required v-model="newPassword" />
-            </b-form-group>
-
-            <b-form-group label="Новый пароль еще раз" label-for="confirm-new-pass-field">
-              <b-form-input id="confirm-new-pass-field" required />
-            </b-form-group>
-
-            <b-btn variant="info" block @click="updatePassword">Сохранить</b-btn>
-          </b-form>
-        </b-card>
+        <password-change />
       </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
+import PasswordChange from '../components/PasswordChange';
+
 export default {
+  components: {
+    PasswordChange
+  },
+
   data() {
     return {
       name: '',
       surname: '',
-      email: '',
-      newPassword: ''
+      email: ''
     }
   },
 
@@ -88,9 +75,6 @@ export default {
         surname: this.surname
       })
     },
-    updatePassword() {
-      this.$store.dispatch('updatePassword', this.newPassword)
-    },
     verifyEmail() {
       this.$store.dispatch('verifyEmail')
     }
@@ -106,7 +90,4 @@ export default {
 </script>
 
 <style>
-.badge {
-  cursor: pointer;
-}
 </style>

@@ -83,8 +83,10 @@ export default {
 
   watch: {
     signed() {
-      if (this.signed)
+      if (this.signed) {
         this.$router.replace('/')
+        this.$store.commit('unsetLoading')
+      }
     }
   },
 }

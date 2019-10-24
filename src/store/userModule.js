@@ -64,8 +64,10 @@ const actions = {
         })
     }
 
-    catch (err) { commit('setError', err.message) }
-    finally { commit('unsetLoading') }
+    catch (err) {
+      commit('setError', err.message)
+      commit('unsetLoading')
+    }
   },
 
   // вход
@@ -76,8 +78,10 @@ const actions = {
       await firebase.auth().signInWithEmailAndPassword(opt.email, opt.password)
     }
 
-    catch (err) { commit('setError', err.message) }
-    finally { commit('unsetLoading') }
+    catch (err) {
+      commit('setError', err.message)
+      commit('unsetLoading')
+    }
   },
 
   // выход

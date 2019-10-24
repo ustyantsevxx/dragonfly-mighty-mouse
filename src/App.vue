@@ -54,7 +54,7 @@ export default {
 }
 
 * {
-  font-family: "Source Sans";
+  font-family: "Source Sans", sans-serif;
 }
 
 #app {

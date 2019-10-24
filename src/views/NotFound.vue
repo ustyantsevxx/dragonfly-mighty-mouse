@@ -1,6 +1,6 @@
 <template>
   <main>
-    <h1 id="msg">404</h1>
+    <h1 id="msg">Запрашиваемого пути не существует</h1>
   </main>
 </template>
 
@@ -15,7 +15,7 @@ export default {
 main {
   width: 100%;
   height: 100%;
-  z-index: -100;
+  z-index: 312;
   position: absolute;
   top: 0;
 
@@ -27,15 +27,16 @@ main {
     top: 50%;
     left: 50%;
     margin: 0;
+    white-space: nowrap;
     transform: translate(-50%, -50%);
-    font-size: 5vw;
+    font-size: 3vw;
   }
 }
 
 @media only screen and (max-width: 768px) {
   main {
     #msg {
-      font-size: 8vw;
+      font-size: 4vw;
       white-space: nowrap;
     }
   }

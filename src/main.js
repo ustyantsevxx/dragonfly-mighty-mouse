@@ -12,6 +12,12 @@ import './plugins/bootstrap-vue'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
+// form validation
+import Vuelidate from 'vuelidate'
+Vue.use(Vuelidate)
+
+
+
 Vue.config.productionTip = false
 
 let app = null
@@ -29,7 +35,8 @@ firebase.initializeApp({
 
 firebase.auth().onAuthStateChanged(async user => {
   let userData
-  if (user) userData = await firebase.firestore().collection('users').doc(user.uid).get()
+  if (user)
+    userData = await firebase.firestore().collection('users').doc(user.uid).get()
 
   store.commit('setAuthData', user)
   store.commit('setUserData', userData ? userData.data() : null)

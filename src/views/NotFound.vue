@@ -21,9 +21,6 @@ main {
 
   #msg {
     position: absolute;
-    background-color: #343a40;
-    color: white;
-    font-family: "Lucida Console";
     top: 50%;
     left: 50%;
     margin: 0;
@@ -33,7 +30,7 @@ main {
   }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 576px) {
   main {
     #msg {
       font-size: 4vw;

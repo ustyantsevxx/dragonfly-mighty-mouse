@@ -20,6 +20,10 @@
                   <template v-else>Войти</template>
                 </b-button>
               </div>
+              <!-- todo: лучше для этого сделать отдельный комп. чтобы нормально отображать загрузку и прочее.. -->
+              <div class="mt-2">
+                <b-link @click.prevent="recoverPassword">Забыли пароль?</b-link>
+              </div>
             </b-form>
           </b-card>
         </b-col>
@@ -35,7 +39,6 @@ export default {
     return {
       email: null,
       password: null,
-      show: false
     }
   },
 
@@ -44,6 +47,11 @@ export default {
       this.$store.dispatch('signIn', {
         email: this.email,
         password: this.password
+      })
+    },
+    recoverPassword() {
+      this.$store.dispatch('recoverPassword', {
+        email: this.email
       })
     }
   },

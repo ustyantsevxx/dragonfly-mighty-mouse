@@ -84,6 +84,22 @@ const actions = {
     }
   },
 
+  // восстановление пароля
+  async recoverPassword({ commit }, opt) {
+    commit('setLoading')
+
+    try {
+      await firebase.auth().sendPasswordResetEmail(opt.email)
+      commit('setSuccess', 'Ссылка востановления отправлена.')
+      commit('unsetLoading')
+    }
+
+    catch (err) {
+      commit('setError', err.message)
+      commit('unsetLoading')
+    }
+  },
+
   // выход
   async signOut() {
     await firebase.auth().signOut()

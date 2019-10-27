@@ -6,7 +6,7 @@
           <b-card class="p-3">
             <h2 class="mb-4 text-center">Регистрация</h2>
             <b-form @submit.prevent="signUp">
-              <b-form-group label="Ваше имя" label-for="name-field">
+              <b-form-group label="Имя" label-for="name-field">
                 <b-form-input
                   id="name-field"
                   :state="$v.name.$dirty ? !$v.name.$error : null"
@@ -14,7 +14,7 @@
                 />
               </b-form-group>
 
-              <b-form-group label="Ваша фамилия" label-for="surname-field">
+              <b-form-group label="Фамилия" label-for="surname-field">
                 <b-form-input
                   id="surname-field"
                   :state="$v.surname.$dirty ? !$v.surname.$error : null"
@@ -22,7 +22,7 @@
                 />
               </b-form-group>
 
-              <hr />
+              <hr class="mt-4" />
 
               <b-form-group label="Эл. почта" label-for="email-field">
                 <b-form-input

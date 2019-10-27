@@ -1,0 +1,10 @@
+$secondary:    #adb5bd;
+$success:   #1db954;
+$warning:   #fb6340 ;
+$danger:  #f5365c;
+$light:#f6f9fc;
+$dark: #191414;
+
+
+@import '../../node_modules/bootstrap/scss/bootstrap';
+@import '../../node_modules/bootstrap-vue/src/index.scss';

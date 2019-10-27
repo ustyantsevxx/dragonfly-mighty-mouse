@@ -33,7 +33,8 @@ let router = new Router({
       path: '*',
       component: () => import('./views/NotFound')
     }
-  ]
+  ],
+  scrollBehavior: () => ({ x: 0, y: 0 })
 })
 
 router.beforeEach((to, from, next) => {

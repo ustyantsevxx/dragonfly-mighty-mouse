@@ -7,6 +7,7 @@ import store from './store'
 
 // bootstrap
 import './plugins/bootstrap-vue'
+import './plugins/bv-custom.scss'
 
 // firebase
 import firebase from 'firebase/app'

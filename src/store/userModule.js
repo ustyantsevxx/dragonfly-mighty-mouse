@@ -51,7 +51,7 @@ const mutations = {
 const actions = {
   // регистрация
   async signUp({ commit }, opt) {
-    commit('setLoading')
+    commit('setLoading', 'registerBtn')
 
     try {
       let creds = await firebase.auth().createUserWithEmailAndPassword(opt.email, opt.password)
@@ -72,7 +72,7 @@ const actions = {
 
   // вход
   async signIn({ commit }, opt) {
-    commit('setLoading')
+    commit('setLoading', 'loginBtn')
 
     try {
       await firebase.auth().signInWithEmailAndPassword(opt.email, opt.password)
@@ -120,6 +120,8 @@ const actions = {
   // смена данных
   async updateData({ commit, state }, data) {
     try {
+      commit('setLoading', 'updateDataBtn')
+
       await firebase.firestore()
         .collection('users')
         .doc(state.uid)
@@ -139,6 +141,8 @@ const actions = {
   // смена пароля
   async updatePassword({ commit, state }, passwords) {
     try {
+      commit('setLoading', 'updatePassBtn')
+
       let user = await firebase.auth().signInWithEmailAndPassword(state.email, passwords.old)
       await firebase.auth().currentUser.updatePassword(passwords.new)
 

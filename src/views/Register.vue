@@ -55,16 +55,15 @@
               </b-form-group>
 
               <div class="mt-4">
-                <b-button
+                <btn-loader
                   size="lg"
-                  :disabled="loading || $v.$invalid"
+                  :disabled="$v.$invalid"
                   type="submit"
                   variant="success"
                   block
-                >
-                  <b-spinner v-if="loading" />
-                  <template v-else>Зарегистрироваться</template>
-                </b-button>
+                  load="registerBtn"
+                  or="Зарегистрироваться"
+                />
               </div>
             </b-form>
           </b-card>
@@ -76,8 +75,10 @@
 
 <script>
 import { minLength, required, email, sameAs } from 'vuelidate/lib/validators'
+import BtnLoader from '../components/BtnLoader'
 
 export default {
+  components: { BtnLoader },
   data() {
     return {
       name: null,
@@ -122,8 +123,8 @@ export default {
   },
 
   computed: {
-    loading() {
-      return this.$store.getters.loading
+    loadingView() {
+      return this.$store.getters.loadingView
     },
     signed() {
       return this.$store.getters.signed

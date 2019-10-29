@@ -1,5 +1,6 @@
 const state = {
   loading: false,
+  loadingView: null,
   error: null,
   success: null
 }
@@ -8,13 +9,21 @@ const state = {
 const getters = {
   error: state => state.error,
   success: state => state.success,
-  loading: state => state.loading
+  loading: state => state.loading,
+  loadingView: state => state.loadingView
 }
 
 
 const mutations = {
-  setLoading: state => state.loading = true,
-  unsetLoading: state => state.loading = false,
+  setLoading: (state, view) => {
+    state.loading = true
+    state.loadingView = view
+  },
+
+  unsetLoading: state => {
+    state.loading = false
+    state.loadingView = null
+  },
 
   setSuccess: (state, msg) => state.success = msg,
   unsetSuccess: state => state.success = null,

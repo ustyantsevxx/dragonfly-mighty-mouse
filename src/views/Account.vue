@@ -31,10 +31,18 @@
               <b-form-input id="email-field" required placeholder="Ваша почта" v-model="email" />
             </b-form-group>
 
-            <b-btn variant="success" block class="mt-2" @click="updateData">Сохранить</b-btn>
+            <btn-loader
+              variant="success"
+              block
+              class="mt-2"
+              @click="updateData"
+              load="updateDataBtn"
+              or="Сохранить"
+            />
           </b-form>
         </b-card>
       </b-col>
+
       <b-col lg="5" xl="4">
         <password-change />
       </b-col>
@@ -43,11 +51,13 @@
 </template>
 
 <script>
-import PasswordChange from '../components/PasswordChange';
+import PasswordChange from '../components/PasswordChange'
+import BtnLoader from '../components/BtnLoader'
 
 export default {
   components: {
-    PasswordChange
+    PasswordChange,
+    BtnLoader
   },
 
   data() {

@@ -15,10 +15,14 @@
               </b-form-group>
 
               <div class="mt-4">
-                <b-button size="lg" :disabled="loading" type="submit" variant="primary" block>
-                  <b-spinner v-if="loading" small class="align-middle" />
-                  <template v-else>Войти</template>
-                </b-button>
+                <btn-loader
+                  size="lg"
+                  type="submit"
+                  variant="primary"
+                  block
+                  load="loginBtn"
+                  or="Войти"
+                />
               </div>
               <!-- todo: лучше для этого сделать отдельный комп. чтобы нормально отображать загрузку и прочее.. -->
               <div class="mt-2">
@@ -33,8 +37,11 @@
 </template>
 
 <script>
+import BtnLoader from '../components/BtnLoader'
 
 export default {
+  components: { BtnLoader },
+
   data() {
     return {
       email: null,
@@ -57,8 +64,8 @@ export default {
   },
 
   computed: {
-    loading() {
-      return this.$store.getters.loading
+    loadingView() {
+      return this.$store.getters.loadingView
     },
     signed() {
       return this.$store.getters.signed

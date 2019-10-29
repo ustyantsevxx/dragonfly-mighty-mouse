@@ -27,13 +27,18 @@
         />
       </b-form-group>
 
-      <b-btn variant="info" block @click="updatePassword">Сохранить</b-btn>
+      <btn-loader variant="info" block @click="updatePassword" load="updatePassBtn" or="Сохранить" />
     </b-form>
   </b-card>
 </template>
 
 <script>
+import BtnLoader from '../components/BtnLoader';
+
 export default {
+  components: {
+    BtnLoader
+  },
   data() {
     return {
       oldPassword: null,

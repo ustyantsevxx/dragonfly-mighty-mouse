@@ -71,6 +71,7 @@ export default {
 .fade-leave-to {
   opacity: 0;
 }
+
 .form-control.is-valid,
 .was-validated .form-control:valid,
 .form-control.is-invalid,

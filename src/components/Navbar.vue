@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="sm" type="dark" variant="dark" :sticky="true">
+  <b-navbar toggleable="sm" type="dark" class="nav" :sticky="true">
     <b-navbar-brand to="/">Project Scimitar</b-navbar-brand>
 
     <b-navbar-toggle target="collapse" />
@@ -40,3 +40,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.nav {
+  background-color: #191414ea;
+}
+</style>

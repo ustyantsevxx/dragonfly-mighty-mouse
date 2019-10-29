@@ -3,36 +3,48 @@
     <h1>Смена пароля</h1>
     <hr />
     <b-form>
-      <b-form-group label="Старый пароль" label-for="old-pass-field">
-        <b-form-input type="password" id="old-pass-field" required v-model="oldPassword" />
-      </b-form-group>
-
-      <b-form-group label="Новый пароль" label-for="new-pass-field">
+      <b-form-group label="Текущий пароль" label-for="old-password-field">
         <b-form-input
+          id="old-password-field"
           type="password"
-          id="new-pass-field"
-          required
-          v-model="newPassword"
-          autocomplete="off"
+          :state="$v.oldPassword.$dirty ? !$v.oldPassword.$error : null"
+          v-model.trim="$v.oldPassword.$model"
         />
       </b-form-group>
 
-      <b-form-group label="Новый пароль еще раз" label-for="confirm-new-pass-field">
+      <b-form-group label="Новый пароль" label-for="password-field">
         <b-form-input
+          id="password-field"
           type="password"
-          id="confirm-new-pass-field"
-          v-model="confirmPassword"
-          required
-          autocomplete="off"
+          :state="$v.newPassword.$dirty ? !$v.newPassword.$error : null"
+          v-model.trim="$v.newPassword.$model"
         />
+        <b-form-invalid-feedback v-if="!$v.newPassword.minLength">Пароль не короче 6 символов!</b-form-invalid-feedback>
       </b-form-group>
 
-      <btn-loader variant="info" block @click="updatePassword" load="updatePassBtn" or="Сохранить" />
+      <b-form-group label="Подтвердите новый пароль" label-for="confirm-field">
+        <b-form-input
+          id="confirm-field"
+          type="password"
+          :state="$v.confirmPassword.$dirty ? !$v.confirmPassword.$error : null"
+          v-model.trim="$v.confirmPassword.$model"
+        />
+        <b-form-invalid-feedback v-if="!$v.confirmPassword.same">Пароли должны совпадать!</b-form-invalid-feedback>
+      </b-form-group>
+      <btn-loader
+        variant="info"
+        block
+        @click="updatePassword"
+        :disabled="$v.$invalid"
+        load="updatePassBtn"
+        or="Сохранить"
+      />
     </b-form>
   </b-card>
 </template>
 
 <script>
+import { minLength, required, sameAs } from 'vuelidate/lib/validators'
 import BtnLoader from '../components/BtnLoader';
 
 export default {
@@ -48,12 +60,24 @@ export default {
   },
   methods: {
     updatePassword() {
-      if (this.newPassword !== this.confirmPassword) {
-        this.$store.commit('setError', 'Пароли не совпадают!')
-        return
-      }
-      this.$store.dispatch('updatePassword', { old: this.oldPassword, new: this.newPassword })
+      this.$store.dispatch('updatePassword', {
+        old: this.oldPassword,
+        new: this.newPassword
+      })
     },
+  },
+  validations: {
+    oldPassword: {
+      required
+    },
+    newPassword: {
+      required,
+      minLength: minLength(6)
+    },
+    confirmPassword: {
+      required,
+      same: sameAs('newPassword')
+    }
   }
 }
 </script>

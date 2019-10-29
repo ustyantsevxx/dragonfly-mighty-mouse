@@ -35,6 +35,7 @@
               variant="success"
               block
               class="mt-2"
+              :disabled="notChanged"
               @click="updateData"
               load="updateDataBtn"
               or="Сохранить"
@@ -51,6 +52,8 @@
 </template>
 
 <script>
+// FIXME: пофиксить проверку после смены имени, т.к можно сменить еще раз после смены
+
 import PasswordChange from '../components/PasswordChange'
 import BtnLoader from '../components/BtnLoader'
 
@@ -74,6 +77,11 @@ export default {
     },
     emailVerified() {
       return this.$store.getters.emailVerified
+    },
+    notChanged() {
+      return this.userData.name === this.name &&
+        this.userData.surname === this.surname &&
+        this.userData.email === this.email
     }
   },
 

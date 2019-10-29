@@ -13,8 +13,6 @@ export default {
   },
   computed: {
     loadingView() {
-      console.log(this.$attrs);
-      console.log(this.$props);
       return this.$store.getters.loadingView
     }
   }
@@ -22,6 +20,9 @@ export default {
 </script>
 
 <style scoped>
+button {
+  transition: opacity 0.5s;
+}
 button:disabled {
   cursor: not-allowed;
 }

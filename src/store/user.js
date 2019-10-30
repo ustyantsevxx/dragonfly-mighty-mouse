@@ -89,7 +89,9 @@ const actions = {
     commit('setLoading')
 
     try {
-      await firebase.auth().sendPasswordResetEmail(opt.email)
+      await firebase.auth().sendPasswordResetEmail(opt.email, {
+        url: "https://project-scimitar.web.app/login",
+      })
       commit('setSuccess', 'Ссылка востановления отправлена.')
       commit('unsetLoading')
     }

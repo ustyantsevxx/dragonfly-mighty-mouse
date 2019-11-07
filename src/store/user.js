@@ -78,15 +78,15 @@ const actions = {
       await firebase.auth().signInWithEmailAndPassword(opt.email, opt.password)
     }
 
-    catch (err) {
-      commit('setError', err.message)
+    catch {
+      commit('setError', 'Неверная почта или пароль!')
       commit('unsetLoading')
     }
   },
 
   // восстановление пароля
   async recoverPassword({ commit }, opt) {
-    commit('setLoading')
+    commit('setLoading', 'restoreBtn')
 
     try {
       await firebase.auth().sendPasswordResetEmail(opt.email, {
@@ -105,7 +105,6 @@ const actions = {
   // выход
   async signOut() {
     await firebase.auth().signOut()
-    if (router.currentRoute.path !== '/') router.push('/')
   },
 
   async verifyEmail({ commit }) {

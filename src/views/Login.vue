@@ -5,7 +5,7 @@
         <b-col sm="10" md="7" lg="6" xl="5">
           <b-card class="p-3">
             <h2 class="mb-4 text-center">Вход в систему</h2>
-            <b-form @submit.prevent="sign">
+            <b-form @keydown.enter="sign">
               <b-form-group label="Эл. почта" label-for="email-field">
                 <b-form-input id="email-field" type="email" required v-model="email" />
               </b-form-group>
@@ -16,8 +16,8 @@
 
               <div class="mt-4">
                 <btn-loader
+                  @click="sign"
                   size="lg"
-                  type="submit"
                   variant="primary"
                   block
                   load="loginBtn"
@@ -26,7 +26,7 @@
               </div>
 
               <div class="mt-2">
-                <b-link @click.prevent="recoverPassword">Забыли пароль?</b-link>
+                <b-link to="/restore">Забыли пароль?</b-link>
               </div>
             </b-form>
           </b-card>
@@ -50,16 +50,13 @@ export default {
   },
 
   methods: {
-    sign() {
-      this.$store.dispatch('signIn', {
+    async sign() {
+      await this.$store.dispatch('signIn', {
         email: this.email,
         password: this.password
       })
-    },
-    recoverPassword() {
-      this.$store.dispatch('recoverPassword', {
-        email: this.email
-      })
+
+      if (!this.signed) this.password = null
     }
   },
 

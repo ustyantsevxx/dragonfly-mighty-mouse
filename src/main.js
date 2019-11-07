@@ -1,7 +1,7 @@
 import Vue from 'vue'
+import App from './App.vue'
 
 // vue plugins
-import App from './App.vue'
 import router from './router'
 import store from './store'
 
@@ -16,8 +16,6 @@ import 'firebase/auth'
 // form validation
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
-
-
 
 Vue.config.productionTip = false
 
@@ -36,22 +34,21 @@ firebase.initializeApp({
 
 firebase.auth().onAuthStateChanged(async user => {
   let userData
-  if (user)
+
+  if (user) {
     userData = await firebase.firestore().collection('users').doc(user.uid).get()
+    userData = userData.data()
+  }
 
   store.commit('setAuthData', user)
-  store.commit('setUserData', userData ? userData.data() : null)
+  store.commit('setUserData', userData)
 
-  if (!app) {
+  if (!app)
     app = new Vue({
       router,
       store,
       render: vue => vue(App)
     }).$mount('#app')
-  }
-
-  // eslint-disable-next-line
-  console.log(`%c//user status fetched:\n\n`, 'color: white; background: black', user, "\n", userData ? userData.data() : null)
 })
 
 

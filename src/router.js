@@ -30,6 +30,11 @@ let router = new Router({
       meta: { requiresAuth: true }
     },
     {
+      path: '/restore',
+      component: () => import('./views/RestorePassword'),
+      meta: { requiresGuest: true }
+    },
+    {
       path: '*',
       component: () => import('./views/NotFound')
     }

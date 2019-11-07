@@ -51,12 +51,12 @@ export default {
 
   methods: {
     async sign() {
-      await this.$store.dispatch('signIn', {
+      let r = await this.$store.dispatch('signIn', {
         email: this.email,
         password: this.password
       })
 
-      if (!this.signed) this.password = null
+      if (!r) this.password = null
     }
   },
 

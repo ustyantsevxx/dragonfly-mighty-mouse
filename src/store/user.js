@@ -76,10 +76,11 @@ const actions = {
 
     try {
       await firebase.auth().signInWithEmailAndPassword(opt.email, opt.password)
+      return true
     }
 
-    catch {
-      commit('setError', 'Неверная почта или пароль!')
+    catch (err) {
+      commit('setError', err.message)
       commit('unsetLoading')
     }
   },
@@ -94,6 +95,7 @@ const actions = {
       })
       commit('setSuccess', 'Ссылка востановления отправлена.')
       commit('unsetLoading')
+      return true
     }
 
     catch (err) {

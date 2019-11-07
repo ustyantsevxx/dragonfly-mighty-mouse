@@ -42,11 +42,11 @@ export default {
 
   methods: {
     async restorePassword() {
-      await this.$store.dispatch('recoverPassword', {
+      let r = await this.$store.dispatch('recoverPassword', {
         email: this.email
       })
 
-      this.$router.push('/login')
+      if (r) this.$router.push('/login')
     }
   },
 

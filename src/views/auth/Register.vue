@@ -75,7 +75,7 @@
 
 <script>
 import { minLength, required, email, sameAs } from 'vuelidate/lib/validators'
-import BtnLoader from '../components/BtnLoader'
+import BtnLoader from '@/components/BtnLoader'
 
 export default {
   components: { BtnLoader },

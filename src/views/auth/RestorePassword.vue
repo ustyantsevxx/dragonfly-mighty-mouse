@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import BtnLoader from '../components/BtnLoader'
+import BtnLoader from '@/components/BtnLoader'
 
 export default {
   components: { BtnLoader },

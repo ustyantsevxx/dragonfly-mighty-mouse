@@ -45,7 +45,7 @@
       </b-col>
 
       <b-col lg="5" xl="4">
-        <password-change />
+        <password-change-form />
       </b-col>
     </b-row>
   </b-container>
@@ -54,12 +54,12 @@
 <script>
 // FIXME: пофиксить проверку после смены имени, т.к можно сменить еще раз после смены
 
-import PasswordChange from '../components/PasswordChange'
+import PasswordChangeForm from '../components/PasswordChangeForm'
 import BtnLoader from '../components/BtnLoader'
 
 export default {
   components: {
-    PasswordChange,
+    PasswordChangeForm,
     BtnLoader
   },
 

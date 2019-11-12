@@ -15,26 +15,29 @@ let router = new Router({
       path: '/',
       component: () => import('./views/Main')
     },
+
     {
       path: '/login',
-      component: () => import('./views/Login'),
+      component: () => import('./views/auth/Login'),
       meta: { requiresGuest: true, title: 'Вход' }
     },
     {
       path: '/register',
-      component: () => import('./views/Register'),
+      component: () => import('./views/auth/Register'),
       meta: { requiresGuest: true, title: 'Регистрация' }
     },
+    {
+      path: '/restore',
+      component: () => import('./views/auth/RestorePassword'),
+      meta: { requiresGuest: true, title: 'Восстановление пароля' }
+    },
+
     {
       path: '/account',
       component: () => import('./views/Account'),
       meta: { requiresAuth: true, title: 'Мой профиль' }
     },
-    {
-      path: '/restore',
-      component: () => import('./views/RestorePassword'),
-      meta: { requiresGuest: true, title: 'Восстановление пароля' }
-    },
+
     {
       path: '*',
       component: () => import('./views/NotFound'),
@@ -45,7 +48,6 @@ let router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title || 'Scimitar'
 
   const currentUser = firebase.auth().currentUser
   const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
@@ -57,6 +59,7 @@ router.beforeEach((to, from, next) => {
   })
   else if (requiresGuest && currentUser) next('/')
   else next()
+  document.title = to.meta.title || 'Scimitar'
 })
 
 export default router

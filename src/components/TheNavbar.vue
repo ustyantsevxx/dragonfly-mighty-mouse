@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="sm" type="dark" class="nav" :sticky="true">
-    <b-navbar-brand to="/">Project Scimitar</b-navbar-brand>
+    <b-navbar-brand to="/" exact active-class="c">Project Scimitar</b-navbar-brand>
 
     <b-navbar-toggle target="collapse" />
 
@@ -43,8 +43,13 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .nav {
   background-color: #191414ea;
+}
+
+.router-link-active {
+  cursor: default;
+  color: rgba(255, 255, 255, 0.75) !important;
 }
 </style>

@@ -59,11 +59,12 @@ export default {
     }
   },
   methods: {
-    updatePassword() {
-      this.$store.dispatch('updatePassword', {
+    async updatePassword() {
+      let success = await this.$store.dispatch('updatePassword', {
         old: this.oldPassword,
         new: this.newPassword
       })
+      if (!success) this.oldPassword = null
     },
   },
   validations: {

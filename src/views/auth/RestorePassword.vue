@@ -4,7 +4,7 @@
       <b-row align-h="center" class="mt-5">
         <b-col sm="12" md="8" lg="7" xl="6">
           <b-card class="p-3">
-            <h2 class="mb-4 text-center">Восстановление пароля</h2>
+            <h1 class="mb-4 text-center">Восстановление пароля</h1>
             <b-form @submit.prevent="restorePassword">
               <b-form-group label="Эл. почта" label-for="email-field">
                 <b-form-input id="email-field" type="email" required v-model="email" />

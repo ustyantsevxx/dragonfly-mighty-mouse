@@ -4,7 +4,7 @@
       <b-row align-h="center" class="mt-5">
         <b-col sm="10" md="7" lg="6" xl="5">
           <b-card class="p-3">
-            <h2 class="mb-4 text-center">Вход в систему</h2>
+            <h1 class="mb-4 text-center">Вход в систему</h1>
             <b-form @keydown.enter="sign">
               <b-form-group label="Эл. почта" label-for="email-field">
                 <b-form-input id="email-field" type="email" required v-model="email" />

@@ -1,41 +1,36 @@
 <template>
   <b-container>
     <b-row align-h="center">
-      <b-col lg="7" xl="8" class="mb-3">
+      <b-col lg="6" xl="7" class="mb-3">
         <b-card class="p-3">
           <h1>Профиль</h1>
           <hr />
           <b-form>
             <b-form-group label="Имя" label-for="name-field">
-              <b-form-input id="name-field" required placeholder="Ваше имя" v-model="name" />
+              <b-form-input
+                id="name-field"
+                required
+                :state="$v.name.$dirty ? !$v.name.$error : null"
+                v-model.trim="$v.name.$model"
+                placeholder="Ваше имя"
+              />
             </b-form-group>
 
             <b-form-group label="Фамилия" label-for="surname-field">
               <b-form-input
                 id="surname-field"
                 required
+                :state="$v.surname.$dirty ? !$v.surname.$error : null"
+                v-model.trim="$v.surname.$model"
                 placeholder="Ваша фамилия"
-                v-model="surname"
               />
-            </b-form-group>
-
-            <b-form-group>
-              <template #label>
-                <div>
-                  <label for="email-field" class="m-0">Эл. почта</label>
-                  &nbsp;
-                  <b-link v-if="!emailVerified" @click.prevent="verifyEmail">Отправить подтверждение</b-link>
-                </div>
-              </template>
-
-              <b-form-input id="email-field" required placeholder="Ваша почта" v-model="email" />
             </b-form-group>
 
             <btn-loader
               variant="success"
               block
               class="mt-2"
-              :disabled="notChanged"
+              :disabled="notChanged || $v.$invalid"
               @click="updateData"
               load="updateDataBtn"
               or="Сохранить"
@@ -44,22 +39,21 @@
         </b-card>
       </b-col>
 
-      <b-col lg="5" xl="4">
-        <password-change-form />
+      <b-col lg="6" xl="5">
+        <auth-data-edit />
       </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
-// FIXME: пофиксить проверку после смены имени, т.к можно сменить еще раз после смены
-
-import PasswordChangeForm from '../components/PasswordChangeForm'
+import { required } from 'vuelidate/lib/validators'
+import AuthDataEdit from '../components/AuthDataEdit'
 import BtnLoader from '../components/BtnLoader'
 
 export default {
   components: {
-    PasswordChangeForm,
+    AuthDataEdit,
     BtnLoader
   },
 
@@ -67,21 +61,25 @@ export default {
     return {
       name: '',
       surname: '',
-      email: ''
     }
+  },
+
+  validations: {
+    name: {
+      required
+    },
+    surname: {
+      required
+    },
   },
 
   computed: {
     userData() {
       return this.$store.getters.userData
     },
-    emailVerified() {
-      return this.$store.getters.emailVerified
-    },
     notChanged() {
       return this.userData.name === this.name &&
-        this.userData.surname === this.surname &&
-        this.userData.email === this.email
+        this.userData.surname === this.surname
     }
   },
 
@@ -92,16 +90,12 @@ export default {
         name: this.name,
         surname: this.surname
       })
-    },
-    verifyEmail() {
-      this.$store.dispatch('verifyEmail')
     }
   },
 
 
   beforeMount() {
     this.name = this.userData.name
-    this.email = this.userData.email
     this.surname = this.userData.surname
   }
 }

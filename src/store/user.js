@@ -49,7 +49,6 @@ const mutations = {
 
 
 const actions = {
-  // регистрация
   async signUp({ commit }, opt) {
     commit('setLoading', 'registerBtn')
 
@@ -70,7 +69,7 @@ const actions = {
     }
   },
 
-  // вход
+
   async signIn({ commit }, opt) {
     commit('setLoading', 'loginBtn')
 
@@ -85,7 +84,7 @@ const actions = {
     }
   },
 
-  // восстановление пароля
+
   async recoverPassword({ commit }, opt) {
     commit('setLoading', 'restoreBtn')
 
@@ -104,10 +103,11 @@ const actions = {
     }
   },
 
-  // выход
+
   async signOut() {
     await firebase.auth().signOut()
   },
+
 
   async verifyEmail({ commit }) {
     commit('setLoading')
@@ -120,7 +120,7 @@ const actions = {
     finally { commit('unsetLoading') }
   },
 
-  // смена данных
+
   async updateData({ commit, state }, data) {
     try {
       commit('setLoading', 'updateDataBtn')
@@ -141,7 +141,25 @@ const actions = {
     finally { commit('unsetLoading') }
   },
 
-  // смена пароля
+
+  async updateEmail({ commit, state }, data) {
+    try {
+      commit('setLoading', 'updatePassBtn')
+
+      let user = await firebase.auth().signInWithEmailAndPassword(state.email, data.password)
+      await firebase.auth().currentUser.updateEmail(data.newEmail)
+      await firebase.auth().currentUser.sendEmailVerification()
+
+      commit('setAuthData', user.user)
+      commit('setSuccess', 'Запрос на смену эл. почты отправлен.')
+      return true
+    }
+
+    catch (err) { commit('setError', err.message) }
+    finally { commit('unsetLoading') }
+  },
+
+
   async updatePassword({ commit, state }, passwords) {
     try {
       commit('setLoading', 'updatePassBtn')
@@ -151,6 +169,7 @@ const actions = {
 
       commit('setAuthData', user.user)
       commit('setSuccess', 'Пароль успешно изменен.')
+      return true
     }
 
     catch (err) { commit('setError', err.message) }

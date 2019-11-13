@@ -53,7 +53,6 @@
                 />
                 <b-form-invalid-feedback v-if="!$v.confirmPassword.same">Пароли должны совпадать!</b-form-invalid-feedback>
               </b-form-group>
-
               <div class="mt-4">
                 <btn-loader
                   size="lg"

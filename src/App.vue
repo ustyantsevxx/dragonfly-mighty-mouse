@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <the-navbar class="mb-4" />
+    <navbar class="mb-4" />
     <transition name="fade" mode="out-in">
       <router-view />
     </transition>
@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import TheNavbar from './components/TheNavbar';
+import Navbar from './components/Navbar';
 
 export default {
   components: {
-    TheNavbar
+    Navbar
   },
 
   computed: {

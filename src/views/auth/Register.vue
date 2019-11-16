@@ -1,10 +1,10 @@
 <template>
   <div>
     <b-container>
-      <b-row align-h="center" class="mt-5">
+      <b-row align-h="center">
         <b-col sm="12" md="8" lg="7" xl="6">
           <b-card class="p-3">
-            <h1 class="mb-4 text-center">Регистрация</h1>
+            <h2 class="mb-4 text-center">Регистрация</h2>
             <b-form @submit.prevent="signUp">
               <b-form-group label="Имя" label-for="name-field">
                 <b-form-input

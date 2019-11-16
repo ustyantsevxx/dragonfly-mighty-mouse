@@ -30,8 +30,4 @@ export default {
 button {
   transition: opacity 0.5s;
 }
-
-button:disabled {
-  cursor: not-allowed;
-}
 </style>

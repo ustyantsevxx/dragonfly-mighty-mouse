@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <navbar class="mb-4" />
+    <navbar class="mb-3" />
     <transition name="fade" mode="out-in">
       <router-view />
     </transition>
@@ -27,10 +27,10 @@ export default {
   methods: {
     toast(err) {
       this.$bvToast.toast(err ? this.error : this.success, {
-        title: err ? 'Произошла ошибка!' : 'Успех!',
         variant: err ? 'danger' : 'success',
         solid: true,
-        autoHideDelay: 3000
+        noCloseButton: true,
+        toaster: 'b-toaster-top-center'
       })
       this.$store.commit(err ? 'unsetError' : 'unsetSuccess')
     }
@@ -77,5 +77,8 @@ export default {
 .form-control.is-invalid,
 .form-control:invalid {
   background-image: none !important;
+}
+*:disabled {
+  cursor: not-allowed;
 }
 </style>

@@ -3,7 +3,7 @@
     <b-row align-h="center">
       <b-col lg="6" xl="7" class="mb-3">
         <b-card class="p-3">
-          <h1>Профиль</h1>
+          <h2>Профиль</h2>
           <hr />
           <b-form>
             <b-form-group label="Имя" label-for="name-field">

@@ -1,13 +1,13 @@
 <template>
   <b-card class="p-3">
-    <h1>Данные для входа</h1>
+    <h2>Данные для входа</h2>
     <hr />
     <b-form-radio-group
       @change="resetData"
       v-model="selectedRadio"
       buttons
       :options="options"
-      button-variant="info"
+      button-variant="warning"
     />
     <b-form class="mt-3">
       <b-form-group>
@@ -62,7 +62,7 @@
       </b-form-group>
 
       <btn-loader
-        variant="info"
+        variant="danger"
         block
         @click="updateData"
         :disabled="isInvalid() || $v.oldPassword.$invalid"

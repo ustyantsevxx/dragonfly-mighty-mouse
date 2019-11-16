@@ -47,7 +47,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 @font-face {
   font-family: "Source Sans";
   src: url("./assets/source-sans.ttf");

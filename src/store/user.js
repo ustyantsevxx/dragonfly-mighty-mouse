@@ -12,7 +12,6 @@ const state = {
   surname: null
 }
 
-
 const getters = {
   userData: state => state,
   name: state => state.name,
@@ -49,7 +48,9 @@ const mutations = {
 
 
 const actions = {
-  async signUp({ commit }, opt) {
+  async signUp({
+    commit
+  }, opt) {
     commit('setLoading', 'registerBtn')
 
     try {
@@ -61,31 +62,31 @@ const actions = {
           name: opt.name,
           surname: opt.surname
         })
-    }
-
-    catch (err) {
+    } catch (err) {
       commit('setError', err.message)
       commit('unsetLoading')
     }
   },
 
 
-  async signIn({ commit }, opt) {
+  async signIn({
+    commit
+  }, opt) {
     commit('setLoading', 'loginBtn')
 
     try {
       await firebase.auth().signInWithEmailAndPassword(opt.email, opt.password)
       return true
-    }
-
-    catch (err) {
+    } catch (err) {
       commit('setError', err.message)
       commit('unsetLoading')
     }
   },
 
 
-  async recoverPassword({ commit }, opt) {
+  async recoverPassword({
+    commit
+  }, opt) {
     commit('setLoading', 'restoreBtn')
 
     try {
@@ -95,9 +96,7 @@ const actions = {
       commit('setSuccess', 'Ссылка востановления отправлена.')
       commit('unsetLoading')
       return true
-    }
-
-    catch (err) {
+    } catch (err) {
       commit('setError', err.message)
       commit('unsetLoading')
     }
@@ -109,19 +108,26 @@ const actions = {
   },
 
 
-  async verifyEmail({ commit }) {
+  async verifyEmail({
+    commit
+  }) {
     commit('setLoading')
 
     try {
       await firebase.auth().currentUser.sendEmailVerification()
       commit('setSuccess', 'Ссылка подтверждения отправлена.')
+    } catch (err) {
+      commit('setError', err.message)
+    } finally {
+      commit('unsetLoading')
     }
-    catch (err) { commit('setError', err.message) }
-    finally { commit('unsetLoading') }
   },
 
 
-  async updateData({ commit, state }, data) {
+  async updateData({
+    commit,
+    state
+  }, data) {
     try {
       commit('setLoading', 'updateDataBtn')
 
@@ -135,14 +141,18 @@ const actions = {
 
       commit('setUserData', data)
       commit('setSuccess', 'Имя успешно изменено.')
+    } catch (err) {
+      commit('setError', err.message)
+    } finally {
+      commit('unsetLoading')
     }
-
-    catch (err) { commit('setError', err.message) }
-    finally { commit('unsetLoading') }
   },
 
 
-  async updateEmail({ commit, state }, data) {
+  async updateEmail({
+    commit,
+    state
+  }, data) {
     try {
       commit('setLoading', 'updatePassBtn')
 
@@ -153,14 +163,18 @@ const actions = {
       commit('setAuthData', user.user)
       commit('setSuccess', 'Запрос на смену эл. почты отправлен.')
       return true
+    } catch (err) {
+      commit('setError', err.message)
+    } finally {
+      commit('unsetLoading')
     }
-
-    catch (err) { commit('setError', err.message) }
-    finally { commit('unsetLoading') }
   },
 
 
-  async updatePassword({ commit, state }, passwords) {
+  async updatePassword({
+    commit,
+    state
+  }, passwords) {
     try {
       commit('setLoading', 'updatePassBtn')
 
@@ -170,13 +184,19 @@ const actions = {
       commit('setAuthData', user.user)
       commit('setSuccess', 'Пароль успешно изменен.')
       return true
+    } catch (err) {
+      commit('setError', err.message)
+    } finally {
+      commit('unsetLoading')
     }
-
-    catch (err) { commit('setError', err.message) }
-    finally { commit('unsetLoading') }
   }
 }
 
 
 
-export default { state, getters, mutations, actions }
+export default {
+  state,
+  getters,
+  mutations,
+  actions
+}

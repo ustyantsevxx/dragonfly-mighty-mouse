@@ -64,6 +64,9 @@
                   or="Зарегистрироваться"
                 />
               </div>
+              <div class="mt-2 d-flex justify-content-between">
+                <b-link to="/login">Уже зарегистрированы?</b-link>
+              </div>
             </b-form>
           </b-card>
         </b-col>

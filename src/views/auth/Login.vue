@@ -25,8 +25,9 @@
                 />
               </div>
 
-              <div class="mt-2">
+              <div class="mt-2 d-flex justify-content-between">
                 <b-link to="/restore">Забыли пароль?</b-link>
+                <b-link to="/register">Первый раз?</b-link>
               </div>
             </b-form>
           </b-card>

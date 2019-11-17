@@ -8,7 +8,6 @@
       <b-navbar-nav class="ml-auto">
         <template v-if="!signed">
           <b-nav-item to="/login">Войти</b-nav-item>
-          <b-nav-item to="/register">Регистрация</b-nav-item>
         </template>
         <template v-else>
           <b-nav-item to="/account">{{name + ' ' + surname}}</b-nav-item>

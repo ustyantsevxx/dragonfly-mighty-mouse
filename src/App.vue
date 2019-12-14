@@ -35,8 +35,8 @@ export default {
       this.$store.commit(err ? 'unsetError' : 'unsetSuccess')
     },
     async trans(text) {
-      const api = 'trnsl.1.1.20191118T060514Z.555d9b2456b8ced9.dcbb713afeab3834d65eb8a6dea8545d5bbd5cf6'
-      let resp = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${api}&text=${text}&lang=en-ru`)
+      const API = 'trnsl.1.1.20191118T060514Z.555d9b2456b8ced9.dcbb713afeab3834d65eb8a6dea8545d5bbd5cf6'
+      let resp = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${API}&text=${text}&lang=en-ru`)
       resp = await resp.json()
       return resp.text[0]
     },

@@ -48,7 +48,6 @@ let router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-
   const currentUser = firebase.auth().currentUser
   const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
   const requiresGuest = to.matched.some(r => r.meta.requiresGuest)
@@ -59,6 +58,7 @@ router.beforeEach((to, from, next) => {
   })
   else if (requiresGuest && currentUser) next('/')
   else next()
+
   document.title = to.meta.title || 'Scimitar'
 })
 

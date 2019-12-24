@@ -1,6 +1,6 @@
 # Project Scimitar
 
-## Project setup
+## Setup
 ```
 npm i
 ```

@@ -1,49 +1,48 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
 import firebase from 'firebase/app'
 import 'firebase/auth'
-
 Vue.use(Router)
+
+const routes = [
+  {
+    path: '/',
+    component: () => import('./views/Main')
+  },
+
+  {
+    path: '/login',
+    component: () => import('./views/auth/Login'),
+    meta: { requiresGuest: true, title: 'Вход' }
+  },
+  {
+    path: '/register',
+    component: () => import('./views/auth/Register'),
+    meta: { requiresGuest: true, title: 'Регистрация' }
+  },
+  {
+    path: '/restore',
+    component: () => import('./views/auth/RestorePassword'),
+    meta: { requiresGuest: true, title: 'Восстановление пароля' }
+  },
+
+  {
+    path: '/account',
+    component: () => import('./views/Account'),
+    meta: { requiresAuth: true, title: 'Мой профиль' }
+  },
+
+  {
+    path: '*',
+    component: () => import('./views/NotFound'),
+    meta: { title: 'Ошибка 404' }
+  }
+]
 
 let router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
-
-  routes: [
-    {
-      path: '/',
-      component: () => import('./views/Main')
-    },
-
-    {
-      path: '/login',
-      component: () => import('./views/auth/Login'),
-      meta: { requiresGuest: true, title: 'Вход' }
-    },
-    {
-      path: '/register',
-      component: () => import('./views/auth/Register'),
-      meta: { requiresGuest: true, title: 'Регистрация' }
-    },
-    {
-      path: '/restore',
-      component: () => import('./views/auth/RestorePassword'),
-      meta: { requiresGuest: true, title: 'Восстановление пароля' }
-    },
-
-    {
-      path: '/account',
-      component: () => import('./views/Account'),
-      meta: { requiresAuth: true, title: 'Мой профиль' }
-    },
-
-    {
-      path: '*',
-      component: () => import('./views/NotFound'),
-      meta: { title: 'Ошибка 404' }
-    }
-  ],
+  routes,
   scrollBehavior: () => ({ x: 0, y: 0 })
 })
 

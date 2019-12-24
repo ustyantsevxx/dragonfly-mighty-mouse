@@ -11,22 +11,17 @@
 import Navbar from './components/Navbar'
 
 export default {
-  components: {
-    Navbar
-  },
+  components: { Navbar },
 
   computed: {
-    error() {
-      return this.$store.getters.error
-    },
-    success() {
-      return this.$store.getters.success
-    }
+    error() { return this.$store.getters.error },
+    success() { return this.$store.getters.success }
   },
+
 
   methods: {
     async toast(err) {
-      this.$bvToast.toast(await this.trans(err ? this.error : this.success), {
+      this.$bvToast.toast(await this.translate(err ? this.error : this.success), {
         variant: err ? 'danger' : 'success',
         solid: true,
         noCloseButton: true,
@@ -34,7 +29,8 @@ export default {
       })
       this.$store.commit(err ? 'unsetError' : 'unsetSuccess')
     },
-    async trans(text) {
+
+    async translate(text) {
       const API = 'trnsl.1.1.20191118T060514Z.555d9b2456b8ced9.dcbb713afeab3834d65eb8a6dea8545d5bbd5cf6'
       let resp = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${API}&text=${text}&lang=en-ru`)
       resp = await resp.json()
@@ -42,13 +38,10 @@ export default {
     },
   },
 
+
   watch: {
-    error() {
-      if (this.error) this.toast(true)
-    },
-    success() {
-      if (this.success) this.toast(false)
-    }
+    error() { if (this.error) this.toast(true) },
+    success() { if (this.success) this.toast(false) }
   }
 }
 </script>
@@ -84,6 +77,7 @@ export default {
 .form-control:invalid {
   background-image: none !important;
 }
+
 *:disabled {
   cursor: not-allowed;
 }

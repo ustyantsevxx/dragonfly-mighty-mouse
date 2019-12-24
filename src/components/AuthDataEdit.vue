@@ -65,7 +65,7 @@
         variant="danger"
         block
         @click="updateData"
-        :disabled="isInvalid() || $v.oldPassword.$invalid"
+        :disabled="isInvalid || $v.oldPassword.$invalid"
         load="updatePassBtn"
         or="Обновить"
       />
@@ -78,9 +78,12 @@ import { minLength, required, sameAs, email } from 'vuelidate/lib/validators'
 import BtnLoader from '../components/BtnLoader';
 
 export default {
-  components: {
-    BtnLoader
+  components: { BtnLoader },
+
+  beforeMount() {
+    this.email = this.userData.email
   },
+
 
   data() {
     return {
@@ -99,18 +102,40 @@ export default {
     }
   },
 
+
+  validations: {
+    oldPassword: { required },
+    p: {
+      newPassword: {
+        required,
+        minLength: minLength(6)
+      },
+      confirmPassword: {
+        required,
+        same: sameAs('newPassword')
+      },
+    },
+    email: { required, email }
+  },
+
+
   computed: {
     emailVerified() {
       return this.$store.getters.emailVerified || this.emailJustChanged
     },
+
     userData() {
       return this.$store.getters.userData
     },
+
+    isInvalid() {
+      if (this.selectedRadio === 'email')
+        return this.$v.email.$invalid || this.email === this.userData.email
+      else
+        return this.$v.p.$invalid
+    }
   },
 
-  beforeMount() {
-    this.email = this.userData.email
-  },
 
   methods: {
     async updateData() {
@@ -130,47 +155,22 @@ export default {
       }
       if (!success) this.oldPassword = null
     },
-    verifyEmail() {
-      this.$store.dispatch('verifyEmail')
-    },
+
+    verifyEmail() { this.$store.dispatch('verifyEmail') },
+
     resetData() {
       this.email = this.userData.email
       this.p.newPassword = null
       this.p.confirmPassword = null
       this.$v.$reset()
-    },
-    isInvalid() {
-      if (this.selectedRadio === 'email')
-        return this.$v.email.$invalid || this.email === this.userData.email
-      else
-        return this.$v.p.$invalid
     }
   },
+
 
   watch: {
     email() {
       if (this.email === this.userData.email)
         this.$v.email.$reset()
-    }
-  },
-
-  validations: {
-    oldPassword: {
-      required
-    },
-    p: {
-      newPassword: {
-        required,
-        minLength: minLength(6)
-      },
-      confirmPassword: {
-        required,
-        same: sameAs('newPassword')
-      },
-    },
-    email: {
-      required,
-      email
     }
   }
 }

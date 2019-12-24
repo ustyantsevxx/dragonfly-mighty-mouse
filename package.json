@@ -8,28 +8,27 @@
   },
   "dependencies": {
     "bootstrap-vue": "^2.0.0-rc.19",
-    "core-js": "^3.3.2",
-    "firebase": "^7.2.0",
-    "vue": "^2.6.10",
+    "core-js": "^3.5.0",
+    "firebase": "^7.6.0",
+    "vue": "^2.6.11",
     "vue-router": "^3.0.3",
-    "vuefire": "^2.2.0",
     "vuelidate": "^0.7.4",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.0.5",
-    "@vue/cli-plugin-eslint": "^4.0.5",
-    "@vue/cli-service": "^4.0.5",
+    "@vue/cli-plugin-babel": "^4.1.1",
+    "@vue/cli-plugin-eslint": "^4.1.1",
+    "@vue/cli-service": "^4.1.1",
     "babel-eslint": "^10.0.1",
-    "bootstrap": "^4.3.1",
+    "bootstrap": "^4.4.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "node-sass": "^4.12.0",
-    "popper.js": "^1.15.0",
+    "node-sass": "^4.13.0",
+    "popper.js": "^1.16.0",
     "portal-vue": "^2.1.4",
     "sass-loader": "^8.0.0",
     "vue-cli-plugin-bootstrap-vue": "^0.4.0",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
     "root": true,

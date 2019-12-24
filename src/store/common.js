@@ -15,12 +15,12 @@ const getters = {
 
 
 const mutations = {
-  setLoading: (state, view) => {
+  setLoading(state, view) {
     state.loading = true
     state.loadingView = view
   },
 
-  unsetLoading: state => {
+  unsetLoading(state) {
     state.loading = false
     state.loadingView = null
   },
@@ -34,5 +34,6 @@ const mutations = {
 
 
 const actions = {}
+
 
 export default { state, getters, mutations, actions }

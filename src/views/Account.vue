@@ -52,9 +52,11 @@ import AuthDataEdit from '../components/AuthDataEdit'
 import BtnLoader from '../components/BtnLoader'
 
 export default {
-  components: {
-    AuthDataEdit,
-    BtnLoader
+  components: { AuthDataEdit, BtnLoader },
+
+  beforeMount() {
+    this.name = this.userData.name
+    this.surname = this.userData.surname
   },
 
   data() {
@@ -64,22 +66,18 @@ export default {
     }
   },
 
+
   validations: {
-    name: {
-      required
-    },
-    surname: {
-      required
-    },
+    name: { required },
+    surname: { required },
   },
 
+
   computed: {
-    userData() {
-      return this.$store.getters.userData
-    },
+    userData() { return this.$store.getters.userData },
+
     notChanged() {
-      return this.userData.name === this.name &&
-        this.userData.surname === this.surname
+      return this.userData.name === this.name && this.userData.surname === this.surname
     }
   },
 
@@ -91,12 +89,6 @@ export default {
         surname: this.surname
       })
     }
-  },
-
-
-  beforeMount() {
-    this.name = this.userData.name
-    this.surname = this.userData.surname
   }
 }
 </script>

@@ -50,25 +50,23 @@ export default {
     }
   },
 
+
+  computed: {
+    loadingView() { return this.$store.getters.loadingView },
+    signed() { return this.$store.getters.signed }
+  },
+
+
   methods: {
     async sign() {
-      let r = await this.$store.dispatch('signIn', {
+      let signed = await this.$store.dispatch('signIn', {
         email: this.email,
         password: this.password
       })
-
-      if (!r) this.password = null
+      if (!signed) this.password = null
     }
   },
 
-  computed: {
-    loadingView() {
-      return this.$store.getters.loadingView
-    },
-    signed() {
-      return this.$store.getters.signed
-    }
-  },
 
   watch: {
     signed() {

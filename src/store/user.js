@@ -1,4 +1,3 @@
-import router from '../router'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
@@ -7,10 +6,10 @@ const state = {
   uid: null,
   email: null,
   emailVerified: null,
-
   name: null,
   surname: null
 }
+
 
 const getters = {
   userData: state => state,
@@ -48,11 +47,8 @@ const mutations = {
 
 
 const actions = {
-  async signUp({
-    commit
-  }, opt) {
+  async signUp({ commit }, opt) {
     commit('setLoading', 'registerBtn')
-
     try {
       let creds = await firebase.auth().createUserWithEmailAndPassword(opt.email, opt.password)
       firebase.firestore()
@@ -68,12 +64,8 @@ const actions = {
     }
   },
 
-
-  async signIn({
-    commit
-  }, opt) {
+  async signIn({ commit }, opt) {
     commit('setLoading', 'loginBtn')
-
     try {
       await firebase.auth().signInWithEmailAndPassword(opt.email, opt.password)
       return true
@@ -83,12 +75,8 @@ const actions = {
     }
   },
 
-
-  async recoverPassword({
-    commit
-  }, opt) {
+  async recoverPassword({ commit }, opt) {
     commit('setLoading', 'restoreBtn')
-
     try {
       await firebase.auth().sendPasswordResetEmail(opt.email, {
         url: "https://project-scimitar.web.app/login",
@@ -102,17 +90,12 @@ const actions = {
     }
   },
 
-
   async signOut() {
     await firebase.auth().signOut()
   },
 
-
-  async verifyEmail({
-    commit
-  }) {
+  async verifyEmail({ commit }) {
     commit('setLoading')
-
     try {
       await firebase.auth().currentUser.sendEmailVerification()
       commit('setSuccess', 'Ссылка подтверждения отправлена.')
@@ -123,14 +106,9 @@ const actions = {
     }
   },
 
-
-  async updateData({
-    commit,
-    state
-  }, data) {
+  async updateData({ commit, state }, data) {
     try {
       commit('setLoading', 'updateDataBtn')
-
       await firebase.firestore()
         .collection('users')
         .doc(state.uid)
@@ -138,7 +116,6 @@ const actions = {
           name: data.name,
           surname: data.surname
         })
-
       commit('setUserData', data)
       commit('setSuccess', 'Имя успешно изменено.')
     } catch (err) {
@@ -148,11 +125,7 @@ const actions = {
     }
   },
 
-
-  async updateEmail({
-    commit,
-    state
-  }, data) {
+  async updateEmail({ commit, state }, data) {
     try {
       commit('setLoading', 'updatePassBtn')
 
@@ -170,11 +143,7 @@ const actions = {
     }
   },
 
-
-  async updatePassword({
-    commit,
-    state
-  }, passwords) {
+  async updatePassword({ commit, state }, passwords) {
     try {
       commit('setLoading', 'updatePassBtn')
 
@@ -194,9 +163,4 @@ const actions = {
 
 
 
-export default {
-  state,
-  getters,
-  mutations,
-  actions
-}
+export default { state, getters, mutations, actions }

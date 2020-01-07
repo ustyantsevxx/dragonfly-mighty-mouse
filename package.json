@@ -9,6 +9,7 @@
   "dependencies": {
     "bootstrap-vue": "^2.0.0-rc.19",
     "core-js": "^3.5.0",
+    "dotenv": "^8.2.0",
     "firebase": "^7.6.0",
     "vue": "^2.6.11",
     "vue-router": "^3.0.3",

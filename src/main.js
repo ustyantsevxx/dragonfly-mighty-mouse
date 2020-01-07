@@ -21,14 +21,14 @@ Vue.config.productionTip = false
 let app = null
 
 firebase.initializeApp({
-  apiKey: "AIzaSyD-XGzua3MLXvUjECoaGuUz9FE-wYgMnak",
+  apiKey: process.env.VUE_APP__FIREBASE_API,
   authDomain: "project-scimitar.firebaseapp.com",
   databaseURL: "https://project-scimitar.firebaseio.com",
   projectId: "project-scimitar",
   storageBucket: "project-scimitar.appspot.com",
-  messagingSenderId: "752029733760",
-  appId: "1:752029733760:web:23fcad9a7d731d7eeae765",
-  measurementId: "G-SVQWSKW7KC"
+  messagingSenderId: process.env.VUE_APP__FIREBASE_MSI,
+  appId: process.env.VUE_APP__FIREBASE_APPID,
+  measurementId: process.env.VUE_APP__FIREBASE_MESID
 })
 
 firebase.auth().onAuthStateChanged(async user => {

@@ -31,7 +31,9 @@
                   :state="$v.email.$dirty ? !$v.email.$error : null"
                   v-model.trim="$v.email.$model"
                 />
-                <b-form-invalid-feedback v-if="!$v.email.email">Некорректный формат почты!</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.email.email">
+                  Некорректный формат почты!
+                </b-form-invalid-feedback>
               </b-form-group>
 
               <b-form-group label="Пароль" label-for="password-field">
@@ -41,18 +43,30 @@
                   :state="$v.password.$dirty ? !$v.password.$error : null"
                   v-model.trim="$v.password.$model"
                 />
-                <b-form-invalid-feedback v-if="!$v.password.minLength">Пароль не короче 6 символов!</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.password.minLength">
+                  Пароль не короче 6 символов!
+                </b-form-invalid-feedback>
               </b-form-group>
 
-              <b-form-group label="Подтвердите пароль" label-for="confirm-field">
+              <b-form-group
+                label="Подтвердите пароль"
+                label-for="confirm-field"
+              >
                 <b-form-input
                   id="confirm-field"
                   type="password"
-                  :state="$v.confirmPassword.$dirty ? !$v.confirmPassword.$error : null"
+                  :state="
+                    $v.confirmPassword.$dirty
+                      ? !$v.confirmPassword.$error
+                      : null
+                  "
                   v-model.trim="$v.confirmPassword.$model"
                 />
-                <b-form-invalid-feedback v-if="!$v.confirmPassword.same">Пароли должны совпадать!</b-form-invalid-feedback>
+                <b-form-invalid-feedback v-if="!$v.confirmPassword.same">
+                  Пароли должны совпадать!
+                </b-form-invalid-feedback>
               </b-form-group>
+
               <div class="mt-4">
                 <btn-loader
                   size="lg"
@@ -64,6 +78,7 @@
                   or="Зарегистрироваться"
                 />
               </div>
+
               <div class="mt-2 d-flex justify-content-between">
                 <b-link to="/login">Уже зарегистрированы?</b-link>
               </div>
@@ -81,35 +96,21 @@ import BtnLoader from '@/components/BtnLoader'
 
 export default {
   components: { BtnLoader },
-  data() {
-    return {
-      name: null,
-      surname: null,
-      email: null,
-      password: null,
-      confirmPassword: null,
-    }
-  },
+
+  data: () => ({
+    name: null,
+    surname: null,
+    email: null,
+    password: null,
+    confirmPassword: null
+  }),
 
   validations: {
-    name: {
-      required
-    },
-    surname: {
-      required
-    },
-    email: {
-      email,
-      required
-    },
-    password: {
-      required,
-      minLength: minLength(6)
-    },
-    confirmPassword: {
-      required,
-      same: sameAs('password')
-    }
+    name: { required },
+    surname: { required },
+    email: { required, email },
+    password: { required, minLength: minLength(6) },
+    confirmPassword: { required, same: sameAs('password') }
   },
 
   methods: {
@@ -125,12 +126,8 @@ export default {
   },
 
   computed: {
-    loadingView() {
-      return this.$store.getters.loadingView
-    },
-    signed() {
-      return this.$store.getters.signed
-    }
+    loadingView() { return this.$store.getters.loadingView },
+    signed() { return this.$store.getters.signed }
   },
 
   watch: {

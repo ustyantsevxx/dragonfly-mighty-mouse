@@ -7,7 +7,12 @@
             <h2 class="mb-4 text-center">Восстановление пароля</h2>
             <b-form @submit.prevent="restorePassword">
               <b-form-group label="Эл. почта" label-for="email-field">
-                <b-form-input id="email-field" type="email" required v-model="email" />
+                <b-form-input
+                  id="email-field"
+                  type="email"
+                  required
+                  v-model="email"
+                />
               </b-form-group>
 
               <div class="mt-4">
@@ -34,28 +39,17 @@ import BtnLoader from '@/components/BtnLoader'
 export default {
   components: { BtnLoader },
 
-  data() {
-    return {
-      email: null
-    }
+  data: () => ({ email: null }),
+
+  computed: {
+    loadingView() { return this.$store.getters.loadingView },
+    signed() { return this.$store.getters.signed }
   },
 
   methods: {
     async restorePassword() {
-      let r = await this.$store.dispatch('recoverPassword', {
-        email: this.email
-      })
-
+      let r = await this.$store.dispatch('recoverPassword', { email: this.email })
       if (r) this.$router.push('/login')
-    }
-  },
-
-  computed: {
-    loadingView() {
-      return this.$store.getters.loadingView
-    },
-    signed() {
-      return this.$store.getters.signed
     }
   }
 }

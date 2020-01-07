@@ -8,14 +8,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Navbar from './components/Navbar'
 
 export default {
   components: { Navbar },
 
   computed: {
-    error() { return this.$store.getters.error },
-    success() { return this.$store.getters.success }
+    ...mapGetters(['error', 'success'])
   },
 
 
@@ -31,7 +31,7 @@ export default {
     },
 
     async translate(text) {
-      const API = 'trnsl.1.1.20191118T060514Z.555d9b2456b8ced9.dcbb713afeab3834d65eb8a6dea8545d5bbd5cf6'
+      const API = process.env.VUE_APP_YANDEX_TRANSLATE_API_KEY
       let resp = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${API}&text=${text}&lang=en-ru`)
       resp = await resp.json()
       return resp.text[0]
@@ -79,6 +79,6 @@ export default {
 }
 
 *:disabled {
-  cursor: not-allowed;
+  cursor: not-allowed !important;
 }
 </style>

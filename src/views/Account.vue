@@ -59,13 +59,10 @@ export default {
     this.surname = this.userData.surname
   },
 
-  data() {
-    return {
-      name: '',
-      surname: '',
-    }
-  },
-
+  data: () => ({
+    name: '',
+    surname: ''
+  }),
 
   validations: {
     name: { required },

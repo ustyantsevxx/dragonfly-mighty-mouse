@@ -7,11 +7,21 @@
             <h2 class="mb-4 text-center">Вход в систему</h2>
             <b-form @keydown.enter="sign">
               <b-form-group label="Эл. почта" label-for="email-field">
-                <b-form-input id="email-field" type="email" required v-model="email" />
+                <b-form-input
+                  id="email-field"
+                  type="email"
+                  required
+                  v-model="email"
+                />
               </b-form-group>
 
               <b-form-group label="Пароль" label-for="password-field">
-                <b-form-input id="password-field" type="password" required v-model="password" />
+                <b-form-input
+                  id="password-field"
+                  type="password"
+                  required
+                  v-model="password"
+                />
               </b-form-group>
 
               <div class="mt-4">
@@ -43,12 +53,10 @@ import BtnLoader from '@/components/BtnLoader'
 export default {
   components: { BtnLoader },
 
-  data() {
-    return {
-      email: null,
-      password: null,
-    }
-  },
+  data: () => ({
+    email: null,
+    password: null
+  }),
 
 
   computed: {
@@ -78,6 +86,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

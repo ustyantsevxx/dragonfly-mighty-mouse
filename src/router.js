@@ -46,19 +46,23 @@ let router = new Router({
   scrollBehavior: () => ({ x: 0, y: 0 })
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _, next) => {
   const currentUser = firebase.auth().currentUser
   const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
   const requiresGuest = to.matched.some(r => r.meta.requiresGuest)
 
   if (requiresAuth && !currentUser) next({
     path: '/login',
-    query: { redirect: to.fullPath }
+    query: { next: to.fullPath }
   })
-  else if (requiresGuest && currentUser) next('/')
-  else next()
-
-  document.title = to.meta.title || 'Scimitar'
+  else if (requiresGuest && currentUser) {
+    next('/')
+    document.title = 'Scimitar'
+  }
+  else {
+    next()
+    document.title = to.meta.title || 'Scimitar'
+  }
 })
 
 export default router

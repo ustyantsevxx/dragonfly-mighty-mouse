@@ -5,8 +5,8 @@
       @click="$emit('click')"
       :disabled="loadingView === load || $attrs.disabled"
     >
-      <b-spinner small class="align-middle" v-if="loadingView === load" />
-      <template v-else>{{or}}</template>
+      <b-spinner v-if="loadingView === load" small class="align-middle" />
+      <template v-else>{{ or }}</template>
     </b-btn>
   </div>
 </template>
@@ -19,9 +19,7 @@ export default {
   },
   inheritAttrs: false,
   computed: {
-    loadingView() {
-      return this.$store.getters.loadingView
-    }
+    loadingView() { return this.$store.getters.loadingView }
   }
 }
 </script>

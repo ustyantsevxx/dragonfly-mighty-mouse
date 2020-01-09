@@ -1,10 +1,18 @@
 <template>
   <b-container>
     <b-row align-h="center">
-      <b-col lg="6" xl="7" class="mb-3">
+      <h1 class="m-0">
+        Редактирование профиля
+      </h1>
+    </b-row>
+    <b-row align-h="center" class="mb-2">
+      <b-col lg="10" xl="9">
+        <hr />
+      </b-col>
+    </b-row>
+    <b-row align-h="center">
+      <b-col lg="5" xl="4" class="mb-3">
         <b-card class="p-3">
-          <h2>Профиль</h2>
-          <hr />
           <b-form>
             <b-form-group label="Имя" label-for="name-field">
               <b-form-input
@@ -39,7 +47,7 @@
         </b-card>
       </b-col>
 
-      <b-col lg="6" xl="5">
+      <b-col lg="5" xl="5">
         <auth-data-edit />
       </b-col>
     </b-row>

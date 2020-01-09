@@ -79,7 +79,7 @@ const actions = {
     commit('setLoading', 'restoreBtn')
     try {
       await firebase.auth().sendPasswordResetEmail(opt.email, {
-        url: "https://project-scimitar.web.app/login",
+        url: 'https://project-scimitar.web.app/login',
       })
       commit('setSuccess', 'Ссылка востановления отправлена.')
       commit('unsetLoading')
@@ -90,9 +90,7 @@ const actions = {
     }
   },
 
-  async signOut() {
-    await firebase.auth().signOut()
-  },
+  async signOut() { await firebase.auth().signOut() },
 
   async verifyEmail({ commit }) {
     commit('setLoading')

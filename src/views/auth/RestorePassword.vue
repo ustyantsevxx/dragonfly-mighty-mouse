@@ -22,7 +22,7 @@
                   variant="info"
                   block
                   load="restoreBtn"
-                  or="Отправить"
+                  or="Отправить ссылку"
                 />
               </div>
             </b-form>
@@ -54,6 +54,3 @@ export default {
   }
 }
 </script>
-
-<style>
-</style>

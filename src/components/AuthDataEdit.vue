@@ -1,68 +1,72 @@
 <template>
   <b-card class="p-3">
-    <h2>Данные для входа</h2>
-    <hr />
     <b-form-radio-group
       @change="resetData"
       v-model="selectedRadio"
       buttons
       :options="options"
-      button-variant="warning"
+      button-variant="light"
     />
     <b-form class="mt-3">
-      <b-form-group>
+      <b-form-group v-if="selectedRadio === 'email'">
         <template #label>
           <div>
             <label for="email-field" class="m-0">Эл. почта</label>
             &nbsp;
-            <b-link v-if="!emailVerified" @click.prevent="verifyEmail">Отправить подтверждение</b-link>
+            <b-link v-if="!emailVerified" @click.prevent="verifyEmail"
+              >Отправить подтверждение</b-link
+            >
           </div>
         </template>
 
         <b-form-input
-          :disabled="selectedRadio !== 'email'"
           id="email-field"
           placeholder="Ваша почта"
-          :state="$v.email.$dirty ? !$v.email.$error : null"
+          :state="inputState($v.email)"
           v-model.trim="$v.email.$model"
         />
       </b-form-group>
+      <template v-else>
+        <b-form-group label="Новый пароль" label-for="password-field">
+          <b-form-input
+            id="password-field"
+            type="password"
+            :state="inputState($v.p.newPassword)"
+            v-model.trim="$v.p.newPassword.$model"
+          />
+          <b-form-invalid-feedback v-if="!$v.p.newPassword.minLength"
+            >Пароль не короче 6 символов!</b-form-invalid-feedback
+          >
+        </b-form-group>
 
-      <b-form-group label="Новый пароль" label-for="password-field">
-        <b-form-input
-          id="password-field"
-          type="password"
-          :state="$v.p.newPassword.$dirty ? !$v.p.newPassword.$error : null"
-          v-model.trim="$v.p.newPassword.$model"
-          :disabled="selectedRadio !== 'password'"
-        />
-        <b-form-invalid-feedback v-if="!$v.p.newPassword.minLength">Пароль не короче 6 символов!</b-form-invalid-feedback>
-      </b-form-group>
-
-      <b-form-group label="Подтвердите новый пароль" label-for="confirm-field">
-        <b-form-input
-          id="confirm-field"
-          type="password"
-          :state="$v.p.confirmPassword.$dirty ? !$v.p.confirmPassword.$error : null"
-          v-model.trim="$v.p.confirmPassword.$model"
-          :disabled="selectedRadio !== 'password'"
-        />
-        <b-form-invalid-feedback v-if="!$v.p.confirmPassword.same">Пароли должны совпадать!</b-form-invalid-feedback>
-      </b-form-group>
-
+        <b-form-group
+          label="Подтвердите новый пароль"
+          label-for="confirm-field"
+        >
+          <b-form-input
+            id="confirm-field"
+            type="password"
+            :state="inputState($v.p.confirmPassword)"
+            v-model.trim="$v.p.confirmPassword.$model"
+          />
+          <b-form-invalid-feedback v-if="!$v.p.confirmPassword.same"
+            >Пароли должны совпадать!</b-form-invalid-feedback
+          >
+        </b-form-group>
+      </template>
       <hr />
 
       <b-form-group label="Текущий пароль" label-for="old-password-field">
         <b-form-input
           id="old-password-field"
           type="password"
-          :state="$v.oldPassword.$dirty ? !$v.oldPassword.$error : null"
+          :state="inputState($v.oldPassword)"
           v-model.trim="$v.oldPassword.$model"
         />
       </b-form-group>
 
       <btn-loader
-        variant="danger"
+        variant="dark"
         block
         @click="updateData"
         :disabled="isInvalid || $v.oldPassword.$invalid"
@@ -80,40 +84,29 @@ import BtnLoader from '../components/BtnLoader';
 export default {
   components: { BtnLoader },
 
-  beforeMount() {
-    this.email = this.userData.email
-  },
+  beforeMount() { this.email = this.userData.email },
 
-
-  data() {
-    return {
-      selectedRadio: 'email',
-      email: null,
-      emailJustChanged: false,
-      p: {
-        newPassword: null,
-        confirmPassword: null,
-      },
-      oldPassword: null,
-      options: [
-        { text: 'Эл. почта', value: 'email', selected: true },
-        { text: 'Пароль', value: 'password' },
-      ]
-    }
-  },
+  data: () => ({
+    selectedRadio: 'email',
+    email: null,
+    emailJustChanged: false,
+    p: {
+      newPassword: null,
+      confirmPassword: null,
+    },
+    oldPassword: null,
+    options: [
+      { text: 'Эл. почта', value: 'email', selected: true },
+      { text: 'Пароль', value: 'password' },
+    ]
+  }),
 
 
   validations: {
     oldPassword: { required },
     p: {
-      newPassword: {
-        required,
-        minLength: minLength(6)
-      },
-      confirmPassword: {
-        required,
-        same: sameAs('newPassword')
-      },
+      newPassword: { required, minLength: minLength(6) },
+      confirmPassword: { required, same: sameAs('newPassword') },
     },
     email: { required, email }
   },
@@ -124,16 +117,15 @@ export default {
       return this.$store.getters.emailVerified || this.emailJustChanged
     },
 
-    userData() {
-      return this.$store.getters.userData
-    },
+    userData() { return this.$store.getters.userData },
 
     isInvalid() {
       if (this.selectedRadio === 'email')
         return this.$v.email.$invalid || this.email === this.userData.email
-      else
-        return this.$v.p.$invalid
-    }
+      else return this.$v.p.$invalid
+    },
+
+    inputState: () => val => val.$dirty ? !val.$error : null
   },
 
 

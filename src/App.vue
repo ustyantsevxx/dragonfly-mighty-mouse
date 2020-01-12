@@ -58,7 +58,6 @@ export default {
 
 #app {
   height: 100vh;
-  background: #f8f9fa !important;
 }
 
 .fade-enter-active,

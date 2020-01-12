@@ -18,7 +18,7 @@
               <b-form-input
                 id="name-field"
                 required
-                :state="$v.name.$dirty ? !$v.name.$error : null"
+                :state="inputState($v.name)"
                 v-model.trim="$v.name.$model"
                 placeholder="Ваше имя"
               />
@@ -28,7 +28,7 @@
               <b-form-input
                 id="surname-field"
                 required
-                :state="$v.surname.$dirty ? !$v.surname.$error : null"
+                :state="inputState($v.surname)"
                 v-model.trim="$v.surname.$model"
                 placeholder="Ваша фамилия"
               />
@@ -38,7 +38,7 @@
               variant="success"
               block
               class="mt-2"
-              :disabled="notChanged || $v.$invalid"
+              v-if="!(notChanged || $v.$invalid)"
               @click="updateData"
               load="updateDataBtn"
               or="Сохранить"
@@ -77,13 +77,26 @@ export default {
     surname: { required },
   },
 
+  watch: {
+    name() {
+      if (this.name === this.userData.name)
+        this.$v.name.$reset()
+    },
+    surname() {
+      if (this.surname === this.userData.surname)
+        this.$v.surname.$reset()
+    }
+  },
+
 
   computed: {
     userData() { return this.$store.getters.userData },
 
     notChanged() {
       return this.userData.name === this.name && this.userData.surname === this.surname
-    }
+    },
+
+    inputState: () => val => val.$dirty ? !val.$error : null
   },
 
 
@@ -93,6 +106,9 @@ export default {
         name: this.name,
         surname: this.surname
       })
+      this.$v.name.$reset()
+      this.$v.surname.$reset()
+
     }
   }
 }

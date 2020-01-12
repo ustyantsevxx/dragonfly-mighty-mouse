@@ -1,24 +1,22 @@
 import Vue from 'vue'
 import App from './App.vue'
-
-// vue
 import router from './router'
 import store from './store'
+Vue.config.productionTip = false
 
-// bootstrap
-import './plugins/bootstrap-vue'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import '@/assets/custom.scss'
-// firebase
+Vue.use(BootstrapVue)
+
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
-// validation
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
 
-Vue.config.productionTip = false
-
-let app = null
+// main:
 
 firebase.initializeApp({
   apiKey: process.env.VUE_APP__FIREBASE_API,
@@ -30,6 +28,8 @@ firebase.initializeApp({
   appId: process.env.VUE_APP__FIREBASE_APPID,
   measurementId: process.env.VUE_APP__FIREBASE_MESID
 })
+
+let app
 
 firebase.auth().onAuthStateChanged(async user => {
   let userData
@@ -46,6 +46,6 @@ firebase.auth().onAuthStateChanged(async user => {
     app = new Vue({
       router,
       store,
-      render: vue => vue(App)
+      render: x => x(App)
     }).$mount('#app')
 })

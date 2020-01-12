@@ -69,7 +69,7 @@
         variant="dark"
         block
         @click="updateData"
-        :disabled="isInvalid || $v.oldPassword.$invalid"
+        v-if="!(isInvalid || $v.oldPassword.$invalid)"
         load="updatePassBtn"
         or="Обновить"
       />

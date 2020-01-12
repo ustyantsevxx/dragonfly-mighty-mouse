@@ -1,5 +1,5 @@
 <template>
-  <b-card class="p-3">
+  <b-card class="p-3 shadow-sm border-0">
     <b-form-radio-group
       @change="resetData"
       v-model="selectedRadio"

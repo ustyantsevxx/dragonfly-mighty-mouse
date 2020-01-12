@@ -12,7 +12,7 @@
     </b-row>
     <b-row align-h="center">
       <b-col lg="5" xl="4" class="mb-3">
-        <b-card class="p-3">
+        <b-card class="p-3  shadow-sm border-0">
           <b-form>
             <b-form-group label="Имя" label-for="name-field">
               <b-form-input

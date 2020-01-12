@@ -3,7 +3,7 @@
     <b-container>
       <b-row align-h="center">
         <b-col sm="10" md="7" lg="6" xl="5">
-          <b-card class="p-3">
+          <b-card class="p-3 shadow-sm border-0">
             <h2 class="mb-4 text-center">Вход в систему</h2>
             <b-form @keydown.enter="sign">
               <b-form-group label="Эл. почта" label-for="email-field">

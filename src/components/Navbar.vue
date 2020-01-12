@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="sm" type="dark" class="nav" :sticky="true">
+  <b-navbar toggleable="sm" type="dark" class="nav shadow-sm" :sticky="true">
     <b-navbar-brand to="/" exact active-class="c">
       Project Scimitar
     </b-navbar-brand>

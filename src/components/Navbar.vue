@@ -1,9 +1,11 @@
 <template>
   <b-navbar toggleable="sm" type="dark" class="nav" :sticky="true">
-    <b-navbar-brand to="/" exact active-class="c"
-      >Project Scimitar</b-navbar-brand
-    >
-
+    <b-navbar-brand to="/" exact active-class="c">
+      Project Scimitar
+    </b-navbar-brand>
+    <b-navbar-nav>
+      <b-nav-item to="/subjects">Дисциплины</b-nav-item>
+    </b-navbar-nav>
     <b-navbar-toggle target="collapse" />
 
     <b-collapse id="collapse" is-nav>

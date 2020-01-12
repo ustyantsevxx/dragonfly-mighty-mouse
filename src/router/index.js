@@ -3,38 +3,24 @@ import Router from 'vue-router'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 Vue.use(Router)
+import authRoutes from './auth'
+import teacherRoutes from './teacher'
 
 const routes = [
   {
     path: '/',
-    component: () => import('./views/Main')
+    component: () => import('@/views/Main')
   },
-
-  {
-    path: '/login',
-    component: () => import('./views/auth/Login'),
-    meta: { requiresGuest: true, title: 'Вход' }
-  },
-  {
-    path: '/register',
-    component: () => import('./views/auth/Register'),
-    meta: { requiresGuest: true, title: 'Регистрация' }
-  },
-  {
-    path: '/restore',
-    component: () => import('./views/auth/RestorePassword'),
-    meta: { requiresGuest: true, title: 'Восстановление пароля' }
-  },
-
+  ...authRoutes,
+  ...teacherRoutes,
   {
     path: '/account',
-    component: () => import('./views/Account'),
+    component: () => import('@/views/Account'),
     meta: { requiresAuth: true, title: 'Мой профиль' }
   },
-
   {
     path: '*',
-    component: () => import('./views/NotFound'),
+    component: () => import('@/views/Error'),
     meta: { title: 'Ошибка 404' }
   }
 ]

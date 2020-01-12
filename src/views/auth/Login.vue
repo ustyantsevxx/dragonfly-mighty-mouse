@@ -79,7 +79,7 @@ export default {
   watch: {
     signed() {
       if (this.signed) {
-        this.$router.replace(this.$route.query.redirect || '/')
+        this.$router.replace(this.$route.query.next || '/')
         this.$store.commit('unsetLoading')
       }
     }

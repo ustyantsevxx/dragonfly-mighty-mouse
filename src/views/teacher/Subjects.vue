@@ -13,7 +13,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(s, i) in subjects" :key="i">
+            <tr
+              v-for="(s, i) in subjects"
+              :key="i"
+              @click="$router.push(`subjects/${s.id}`)"
+            >
               <td>{{ s.name }}</td>
               <td>{{ s.course }}</td>
             </tr>
@@ -54,6 +58,7 @@
         </b-form-group>
       </b-modal>
     </b-row>
+    <router-view />
   </b-container>
 </template>
 

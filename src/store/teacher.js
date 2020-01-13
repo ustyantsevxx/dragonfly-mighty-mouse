@@ -19,7 +19,7 @@ const actions = {
     let list = await firebase.firestore()
       .collection('subjects')
       .get()
-    list = list.docs.map(d => d.data())
+    list = list.docs.map(x => ({ ...x.data(), id: x.id }))
     commit('assignSubjects', list)
   },
   async addSubject({ dispatch }, subj) {

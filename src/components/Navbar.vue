@@ -4,7 +4,7 @@
       Project Scimitar
     </b-navbar-brand>
     <b-navbar-nav>
-      <b-nav-item to="/subjects">Дисциплины</b-nav-item>
+      <b-nav-item to="/subjects" exact>Дисциплины</b-nav-item>
     </b-navbar-nav>
     <b-navbar-toggle target="collapse" />
 

@@ -87,14 +87,14 @@ export default {
   beforeMount() { this.email = this.userData.email },
 
   data: () => ({
-    selectedRadio: 'email',
     email: null,
-    emailJustChanged: false,
     p: {
       newPassword: null,
       confirmPassword: null,
     },
     oldPassword: null,
+    emailJustChanged: false,
+    selectedRadio: 'email',
     options: [
       { text: 'Эл. почта', value: 'email', selected: true },
       { text: 'Пароль', value: 'password' },
@@ -103,12 +103,12 @@ export default {
 
 
   validations: {
-    oldPassword: { required },
+    email: { required, email },
     p: {
       newPassword: { required, minLength: minLength(6) },
       confirmPassword: { required, same: sameAs('newPassword') },
     },
-    email: { required, email }
+    oldPassword: { required }
   },
 
 

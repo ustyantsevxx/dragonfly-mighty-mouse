@@ -37,6 +37,7 @@
         cancel-title="Отмена"
         id="add-form"
         @ok="addSubject"
+        @hide="resetData"
         ok-variant="success"
       >
         <b-form-group label="Название" label-for="name-field">
@@ -64,15 +65,19 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators'
+import baseMixin from '@/mixins/base'
+
 export default {
+  mixins: [
+    baseMixin({
+      name: null,
+      course: null
+    })
+  ],
+
   beforeCreate() {
     this.$store.dispatch('fetch')
   },
-
-  data: () => ({
-    name: '',
-    course: ''
-  }),
 
   validations: {
     name: { required },
@@ -80,13 +85,13 @@ export default {
   },
 
   computed: {
-    inputState: () => val => val.$dirty ? !val.$error : null,
     subjects() { return this.$store.state.teacher.subjects }
   },
 
   methods: {
     async addSubject() {
       this.$store.dispatch('addSubject', { name: this.name, course: this.course })
+      this.resetData()
     }
   }
 }

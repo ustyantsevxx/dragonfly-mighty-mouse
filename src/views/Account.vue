@@ -58,19 +58,22 @@
 import { required } from 'vuelidate/lib/validators'
 import AuthDataEdit from '../components/AuthDataEdit'
 import BtnLoader from '../components/BtnLoader'
+import baseMixin from '@/mixins/base'
 
 export default {
   components: { AuthDataEdit, BtnLoader },
+
+  mixins: [
+    baseMixin({
+      name: null,
+      surname: null
+    }),
+  ],
 
   beforeMount() {
     this.name = this.userData.name
     this.surname = this.userData.surname
   },
-
-  data: () => ({
-    name: '',
-    surname: ''
-  }),
 
   validations: {
     name: { required },
@@ -88,17 +91,13 @@ export default {
     }
   },
 
-
   computed: {
     userData() { return this.$store.getters.userData },
 
     notChanged() {
       return this.userData.name === this.name && this.userData.surname === this.surname
-    },
-
-    inputState: () => val => val.$dirty ? !val.$error : null
+    }
   },
-
 
   methods: {
     updateData() {
@@ -106,9 +105,7 @@ export default {
         name: this.name,
         surname: this.surname
       })
-      this.$v.name.$reset()
-      this.$v.surname.$reset()
-
+      this.resetData()
     }
   }
 }

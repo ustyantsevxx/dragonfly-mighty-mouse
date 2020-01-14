@@ -25,7 +25,8 @@ export default {
         variant: err ? 'danger' : 'success',
         solid: true,
         noCloseButton: true,
-        toaster: 'b-toaster-top-center'
+        toaster: 'b-toaster-top-center',
+        bodyClass: 'text-center'
       })
       this.$store.commit(err ? 'unsetError' : 'unsetSuccess')
     },

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/store'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 Vue.use(Router)
@@ -38,10 +39,13 @@ router.beforeEach((to, _, next) => {
   const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
   const requiresGuest = to.matched.some(r => r.meta.requiresGuest)
 
-  if (requiresAuth && !currentUser) next({
-    path: '/login',
-    query: { next: to.fullPath }
-  })
+  if (requiresAuth && !currentUser) {
+    store.commit('setError', 'Войдите для доступа к данной странице')
+    next({
+      path: '/login',
+      query: { next: to.fullPath }
+    })
+  }
   else if (requiresGuest && currentUser) {
     next('/')
     document.title = 'Scimitar'

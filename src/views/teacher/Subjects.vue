@@ -1,10 +1,17 @@
 <template>
   <b-container>
     <b-row>
-      <b-col md="8">
-        <b-nav tabs class="border-0" v-if="subjects && subjects.length">
+      <b-col md="4" order-md="2">
+        <b-btn variant="primary" v-b-modal.add-form>Добавить</b-btn>
+      </b-col>
+      <b-col md="8" order-md="1">
+        <b-nav
+          tabs
+          class="border-0"
+          v-if="subjects && subjects.length && coursesList.length > 1"
+        >
           <b-nav-item to="/subjects" exact-active-class="active"
-            >Все</b-nav-item
+            >Все курсы</b-nav-item
           >
           <b-nav-item
             v-for="(c, i) in coursesList"
@@ -28,7 +35,8 @@
             <tr
               v-for="(s, i) in subjectsSorted"
               :key="i"
-              @click="$router.push(`subjects/${s.id}`)"
+              style="cursor: pointer"
+              @click.once="$router.push(`subjects/${s.id}`)"
             >
               <td>{{ s.name }}</td>
               <td>{{ s.course }}</td>
@@ -36,10 +44,6 @@
           </tbody>
         </table>
         <div v-else class="empty-msg text-muted">Список дисциплин пуст</div>
-      </b-col>
-
-      <b-col md="4">
-        <b-btn variant="primary" v-b-modal.add-form>Добавить</b-btn>
       </b-col>
 
       <b-modal
@@ -104,12 +108,12 @@ export default {
         if (this.$route.query.course) {
           ar = ar.filter(x => x.course === +this.$route.query.course)
         }
-        return ar.sort((a, b) => a.course - b.course)
+        return ar.sort((a, b) => a.course - b.course || a.name.localeCompare(b.name))
       } else return []
     },
     coursesList() {
       return this.subjects
-        ? new Set(this.subjects.map(x => x.course).sort())
+        ? [...new Set(this.subjects.map(x => x.course).sort())]
         : []
     }
   },

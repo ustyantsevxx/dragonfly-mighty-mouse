@@ -1,16 +1,20 @@
 <template>
-  <div>{{ id }}</div>
+  <div>{{ subj }}</div>
 </template>
 
 <script>
 export default {
   computed: {
-    id() {
-      return this.$route.params.id
+    subj() {
+      return this.$store.state.teacher.subjects
+        ? this.$store.state.teacher.subjects.find(x => x.id === this.$route.params.id)
+        : null
     }
+  },
+  beforeCreate() {
+    if (this.$store.state.teacher.subjects === null)
+      this.$store.dispatch('fetch')
+    document.title = this.subj.name
   }
 }
 </script>
-
-<style>
-</style>

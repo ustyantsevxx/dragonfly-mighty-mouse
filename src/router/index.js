@@ -9,7 +9,8 @@ import teacherRoutes from './teacher'
 const routes = [
   {
     path: '/',
-    component: () => import('@/views/Main')
+    component: () => import('@/views/Main'),
+    meta: { title: 'Scimitar' }
   },
   ...authRoutes,
   ...teacherRoutes,
@@ -47,7 +48,7 @@ router.beforeEach((to, _, next) => {
   }
   else {
     next()
-    document.title = to.meta.title || 'Scimitar'
+    if (!to.meta.dynamicTitle) document.title = to.meta.title
   }
 })
 

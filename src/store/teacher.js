@@ -15,22 +15,27 @@ const mutations = {
 const getters = {}
 
 const actions = {
-  async fetch({ commit }) {
+  async fetch({ commit, rootState }) {
     let list = await firebase.firestore()
       .collection('subjects')
       .get()
-    list = list.docs.map(x => ({ ...x.data(), id: x.id }))
+    list = list.docs
+      .map(x => ({ ...x.data(), id: x.id }))
+      .filter(x => x.teacherId === rootState.user.uid)
     commit('assignSubjects', list)
   },
-  async addSubject({ dispatch }, subj) {
+
+  async addSubject({ dispatch, rootState }, subj) {
     firebase.firestore()
       .collection('subjects')
       .add({
         name: subj.name,
-        course: +subj.course
+        course: +subj.course,
+        teacherId: rootState.user.uid
       })
     dispatch('fetch')
   }
 }
+
 
 export default { state, getters, mutations, actions }

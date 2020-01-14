@@ -7,6 +7,6 @@ export default [
   {
     path: '/subjects/:id',
     component: () => import('@/views/teacher/Subject'),
-    meta: { requiresAuth: true, title: 'Просмотр дисциплины' },
+    meta: { requiresAuth: true, dynamicTitle: true },
   }
 ]

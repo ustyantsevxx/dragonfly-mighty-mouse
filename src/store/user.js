@@ -90,7 +90,10 @@ const actions = {
     }
   },
 
-  async signOut() { await firebase.auth().signOut() },
+  async signOut() {
+    await firebase.auth().signOut()
+    location.replace('/')
+  },
 
   async verifyEmail({ commit }) {
     commit('setLoading')

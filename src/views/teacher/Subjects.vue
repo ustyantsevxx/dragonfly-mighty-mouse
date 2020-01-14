@@ -2,9 +2,21 @@
   <b-container>
     <b-row>
       <b-col md="8">
+        <b-nav tabs class="border-0" v-if="subjects && subjects.length">
+          <b-nav-item to="/subjects" exact-active-class="active"
+            >Все</b-nav-item
+          >
+          <b-nav-item
+            v-for="(c, i) in coursesList"
+            :key="i"
+            :to="`?course=${c}`"
+            exact-active-class="active"
+            >{{ c }}</b-nav-item
+          >
+        </b-nav>
         <table
-          v-if="subjects && subjects.length"
-          class="table table-bordered table-hover"
+          v-if="subjectsSorted && subjectsSorted.length"
+          class="table table-bordered table-hover bg-white"
         >
           <thead>
             <tr>
@@ -14,7 +26,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="(s, i) in subjects"
+              v-for="(s, i) in subjectsSorted"
               :key="i"
               @click="$router.push(`subjects/${s.id}`)"
             >
@@ -85,7 +97,21 @@ export default {
   },
 
   computed: {
-    subjects() { return this.$store.state.teacher.subjects }
+    subjects() { return this.$store.state.teacher.subjects },
+    subjectsSorted() {
+      if (this.subjects) {
+        let ar = [...this.subjects]
+        if (this.$route.query.course) {
+          ar = ar.filter(x => x.course === +this.$route.query.course)
+        }
+        return ar.sort((a, b) => a.course - b.course)
+      } else return []
+    },
+    coursesList() {
+      return this.subjects
+        ? new Set(this.subjects.map(x => x.course).sort())
+        : []
+    }
   },
 
   methods: {

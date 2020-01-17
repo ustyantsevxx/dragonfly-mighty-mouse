@@ -8,10 +8,15 @@
       </b-col>
     </b-row>
   </b-container>
+  <loader v-else />
 </template>
 
 <script>
+import Loader from '@/components/Loader'
+
 export default {
+  components: { Loader },
+
   computed: {
     subj() {
       return this.$store.state.teacher.subjects

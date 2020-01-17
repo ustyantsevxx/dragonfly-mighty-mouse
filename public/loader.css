@@ -15,7 +15,7 @@ html {
   background-color: #191414ea;
 }
 
-#cube-loader {
+#loader {
   align-items: center;
   display: flex;
   height: 100%;
@@ -23,11 +23,7 @@ html {
   position: fixed;
 }
 
-#cube-loader .caption {
-  margin: 0 auto;
-}
-
-#cube-loader .cube-loader {
+#loader .loader-container {
   width: 100px;
   height: 100px;
   margin: 0 auto;
@@ -36,7 +32,7 @@ html {
   transform: rotateZ(45deg);
 }
 
-#cube-loader .cube-loader .cube {
+#loader .loader-container .base {
   position: relative;
   transform: rotateZ(45deg);
   width: 50%;
@@ -45,7 +41,7 @@ html {
   transform: scale(1.01);
 }
 
-#cube-loader .cube-loader .cube:before {
+#loader .loader-container .base:before {
   content: "";
   position: absolute;
   top: 0;
@@ -57,29 +53,29 @@ html {
   transform-origin: 100% 100%;
 }
 
-#cube-loader .cube-loader .loader-2 {
+#loader .loader-container .part-2 {
   transform: scale(1.01) rotateZ(90deg);
 }
 
-#cube-loader .cube-loader .loader-3 {
+#loader .loader-container .part-4 {
   transform: scale(1.01) rotateZ(180deg);
 }
 
-#cube-loader .cube-loader .loader-4 {
+#loader .loader-container .part-3 {
   transform: scale(1.01) rotateZ(270deg);
 }
 
-#cube-loader .cube-loader .loader-2:before {
+#loader .loader-container .part-2:before {
   animation-delay: 0.35s;
   background-color: rgb(128, 128, 128);
 }
 
-#cube-loader .cube-loader .loader-3:before {
+#loader .loader-container .part-4:before {
   animation-delay: 0.69s;
   background-color: rgb(64, 64, 64);
 }
 
-#cube-loader .cube-loader .loader-4:before {
+#loader .loader-container .part-3:before {
   animation-delay: 1.04s;
   background-color: rgb(32, 32, 32);
 }

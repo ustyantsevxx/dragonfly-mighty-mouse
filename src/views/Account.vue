@@ -105,7 +105,7 @@ export default {
         name: this.name,
         surname: this.surname
       })
-      this.resetData()
+      this.$v.$reset()
     }
   }
 }

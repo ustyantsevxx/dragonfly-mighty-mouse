@@ -1,5 +1,13 @@
 <template>
-  <div>{{ subj }}</div>
+  <b-container v-if="subj">
+    <b-row>
+      <b-col>
+        <h1>
+          {{ subj.name }}
+        </h1>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -11,10 +19,10 @@ export default {
         : null
     }
   },
-  beforeCreate() {
+  async created() {
     if (this.$store.state.teacher.subjects === null)
-      this.$store.dispatch('fetch')
-    document.title = this.subj.name
+      await this.$store.dispatch('fetch')
+    if (this.subj) document.title = this.subj.name
   }
 }
 </script>

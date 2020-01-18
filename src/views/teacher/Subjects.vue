@@ -20,29 +20,36 @@
             exact-active-class="active"
             >{{ c }}</b-nav-item
           >
+          <li class="filter-container">
+            <input
+              tabindex="1"
+              v-model="filter"
+              @keydown.enter="goIfOneResult"
+              placeholder="Поиск дисциплины"
+            />
+          </li>
         </b-nav>
-        <table
-          v-if="subjectsSorted && subjectsSorted.length"
-          class="table table-bordered table-hover bg-white"
-        >
-          <thead>
-            <tr>
-              <th>Название</th>
-              <th>Курс</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(s, i) in subjectsSorted"
-              :key="i"
-              style="cursor: pointer"
-              @click.once="$router.push(`subjects/${s.id}`)"
-            >
-              <td>{{ s.name }}</td>
-              <td>{{ s.course }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <template v-if="subjectsSorted && subjectsSorted.length">
+          <table class="table table-bordered table-hover bg-white">
+            <thead>
+              <tr>
+                <th>Название</th>
+                <th>Курс</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(s, i) in subjectsSorted"
+                :key="i"
+                style="cursor: pointer"
+                @click.once="$router.push(`subjects/${s.id}`)"
+              >
+                <td>{{ s.name }}</td>
+                <td>{{ s.course }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </template>
         <div v-else class="empty-msg text-muted">Список дисциплин пуст</div>
       </b-col>
 
@@ -87,7 +94,8 @@ export default {
   mixins: [
     baseMixin({
       name: null,
-      course: null
+      course: null,
+      filter: null
     })
   ],
 
@@ -108,6 +116,10 @@ export default {
         if (this.$route.query.course) {
           ar = ar.filter(x => x.course === +this.$route.query.course)
         }
+        if (this.filter) {
+          ar = ar.filter(x => x.name.toLowerCase()
+            .includes(this.filter.toLowerCase()))
+        }
         return ar.sort((a, b) => a.course - b.course || a.name.localeCompare(b.name))
       } else return []
     },
@@ -122,14 +134,45 @@ export default {
     async addSubject() {
       this.$store.dispatch('addSubject', { name: this.name, course: this.course })
       this.resetData()
+    },
+    goIfOneResult() {
+      if (this.filter && this.subjectsSorted.length === 1) {
+        this.$router.push(`subjects/${this.subjectsSorted[0].id}`)
+      }
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .empty-msg {
   text-align: center;
   font-size: 2em;
+}
+
+.filter-container {
+  margin-left: auto;
+  align-self: flex-end;
+
+  input {
+    margin-bottom: 5px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #bcbfc2;
+    outline: none;
+    transition: all 0.15s ease-in-out;
+
+    &::placeholder {
+      color: #bcbfc2;
+    }
+
+    &:focus {
+      border-bottom-color: #191414;
+
+      &::placeholder {
+        color: transparent;
+      }
+    }
+  }
 }
 </style>

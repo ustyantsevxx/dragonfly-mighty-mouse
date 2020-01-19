@@ -19,7 +19,11 @@
               <b-input-group-prepend is-text>
                 <b-icon icon="search" />
               </b-input-group-prepend>
-              <b-input v-model="filter" @keydown.enter="goIfOneResult" />
+              <b-input
+                v-model="filter"
+                @keydown.enter="goIfOneResult"
+                @keydown.esc="filter = null"
+              />
             </b-input-group>
             <transition name="fade">
               <span v-if="filter" @click="filter = null" id="searchclear">

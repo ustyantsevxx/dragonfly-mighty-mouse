@@ -4,31 +4,31 @@
       <b-col md="4" order-md="2">
         <b-btn variant="primary" v-b-modal.add-form>Добавить</b-btn>
       </b-col>
+
       <b-col md="8" order-md="1">
-        <b-nav
-          tabs
-          class="border-0"
-          v-if="subjects && subjects.length && coursesList.length > 1"
-        >
-          <b-nav-item to="/subjects" exact-active-class="active"
-            >Все курсы</b-nav-item
-          >
+        <b-nav tabs class="border-0" v-if="subjects && subjects.length && coursesList.length > 1">
+          <b-nav-item to="/subjects" exact-active-class="active">Все курсы</b-nav-item>
           <b-nav-item
             v-for="(c, i) in coursesList"
             :key="i"
             :to="`?course=${c}`"
             exact-active-class="active"
-            >{{ c }}</b-nav-item
-          >
-          <li class="filter-container">
-            <input
-              tabindex="1"
-              v-model="filter"
-              @keydown.enter="goIfOneResult"
-              placeholder="Поиск дисциплины"
-            />
+          >{{ c }}</b-nav-item>
+          <li class="filter">
+            <b-input-group size="sm">
+              <b-input-group-prepend is-text>
+                <b-icon icon="search" />
+              </b-input-group-prepend>
+              <b-input v-model="filter" @keydown.enter="goIfOneResult" />
+            </b-input-group>
+            <transition name="fade">
+              <span v-if="filter" @click="filter = null" id="searchclear">
+                <b-icon icon="x-circle" />
+              </span>
+            </transition>
           </li>
         </b-nav>
+
         <template v-if="subjectsSorted && subjectsSorted.length">
           <table class="table table-bordered table-hover bg-white">
             <thead>
@@ -64,11 +64,7 @@
         ok-variant="success"
       >
         <b-form-group label="Название" label-for="name-field">
-          <b-form-input
-            id="name-field"
-            :state="inputState($v.name)"
-            v-model.trim="$v.name.$model"
-          />
+          <b-form-input id="name-field" :state="inputState($v.name)" v-model.trim="$v.name.$model" />
         </b-form-group>
         <b-form-group label="Курс" label-for="course-field">
           <b-form-input
@@ -82,7 +78,6 @@
         </b-form-group>
       </b-modal>
     </b-row>
-    <router-view />
   </b-container>
 </template>
 
@@ -144,35 +139,26 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .empty-msg {
   text-align: center;
   font-size: 2em;
 }
 
-.filter-container {
+.filter {
   margin-left: auto;
+  margin-bottom: 5px;
   align-self: flex-end;
+  position: relative;
+}
 
-  input {
-    margin-bottom: 5px;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #bcbfc2;
-    outline: none;
-    transition: all 0.15s ease-in-out;
-
-    &::placeholder {
-      color: #bcbfc2;
-    }
-
-    &:focus {
-      border-bottom-color: #191414;
-
-      &::placeholder {
-        color: transparent;
-      }
-    }
-  }
+#searchclear {
+  position: absolute;
+  right: 0.5em;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #a6acb4;
+  z-index: 100;
 }
 </style>

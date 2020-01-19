@@ -61,6 +61,10 @@ export default {
   height: 100vh;
 }
 
+.pointer {
+  cursor: pointer !important;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.17s;

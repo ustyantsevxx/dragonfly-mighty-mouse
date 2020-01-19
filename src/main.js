@@ -5,11 +5,11 @@ import store from './store'
 Vue.config.productionTip = false
 
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
+Vue.use(BootstrapVue)
+Vue.use(BootstrapVueIcons)
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import '@/assets/custom.scss'
-Vue.use(BootstrapVue)
-Vue.use(BootstrapVueIcons)
 
 import firebase from 'firebase/app'
 import 'firebase/auth'

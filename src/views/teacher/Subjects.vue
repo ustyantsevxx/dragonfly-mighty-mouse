@@ -20,7 +20,7 @@
                 <b-icon icon="search" />
               </b-input-group-prepend>
               <b-input
-                v-model="filter"
+                v-model.trim="filter"
                 @keydown.enter="goIfOneResult"
                 @keydown.esc="filter = null"
               />
@@ -46,9 +46,13 @@
                 v-for="(s, i) in subjectsSorted"
                 :key="i"
                 style="cursor: pointer"
+                :class="searchResult"
                 @click.once="$router.push(`subjects/${s.id}`)"
               >
-                <td>{{ s.name }}</td>
+                <td>
+                  <text-highlight v-if="filter" :queries="filter">{{ s.name }}</text-highlight>
+                  <template v-else>{{ s.name }}</template>
+                </td>
                 <td>{{ s.course }}</td>
               </tr>
             </tbody>
@@ -88,6 +92,7 @@
 <script>
 import { required } from 'vuelidate/lib/validators'
 import baseMixin from '@/mixins/base'
+import TextHighlight from 'vue-text-highlight'
 
 export default {
   mixins: [
@@ -97,6 +102,8 @@ export default {
       filter: null
     })
   ],
+
+  components: { TextHighlight },
 
   beforeCreate() {
     this.$store.dispatch('fetch')
@@ -126,6 +133,11 @@ export default {
       return this.subjects
         ? [...new Set(this.subjects.map(x => x.course).sort())]
         : []
+    },
+    searchResult() {
+      return this.filter && this.subjectsSorted.length === 1
+        ? 'searchResultFound'
+        : ''
     }
   },
 
@@ -143,7 +155,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .empty-msg {
   text-align: center;
   font-size: 2em;
@@ -164,5 +176,14 @@ export default {
   cursor: pointer;
   color: #a6acb4;
   z-index: 100;
+}
+
+mark {
+  padding: 0 !important;
+  background: var(--light) !important;
+}
+
+.searchResultFound {
+  background: var(--light);
 }
 </style>

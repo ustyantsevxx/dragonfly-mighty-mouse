@@ -6,7 +6,7 @@
       </b-col>
 
       <b-col md="8" order-md="1">
-        <b-nav tabs class="border-0" v-if="subjects && subjects.length && coursesList.length > 1">
+        <b-nav tabs class="border-0">
           <b-nav-item to="/subjects" exact-active-class="active">Все курсы</b-nav-item>
           <b-nav-item
             v-for="(c, i) in coursesList"
@@ -14,16 +14,12 @@
             :to="`?course=${c}`"
             exact-active-class="active"
           >{{ c }}</b-nav-item>
-          <li class="filter">
+          <li class="filter" v-if="subjects && subjects.length">
             <b-input-group size="sm">
               <b-input-group-prepend is-text>
                 <b-icon icon="search" />
               </b-input-group-prepend>
-              <b-input
-                v-model.trim="filter"
-                @keydown.enter="goIfOneResult"
-                @keydown.esc="filter = null"
-              />
+              <b-input v-model.trim="filter" @keydown.esc="filter = null" />
             </b-input-group>
             <transition name="fade">
               <span v-if="filter" @click="filter = null" id="searchclear">
@@ -33,32 +29,28 @@
           </li>
         </b-nav>
 
-        <template v-if="subjectsSorted && subjectsSorted.length">
-          <table class="table table-bordered table-hover bg-white">
-            <thead>
-              <tr>
-                <th>Название</th>
-                <th>Курс</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(s, i) in subjectsSorted"
-                :key="i"
-                style="cursor: pointer"
-                :class="searchResult"
-                @click.once="$router.push(`subjects/${s.id}`)"
-              >
-                <td>
-                  <text-highlight v-if="filter" :queries="filter">{{ s.name }}</text-highlight>
-                  <template v-else>{{ s.name }}</template>
-                </td>
-                <td>{{ s.course }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </template>
-        <div v-else class="empty-msg text-muted">Список дисциплин пуст</div>
+        <b-table
+          :fields="fields"
+          :items="subjectsByCourse"
+          :filter="filter"
+          sort-by="course"
+          show-empty
+          hover
+          bordered
+          class="bg-white pointer"
+          @row-clicked.once="$router.push(`subjects/${$event.id}`)"
+        >
+          <template #empty>
+            <div class="text-center text-muted">Список дисциплин пуст</div>
+          </template>
+          <template #emptyfiltered>
+            <div class="text-center text-muted">По запросу ничего не найдено</div>
+          </template>
+          <template #cell(name)="data">
+            <text-highlight v-if="filter" :queries="filter">{{ data.item.name }}</text-highlight>
+            <template v-else>{{ data.item.name }}</template>
+          </template>
+        </b-table>
       </b-col>
 
       <b-modal
@@ -78,7 +70,7 @@
           <b-form-input
             type="number"
             min="1"
-            max="10"
+            max="6"
             id="course-field"
             :state="inputState($v.course)"
             v-model.trim="$v.course.$model"
@@ -99,7 +91,11 @@ export default {
     baseMixin({
       name: null,
       course: null,
-      filter: null
+      filter: null,
+      fields: [
+        { key: 'name', label: 'Название', sortable: true },
+        { key: 'course', label: 'Курс', sortable: true }
+      ]
     })
   ],
 
@@ -116,28 +112,20 @@ export default {
 
   computed: {
     subjects() { return this.$store.state.teacher.subjects },
-    subjectsSorted() {
+    subjectsByCourse() {
       if (this.subjects) {
-        let ar = [...this.subjects]
         if (this.$route.query.course) {
+          let ar = [...this.subjects]
           ar = ar.filter(x => x.course === +this.$route.query.course)
+          return ar
         }
-        if (this.filter) {
-          ar = ar.filter(x => x.name.toLowerCase()
-            .includes(this.filter.toLowerCase()))
-        }
-        return ar.sort((a, b) => a.course - b.course || a.name.localeCompare(b.name))
+        return this.subjects
       } else return []
     },
     coursesList() {
       return this.subjects
         ? [...new Set(this.subjects.map(x => x.course).sort())]
         : []
-    },
-    searchResult() {
-      return this.filter && this.subjectsSorted.length === 1
-        ? 'searchResultFound'
-        : ''
     }
   },
 
@@ -145,11 +133,6 @@ export default {
     async addSubject() {
       this.$store.dispatch('addSubject', { name: this.name, course: this.course })
       this.resetData()
-    },
-    goIfOneResult() {
-      if (this.filter && this.subjectsSorted.length === 1) {
-        this.$router.push(`subjects/${this.subjectsSorted[0].id}`)
-      }
     }
   }
 }
@@ -181,9 +164,5 @@ export default {
 mark {
   padding: 0 !important;
   background: var(--light) !important;
-}
-
-.searchResultFound {
-  background: var(--light);
 }
 </style>

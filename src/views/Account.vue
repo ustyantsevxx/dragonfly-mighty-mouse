@@ -1,9 +1,7 @@
 <template>
   <b-container>
     <b-row align-h="center">
-      <h1 class="m-0">
-        Редактирование профиля
-      </h1>
+      <h1 class="m-0">Редактирование профиля</h1>
     </b-row>
     <b-row align-h="center" class="mb-2">
       <b-col lg="10" xl="9">
@@ -12,7 +10,7 @@
     </b-row>
     <b-row align-h="center">
       <b-col lg="5" xl="4" class="mb-3">
-        <b-card class="p-3  shadow-sm border-0">
+        <b-card class="p-3 shadow-sm border-0">
           <b-form>
             <b-form-group label="Имя" label-for="name-field">
               <b-form-input
@@ -70,14 +68,11 @@ export default {
     }),
   ],
 
-  beforeMount() {
-    this.name = this.userData.name
-    this.surname = this.userData.surname
-  },
-
-  validations: {
-    name: { required },
-    surname: { required },
+  computed: {
+    userData() { return this.$store.getters.userData },
+    notChanged() {
+      return this.userData.name === this.name && this.userData.surname === this.surname
+    }
   },
 
   watch: {
@@ -91,12 +86,9 @@ export default {
     }
   },
 
-  computed: {
-    userData() { return this.$store.getters.userData },
-
-    notChanged() {
-      return this.userData.name === this.name && this.userData.surname === this.surname
-    }
+  beforeMount() {
+    this.name = this.userData.name
+    this.surname = this.userData.surname
   },
 
   methods: {
@@ -107,9 +99,11 @@ export default {
       })
       this.$v.$reset()
     }
-  }
+  },
+
+  validations: {
+    name: { required },
+    surname: { required },
+  },
 }
 </script>
-
-<style>
-</style>

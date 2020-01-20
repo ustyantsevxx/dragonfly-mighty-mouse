@@ -2,9 +2,7 @@
   <b-container v-if="subj">
     <b-row>
       <b-col>
-        <h1>
-          {{ subj.name }}
-        </h1>
+        <h1>{{ subj.name }}</h1>
       </b-col>
     </b-row>
   </b-container>
@@ -24,6 +22,7 @@ export default {
         : null
     }
   },
+
   async created() {
     if (this.$store.state.teacher.subjects === null)
       await this.$store.dispatch('fetch')

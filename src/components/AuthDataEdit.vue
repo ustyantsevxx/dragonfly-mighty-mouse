@@ -13,9 +13,7 @@
           <div>
             <label for="email-field" class="m-0">Эл. почта</label>
             &nbsp;
-            <b-link v-if="!emailVerified" @click.prevent="verifyEmail"
-              >Отправить подтверждение</b-link
-            >
+            <b-link v-if="!emailVerified" @click.prevent="verifyEmail">Отправить подтверждение</b-link>
           </div>
         </template>
 
@@ -34,24 +32,17 @@
             :state="inputState($v.p.newPassword)"
             v-model.trim="$v.p.newPassword.$model"
           />
-          <b-form-invalid-feedback v-if="!$v.p.newPassword.minLength"
-            >Пароль не короче 6 символов!</b-form-invalid-feedback
-          >
+          <b-form-invalid-feedback v-if="!$v.p.newPassword.minLength">Пароль не короче 6 символов!</b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group
-          label="Подтвердите новый пароль"
-          label-for="confirm-field"
-        >
+        <b-form-group label="Подтвердите новый пароль" label-for="confirm-field">
           <b-form-input
             id="confirm-field"
             type="password"
             :state="inputState($v.p.confirmPassword)"
             v-model.trim="$v.p.confirmPassword.$model"
           />
-          <b-form-invalid-feedback v-if="!$v.p.confirmPassword.same"
-            >Пароли должны совпадать!</b-form-invalid-feedback
-          >
+          <b-form-invalid-feedback v-if="!$v.p.confirmPassword.same">Пароли должны совпадать!</b-form-invalid-feedback>
         </b-form-group>
       </template>
       <hr />
@@ -84,8 +75,6 @@ import BtnLoader from '../components/BtnLoader';
 export default {
   components: { BtnLoader },
 
-  beforeMount() { this.email = this.userData.email },
-
   data: () => ({
     email: null,
     p: {
@@ -100,17 +89,6 @@ export default {
       { text: 'Пароль', value: 'password' },
     ]
   }),
-
-
-  validations: {
-    email: { required, email },
-    p: {
-      newPassword: { required, minLength: minLength(6) },
-      confirmPassword: { required, same: sameAs('newPassword') },
-    },
-    oldPassword: { required }
-  },
-
 
   computed: {
     emailVerified() {
@@ -128,6 +106,16 @@ export default {
     inputState: () => val => val.$dirty ? !val.$error : null
   },
 
+  watch: {
+    email() {
+      if (this.email === this.userData.email)
+        this.$v.email.$reset()
+    }
+  },
+
+  beforeMount() {
+    this.email = this.userData.email
+  },
 
   methods: {
     async updateData() {
@@ -147,9 +135,9 @@ export default {
       }
       if (!success) this.oldPassword = null
     },
-
-    verifyEmail() { this.$store.dispatch('verifyEmail') },
-
+    verifyEmail() {
+      this.$store.dispatch('verifyEmail')
+    },
     resetData() {
       this.email = this.userData.email
       this.p.newPassword = null
@@ -158,12 +146,13 @@ export default {
     }
   },
 
-
-  watch: {
-    email() {
-      if (this.email === this.userData.email)
-        this.$v.email.$reset()
-    }
+  validations: {
+    email: { required, email },
+    p: {
+      newPassword: { required, minLength: minLength(6) },
+      confirmPassword: { required, same: sameAs('newPassword') },
+    },
+    oldPassword: { required }
   }
 }
 </script>

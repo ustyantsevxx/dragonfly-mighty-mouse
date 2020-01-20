@@ -13,9 +13,11 @@ import Navbar from './components/Navbar'
 
 export default {
   components: { Navbar },
+
   computed: {
     ...mapGetters(['error', 'success'])
   },
+
   methods: {
     async toast(isError) {
       let russianMsg = await this.translate(isError ? this.error : this.success)
@@ -36,6 +38,7 @@ export default {
       return resp.text.join(' ')
     },
   },
+
   watch: {
     error() { if (this.error) this.toast(true) },
     success() { if (this.success) this.toast(false) }

@@ -87,6 +87,7 @@ import baseMixin from '@/mixins/base'
 import TextHighlight from 'vue-text-highlight'
 
 export default {
+  components: { TextHighlight },
   mixins: [
     baseMixin({
       name: null,
@@ -98,18 +99,6 @@ export default {
       ]
     })
   ],
-
-  components: { TextHighlight },
-
-  beforeCreate() {
-    this.$store.dispatch('fetch')
-  },
-
-  validations: {
-    name: { required },
-    course: { required }
-  },
-
   computed: {
     subjects() { return this.$store.state.teacher.subjects },
     subjectsByCourse() {
@@ -128,12 +117,18 @@ export default {
         : []
     }
   },
-
+  beforeCreate() {
+    this.$store.dispatch('fetch')
+  },
   methods: {
     async addSubject() {
       this.$store.dispatch('addSubject', { name: this.name, course: this.course })
       this.resetData()
     }
+  },
+  validations: {
+    name: { required },
+    course: { required }
   }
 }
 </script>

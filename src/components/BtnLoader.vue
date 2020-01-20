@@ -13,11 +13,13 @@
 
 <script>
 export default {
+  inheritAttrs: false,
+
   props: {
     load: String,
     or: String
   },
-  inheritAttrs: false,
+
   computed: {
     loadingView() { return this.$store.getters.loadingView }
   }

@@ -1,1 +1,1 @@
-# Описание приложения пока что в стадии `to-do`
+# App description in `to-do` stage yet

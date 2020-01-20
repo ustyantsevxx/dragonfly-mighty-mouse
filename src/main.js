@@ -9,7 +9,6 @@ Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import '@/assets/custom.scss'
 
 import firebase from 'firebase/app'
 import 'firebase/auth'
@@ -17,6 +16,7 @@ import 'firebase/auth'
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
 
+import '@/assets/global.scss'
 // main:
 
 firebase.initializeApp({

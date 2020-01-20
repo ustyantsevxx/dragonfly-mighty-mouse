@@ -1,0 +1,45 @@
+// bootstrap custom theme
+
+$primary: #222222;
+$secondary: #666666;
+$success: #333333;
+$danger: #434343;
+$info: #515151;
+$warning: #5f5f5f;
+$light: #eceeec;
+$dark: #111111;
+
+@import 'bootstrap/scss/bootstrap';
+
+// global styles
+
+@font-face {
+  font-family: 'Source Sans';
+  src: url('source-sans.ttf');
+}
+
+* {
+  font-family: 'Source Sans', sans-serif;
+}
+
+#app {
+  height: 100vh;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.17s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.pointer {
+  cursor: pointer !important;
+}
+
+*:disabled {
+  cursor: not-allowed !important;
+}

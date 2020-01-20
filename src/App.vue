@@ -17,21 +17,23 @@ export default {
     ...mapGetters(['error', 'success'])
   },
   methods: {
-    async toast(err) {
-      this.$bvToast.toast(await this.translate(err ? this.error : this.success), {
-        variant: err ? 'danger' : 'success',
+    async toast(isError) {
+      let russianMsg = await this.translate(isError ? this.error : this.success)
+      this.$bvToast.toast(russianMsg, {
+        variant: isError ? 'danger' : 'success',
         solid: true,
         noCloseButton: true,
         toaster: 'b-toaster-top-center',
+        toastClass: 'border-0',
         bodyClass: 'text-center'
       })
-      this.$store.commit(err ? 'unsetError' : 'unsetSuccess')
+      this.$store.commit(isError ? 'unsetError' : 'unsetSuccess')
     },
     async translate(text) {
       const API = process.env.VUE_APP_YANDEX_TRANSLATE_API_KEY
       let resp = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${API}&text=${text}&lang=en-ru`)
       resp = await resp.json()
-      return resp.text[0]
+      return resp.text.join(' ')
     },
   },
   watch: {

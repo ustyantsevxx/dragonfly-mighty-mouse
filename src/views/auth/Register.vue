@@ -95,8 +95,7 @@ export default {
   }),
 
   computed: {
-    loadingView() { return this.$store.getters.loadingView },
-    signed() { return this.$store.getters.signed }
+    signed() { return this.$store.state.user.uid }
   },
 
   watch: {
@@ -115,7 +114,7 @@ export default {
         surname: this.surname,
         email: this.email,
         password: this.password,
-        confirmPassword: this.confirmPassword,
+        confirmPassword: this.confirmPassword
       })
     }
   },

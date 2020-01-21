@@ -19,10 +19,16 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
-  computed: { ...mapGetters(['name', 'surname', 'signed']) },
+  computed: {
+    ...mapState({
+      name: s => s.user.name,
+      surname: s => s.user.surname,
+      signed: s => s.user.uid
+    })
+  },
 
   methods: {
     async signOut() {

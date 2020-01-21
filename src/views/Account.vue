@@ -16,8 +16,8 @@
               <b-form-input
                 id="name-field"
                 required
-                :state="inputState($v.name)"
-                v-model.trim="$v.name.$model"
+                :state="inputState($v.newName)"
+                v-model.trim="$v.newName.$model"
                 placeholder="Ваше имя"
               />
             </b-form-group>
@@ -26,8 +26,8 @@
               <b-form-input
                 id="surname-field"
                 required
-                :state="inputState($v.surname)"
-                v-model.trim="$v.surname.$model"
+                :state="inputState($v.newSurname)"
+                v-model.trim="$v.newSurname.$model"
                 placeholder="Ваша фамилия"
               />
             </b-form-group>
@@ -63,47 +63,48 @@ export default {
 
   mixins: [
     baseMixin({
-      name: null,
-      surname: null
+      newName: null,
+      newSurname: null
     }),
   ],
 
   computed: {
-    userData() { return this.$store.getters.userData },
+    name() { return this.$store.state.user.name },
+    surname() { return this.$store.state.user.surname },
     notChanged() {
-      return this.userData.name === this.name && this.userData.surname === this.surname
+      return this.newName === this.name && this.newSurname === this.surname
     }
   },
 
   watch: {
-    name() {
-      if (this.name === this.userData.name)
-        this.$v.name.$reset()
+    newName() {
+      if (this.newName === this.name)
+        this.$v.newName.$reset()
     },
-    surname() {
-      if (this.surname === this.userData.surname)
-        this.$v.surname.$reset()
+    newSurname() {
+      if (this.newSurname === this.surname)
+        this.$v.newSurname.$reset()
     }
   },
 
   beforeMount() {
-    this.name = this.userData.name
-    this.surname = this.userData.surname
+    this.newName = this.name
+    this.newSurname = this.surname
   },
 
   methods: {
     updateData() {
       this.$store.dispatch('updateData', {
-        name: this.name,
-        surname: this.surname
+        name: this.newName,
+        surname: this.newSurname
       })
       this.$v.$reset()
     }
   },
 
   validations: {
-    name: { required },
-    surname: { required },
+    newName: { required },
+    newSurname: { required },
   },
 }
 </script>

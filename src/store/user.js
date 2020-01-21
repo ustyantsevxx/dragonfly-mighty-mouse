@@ -10,36 +10,17 @@ const state = {
   surname: null
 }
 
-const getters = {
-  userData: state => state,
-  name: state => state.name,
-  surname: state => state.surname,
-  email: state => state.email,
-  emailVerified: state => state.emailVerified,
-  signed: state => state.uid !== null,
-}
+const getters = {}
 
 const mutations = {
   setAuthData(state, user) {
-    if (user) {
-      state.uid = user.uid
-      state.email = user.email
-      state.emailVerified = user.emailVerified
-    } else {
-      state.uid = null
-      state.email = null
-      state.emailVerififed = null
-    }
+    state.uid = user ? user.uid : null
+    state.email = user ? user.email : null
+    state.emailVerified = user ? user.emailVerified : null
   },
-
   setUserData(state, user) {
-    if (user) {
-      state.name = user.name
-      state.surname = user.surname
-    } else {
-      state.name = null
-      state.surname = null
-    }
+    state.name = user ? user.name : null
+    state.surname = user ? user.surname : null
   }
 }
 

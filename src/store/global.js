@@ -3,10 +3,7 @@ const state = {
   toastMsg: null
 }
 
-const getters = {
-  toastMsg: s => s.toastMsg,
-  loadingView: s => s.loadingView
-}
+const getters = {}
 
 const mutations = {
   setLoading: (s, view) => s.loadingView = view,

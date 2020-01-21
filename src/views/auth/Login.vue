@@ -47,7 +47,7 @@ export default {
   }),
 
   computed: {
-    signed() { return this.$store.getters.signed }
+    signed() { return this.$store.state.user.uid }
   },
 
   watch: {

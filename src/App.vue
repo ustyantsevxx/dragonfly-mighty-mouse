@@ -18,6 +18,11 @@ export default {
     ...mapGetters(['error', 'success'])
   },
 
+  watch: {
+    error() { if (this.error) this.toast(true) },
+    success() { if (this.success) this.toast(false) }
+  },
+
   methods: {
     async toast(isError) {
       let russianMsg = await this.translate(isError ? this.error : this.success)
@@ -36,12 +41,7 @@ export default {
       let resp = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${API}&text=${text}&lang=en-ru`)
       resp = await resp.json()
       return resp.text.join(' ')
-    },
-  },
-
-  watch: {
-    error() { if (this.error) this.toast(true) },
-    success() { if (this.success) this.toast(false) }
+    }
   }
 }
 </script>

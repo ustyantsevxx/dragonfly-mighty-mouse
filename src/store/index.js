@@ -1,11 +1,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import user from './user'
-import global from './global'
-import teacher from './teacher'
-
 Vue.use(Vuex)
 
+import user from './user'
+import teacher from './teacher'
+
 export default new Vuex.Store({
-  modules: { global, user, teacher }
+  modules: { user, teacher },
+  state: {
+    loadingView: null,
+    toastMsg: null
+  },
+  mutations: {
+    setLoading: (s, view) => s.loadingView = view,
+    setToastMsg: (s, msg) => s.toastMsg = msg,
+    unsetLoading: s => s.loadingView = null,
+    unsetToastMsg: s => s.toastMsg = null,
+  }
 })

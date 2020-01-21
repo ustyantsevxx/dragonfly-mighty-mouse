@@ -14,7 +14,7 @@ export default {
   components: { Navbar },
 
   computed: {
-    toastMsg() { return this.$store.state.global.toastMsg }
+    toastMsg() { return this.$store.state.toastMsg }
   },
 
   watch: {

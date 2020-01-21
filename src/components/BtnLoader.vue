@@ -21,7 +21,7 @@ export default {
   },
 
   computed: {
-    loadingView() { return this.$store.state.global.loadingView }
+    loadingView() { return this.$store.state.loadingView }
   }
 }
 </script>

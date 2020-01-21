@@ -33,11 +33,6 @@ export default {
 
   data: () => ({ email: null }),
 
-  computed: {
-    loadingView() { return this.$store.getters.loadingView },
-    signed() { return this.$store.getters.signed }
-  },
-
   methods: {
     async restorePassword() {
       let r = await this.$store.dispatch('recoverPassword', { email: this.email })

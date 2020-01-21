@@ -1,37 +1,19 @@
 const state = {
-  loading: false,
   loadingView: null,
-  error: null,
-  success: null
+  toastMsg: null
 }
-
 
 const getters = {
-  error: state => state.error,
-  success: state => state.success,
-  loading: state => state.loading,
-  loadingView: state => state.loadingView
+  toastMsg: s => s.toastMsg,
+  loadingView: s => s.loadingView
 }
-
 
 const mutations = {
-  setLoading(state, view) {
-    state.loading = true
-    state.loadingView = view
-  },
-
-  unsetLoading(state) {
-    state.loading = false
-    state.loadingView = null
-  },
-
-  setSuccess: (state, msg) => state.success = msg,
-  unsetSuccess: state => state.success = null,
-
-  setError: (state, err) => state.error = err,
-  unsetError: state => state.error = null,
+  setLoading: (s, view) => s.loadingView = view,
+  setToastMsg: (s, msg) => s.toastMsg = msg,
+  unsetLoading: s => s.loadingView = null,
+  unsetToastMsg: s => s.toastMsg = null,
 }
-
 
 const actions = {}
 

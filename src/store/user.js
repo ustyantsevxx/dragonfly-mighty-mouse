@@ -10,7 +10,6 @@ const state = {
   surname: null
 }
 
-
 const getters = {
   userData: state => state,
   name: state => state.name,
@@ -19,7 +18,6 @@ const getters = {
   emailVerified: state => state.emailVerified,
   signed: state => state.uid !== null,
 }
-
 
 const mutations = {
   setAuthData(state, user) {
@@ -45,7 +43,6 @@ const mutations = {
   }
 }
 
-
 const actions = {
   async signUp({ commit }, opt) {
     commit('setLoading', 'registerBtn')
@@ -59,9 +56,9 @@ const actions = {
           surname: opt.surname
         })
     } catch (err) {
-      commit('setError', err.message)
-      commit('unsetLoading')
+      commit('setToastMsg', { error: true, msg: err.message })
     }
+    commit('unsetLoading')
   },
 
   async signIn({ commit }, opt) {
@@ -70,7 +67,7 @@ const actions = {
       await firebase.auth().signInWithEmailAndPassword(opt.email, opt.password)
       return true
     } catch (err) {
-      commit('setError', err.message)
+      commit('setToastMsg', { error: true, msg: err.message })
       commit('unsetLoading')
     }
   },
@@ -81,11 +78,11 @@ const actions = {
       await firebase.auth().sendPasswordResetEmail(opt.email, {
         url: 'https://project-scimitar.web.app/login',
       })
-      commit('setSuccess', 'Ссылка востановления отправлена.')
+      commit('setToastMsg', { msg: 'Ссылка востановления отправлена' })
       commit('unsetLoading')
       return true
     } catch (err) {
-      commit('setError', err.message)
+      commit('setToastMsg', { error: true, msg: err.message })
       commit('unsetLoading')
     }
   },
@@ -99,17 +96,16 @@ const actions = {
     commit('setLoading')
     try {
       await firebase.auth().currentUser.sendEmailVerification()
-      commit('setSuccess', 'Ссылка подтверждения отправлена.')
+      commit('setToastMsg', { msg: 'Ссылка подтверждения отправлена' })
     } catch (err) {
-      commit('setError', err.message)
-    } finally {
-      commit('unsetLoading')
+      commit('setToastMsg', { error: true, msg: err.message })
     }
+    commit('unsetLoading')
   },
 
   async updateData({ commit, state }, data) {
+    commit('setLoading', 'updateDataBtn')
     try {
-      commit('setLoading', 'updateDataBtn')
       await firebase.firestore()
         .collection('users')
         .doc(state.uid)
@@ -118,50 +114,44 @@ const actions = {
           surname: data.surname
         })
       commit('setUserData', data)
-      commit('setSuccess', 'Имя успешно изменено.')
+      commit('setToastMsg', { msg: 'Имя успешно изменено' })
     } catch (err) {
-      commit('setError', err.message)
-    } finally {
-      commit('unsetLoading')
+      commit('setToastMsg', { error: true, msg: err.message })
     }
+    commit('unsetLoading')
   },
 
   async updateEmail({ commit, state }, data) {
+    commit('setLoading', 'updatePassBtn')
     try {
-      commit('setLoading', 'updatePassBtn')
-
       let user = await firebase.auth().signInWithEmailAndPassword(state.email, data.password)
       await firebase.auth().currentUser.updateEmail(data.newEmail)
       await firebase.auth().currentUser.sendEmailVerification()
-
       commit('setAuthData', user.user)
-      commit('setSuccess', 'Запрос на смену эл. почты отправлен.')
+      commit('setToastMsg', { msg: 'Запрос на смену эл. почты отправлен' })
       return true
     } catch (err) {
-      commit('setError', err.message)
+      commit('setToastMsg', { error: true, msg: err.message })
     } finally {
       commit('unsetLoading')
     }
   },
 
   async updatePassword({ commit, state }, passwords) {
+    commit('setLoading', 'updatePassBtn')
     try {
-      commit('setLoading', 'updatePassBtn')
-
       let user = await firebase.auth().signInWithEmailAndPassword(state.email, passwords.old)
       await firebase.auth().currentUser.updatePassword(passwords.new)
-
       commit('setAuthData', user.user)
-      commit('setSuccess', 'Пароль успешно изменен.')
+      commit('setToastMsg', { msg: 'Пароль успешно изменен' })
       return true
     } catch (err) {
-      commit('setError', err.message)
+      commit('setToastMsg', { error: true, msg: err.message })
     } finally {
       commit('unsetLoading')
     }
   }
 }
-
 
 
 export default { state, getters, mutations, actions }

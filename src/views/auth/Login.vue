@@ -47,7 +47,6 @@ export default {
   }),
 
   computed: {
-    loadingView() { return this.$store.getters.loadingView },
     signed() { return this.$store.getters.signed }
   },
 

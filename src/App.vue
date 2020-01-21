@@ -8,33 +8,31 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import Navbar from './components/Navbar'
 
 export default {
   components: { Navbar },
 
   computed: {
-    ...mapGetters(['error', 'success'])
+    toastMsg() { return this.$store.getters.toastMsg }
   },
 
   watch: {
-    error() { if (this.error) this.toast(true) },
-    success() { if (this.success) this.toast(false) }
+    toastMsg() { if (this.toastMsg) this.toast() },
   },
 
   methods: {
     async toast(isError) {
-      let russianMsg = await this.translate(isError ? this.error : this.success)
+      let russianMsg = await this.translate(this.toastMsg.msg)
       this.$bvToast.toast(russianMsg, {
-        variant: isError ? 'danger' : 'success',
+        variant: this.toastMsg.error ? 'danger' : 'success',
         solid: true,
         noCloseButton: true,
         toaster: 'b-toaster-top-center',
         toastClass: 'border-0',
         bodyClass: 'text-center'
       })
-      this.$store.commit(isError ? 'unsetError' : 'unsetSuccess')
+      this.$store.commit('unsetToastMsg')
     },
     async translate(text) {
       const API = process.env.VUE_APP_YANDEX_TRANSLATE_API_KEY

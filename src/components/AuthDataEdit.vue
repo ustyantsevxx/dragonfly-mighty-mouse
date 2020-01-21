@@ -7,21 +7,24 @@
       :options="options"
       button-variant="light"
     />
+
     <b-form class="mt-3">
       <b-form-group v-if="selectedRadio === 'email'">
         <template #label>
           <div>
             <label for="email-field" class="m-0">Эл. почта</label>
             &nbsp;
-            <b-link v-if="!emailVerified" @click.prevent="verifyEmail">Отправить подтверждение</b-link>
+            <b-badge v-if="!emailVerified" variant="light">
+              <b-link @click.prevent="verifyEmail">Отправить подтверждение</b-link>
+            </b-badge>
           </div>
         </template>
 
         <b-form-input
           id="email-field"
           placeholder="Ваша почта"
-          :state="inputState($v.email)"
-          v-model.trim="$v.email.$model"
+          :state="inputState($v.newEmail)"
+          v-model.trim="$v.newEmail.$model"
         />
       </b-form-group>
       <template v-else>
@@ -76,7 +79,7 @@ export default {
   components: { BtnLoader },
 
   data: () => ({
-    email: null,
+    newEmail: null,
     p: {
       newPassword: null,
       confirmPassword: null,
@@ -92,29 +95,26 @@ export default {
 
   computed: {
     emailVerified() {
-      return this.$store.getters.emailVerified || this.emailJustChanged
+      return this.$store.state.user.emailVerified || this.emailJustChanged
     },
-
-    userData() { return this.$store.getters.userData },
-
+    email() { return this.$store.state.user.email },
     isInvalid() {
       if (this.selectedRadio === 'email')
-        return this.$v.email.$invalid || this.email === this.userData.email
+        return this.$v.newEmail.$invalid || this.newEmail === this.email
       else return this.$v.p.$invalid
     },
-
     inputState: () => val => val.$dirty ? !val.$error : null
   },
 
   watch: {
-    email() {
-      if (this.email === this.userData.email)
-        this.$v.email.$reset()
+    newEmail() {
+      if (this.newEmail === this.email)
+        this.$v.newEmail.$reset()
     }
   },
 
   beforeMount() {
-    this.email = this.userData.email
+    this.newEmail = this.email
   },
 
   methods: {
@@ -129,7 +129,7 @@ export default {
       else {
         success = await this.$store.dispatch('updateEmail', {
           password: this.oldPassword,
-          newEmail: this.email
+          newEmail: this.newEmail
         })
         if (success) this.emailJustChanged = true
       }
@@ -139,7 +139,7 @@ export default {
       this.$store.dispatch('verifyEmail')
     },
     resetData() {
-      this.email = this.userData.email
+      this.newEmail = this.email
       this.p.newPassword = null
       this.p.confirmPassword = null
       this.$v.$reset()
@@ -147,7 +147,7 @@ export default {
   },
 
   validations: {
-    email: { required, email },
+    newEmail: { required, email },
     p: {
       newPassword: { required, minLength: minLength(6) },
       confirmPassword: { required, same: sameAs('newPassword') },

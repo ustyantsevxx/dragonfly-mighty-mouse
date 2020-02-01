@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <navbar class="mb-3" />
-    <transition name="fade" mode="out-in">
+    <transition name="global-fade" mode="out-in">
       <router-view />
     </transition>
   </div>
@@ -18,7 +18,9 @@ export default {
   },
 
   watch: {
-    toastMsg() { if (this.toastMsg) this.toast() },
+    toastMsg() {
+      if (this.toastMsg) this.toast()
+    }
   },
 
   methods: {

@@ -26,13 +26,13 @@ $dark: #111111;
   height: 100vh;
 }
 
-.fade-enter-active,
-.fade-leave-active {
+.global-fade-enter-active,
+.global-fade-leave-active {
   transition: opacity 0.17s;
 }
 
-.fade-enter,
-.fade-leave-to {
+.global-fade-enter,
+.global-fade-leave-to {
   opacity: 0;
 }
 

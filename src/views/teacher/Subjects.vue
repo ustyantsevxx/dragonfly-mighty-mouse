@@ -21,7 +21,7 @@
               </b-input-group-prepend>
               <b-input v-model.trim="filter" @keydown.esc="filter = null" />
             </b-input-group>
-            <transition name="fade">
+            <transition name="global-fade">
               <span v-if="filter" @click="filter = null" id="searchclear">
                 <b-icon icon="x-circle" />
               </span>
@@ -30,7 +30,7 @@
         </b-nav>
 
         <b-table
-          :fields="fields"
+          :fields="tableHeaders"
           :items="subjectsByCourse"
           :filter="filter"
           sort-by="course"
@@ -59,6 +59,7 @@
         ok-title="Сохранить"
         cancel-title="Отмена"
         id="add-form"
+        :ok-disabled="$v.$invalid"
         @ok="addSubject"
         @hide="resetData"
         ok-variant="success"
@@ -93,7 +94,7 @@ export default {
       name: null,
       course: null,
       filter: null,
-      fields: [
+      tableHeaders: [
         { key: 'name', label: 'Название', sortable: true },
         { key: 'course', label: 'Курс', sortable: true }
       ]

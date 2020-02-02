@@ -40,7 +40,7 @@ router.beforeEach((to, _, next) => {
   const requiresGuest = to.matched.some(r => r.meta.requiresGuest)
 
   if (requiresAuth && !currentUser) {
-    store.commit('setError', 'Войдите для доступа к данной странице')
+    store.commit('setToastMsg', { error: true, msg: 'Войдите для доступа к данной странице' })
     next({
       path: '/login',
       query: { next: to.fullPath }

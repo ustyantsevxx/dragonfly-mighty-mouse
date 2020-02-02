@@ -144,10 +144,13 @@ export default {
     transition: opacity 0.3s;
     opacity: 0;
     cursor: pointer;
+    &:hover {
+      opacity: 0.4 !important;
+    }
   }
   &:hover {
     .edit-icon {
-      opacity: 0.4;
+      opacity: 0.1;
     }
   }
 }

@@ -20,6 +20,16 @@ $dark: #111111;
 
 * {
   font-family: 'Source Sans', sans-serif;
+
+
+  &::selection {
+    background-color: $primary;
+    color: invert($primary);
+  }
+
+  &:disabled {
+    cursor: not-allowed !important;
+  }
 }
 
 #app {
@@ -39,8 +49,4 @@ $dark: #111111;
 
 .pointer {
   cursor: pointer !important;
-}
-
-*:disabled {
-  cursor: not-allowed !important;
 }

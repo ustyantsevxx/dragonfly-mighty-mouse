@@ -28,12 +28,13 @@ $dark: #111111;
 
 .global-fade-enter-active,
 .global-fade-leave-active {
-  transition: opacity 0.17s;
+  transition: all 0.17s;
 }
 
 .global-fade-enter,
 .global-fade-leave-to {
   opacity: 0;
+  transform: translateY(3px);
 }
 
 .pointer {

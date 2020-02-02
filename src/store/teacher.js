@@ -25,7 +25,7 @@ const actions = {
     commit('assignSubjects', list)
   },
 
-  async addSubject({ dispatch, rootState }, subj) {
+  addSubject({ dispatch, rootState }, subj) {
     firebase.firestore()
       .collection('subjects')
       .add({
@@ -34,6 +34,15 @@ const actions = {
         teacherId: rootState.user.uid
       })
     dispatch('fetch')
+  },
+
+  async deleteSubject({ commit }, id) {
+    commit('setLoading', 'deleteSubjectBtn')
+    await firebase.firestore()
+      .collection('subjects')
+      .doc(id)
+      .delete()
+    commit('unsetLoading')
   }
 }
 

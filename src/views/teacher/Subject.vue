@@ -26,6 +26,18 @@
       </b-col>
     </b-row>
 
+    <b-row align-h="center">
+      <b-col>
+        <nav>
+          <b-link :to="`/subjects/${subj.id}/tasklist`">Список лабораторных работ</b-link>
+        </nav>
+      </b-col>
+    </b-row>
+
+    <b-row>
+      <router-view />
+    </b-row>
+
     <b-modal centered title="Редактирование дисциплины" ref="edit-form">
       <b-form-group label="Название" label-for="name-field">
         <b-form-input id="name-field" :state="inputState($v.name)" v-model.trim="$v.name.$model" />

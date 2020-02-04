@@ -15,10 +15,5 @@ export default [
         meta: { requiresAuth: true },
       }
     ]
-  },
-  {
-    path: '/groups',
-    component: () => import('@/views/teacher/GroupsView'),
-    meta: { requiresAuth: true, title: 'Учебные группы' }
-  },
+  }
 ]

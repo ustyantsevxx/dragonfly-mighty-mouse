@@ -26,17 +26,7 @@
       </b-col>
     </b-row>
 
-    <b-row align-h="center">
-      <b-col>
-        <nav>
-          <b-link :to="`/subjects/${subj.id}/tasklist`">Список лабораторных работ</b-link>
-        </nav>
-      </b-col>
-    </b-row>
-
-    <b-row>
-      <router-view />
-    </b-row>
+    <task-list />
 
     <b-modal centered title="Редактирование дисциплины" ref="edit-form">
       <b-form-group label="Название" label-for="name-field">
@@ -64,7 +54,7 @@
       </b-collapse>
 
       <template #modal-footer>
-        <b-btn @click="resetModal" variant="secondary">Отмена</b-btn>
+        <b-btn @click="resetModal('edit-form')" variant="secondary">Отмена</b-btn>
         <btn-loader
           load="updateSubjectBtn"
           or="Обновить"
@@ -81,11 +71,12 @@
 <script>
 import { required } from 'vuelidate/lib/validators'
 import BtnLoader from '@/components/BtnLoader'
+import TaskList from '@/components/teacher/TaskList'
 import Loader from '@/components/Loader'
 import baseMixin from '@/mixins/base'
 
 export default {
-  components: { Loader, BtnLoader },
+  components: { Loader, BtnLoader, TaskList },
   mixins: [
     baseMixin({
       name: null,
@@ -123,18 +114,13 @@ export default {
       this.course = this.subj.course
       this.$refs['edit-form'].show()
     },
-    resetModal() {
-      this.resetData()
-      this.$refs['edit-form'].hide()
-      this.$v.$reset()
-    },
     async editSubject() {
       await this.$store.dispatch('updateSubject', {
         name: this.name,
         course: this.course,
         id: this.subj.id
       })
-      this.resetModal()
+      this.resetModal('edit-form')
       document.title = this.subj.name
     },
     async deleteSubject() {

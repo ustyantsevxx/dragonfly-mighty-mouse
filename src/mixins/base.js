@@ -10,7 +10,12 @@ export default state => {
       resetData() {
         Object.assign(this.$data, state)
         this.$v.$reset()
-      }
+      },
+      resetModal(modalRef) {
+        this.resetData()
+        this.$refs[modalRef].hide()
+        this.$v.$reset()
+      },
     }
   }
 }

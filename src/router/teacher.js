@@ -7,13 +7,6 @@ export default [
   {
     path: '/subjects/:id',
     component: () => import('@/views/teacher/Subject'),
-    meta: { requiresAuth: true, dynamicTitle: true },
-    children: [
-      {
-        path: 'tasklist',
-        component: () => import('@/components/teacher/TaskList'),
-        meta: { requiresAuth: true },
-      }
-    ]
+    meta: { requiresAuth: true, dynamicTitle: true }
   }
 ]

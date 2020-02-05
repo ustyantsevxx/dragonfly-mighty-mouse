@@ -1,13 +1,13 @@
 // bootstrap custom theme
 
-$primary: #222222;
-$secondary: #666666;
-$success: #333333;
-$danger: #434343;
-$info: #515151;
-$warning: #5f5f5f;
-$light: #eceeec;
-$dark: #111111;
+// $primary: #222222;
+// $secondary: #666666;
+// $success: #333333;
+// $danger: #434343;
+// $info: #515151;
+// $warning: #5f5f5f;
+// $light: #eceeec;
+// $dark: #111111;
 
 @import 'bootstrap/scss/bootstrap';
 
@@ -23,8 +23,8 @@ $dark: #111111;
 
 
   &::selection {
-    background-color: $primary;
-    color: invert($primary);
+    //background-color: $primary;
+    //color: invert($primary);
   }
 
   &:disabled {

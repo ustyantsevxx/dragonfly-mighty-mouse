@@ -8,7 +8,7 @@
     <b-row>
       <b-col>
         <b-list-group role="tablist">
-          <b-list-group-item class="p-0" v-for="(task, i) in $parent.subj.tasklist" :key="i">
+          <b-list-group-item class="p-0" v-for="(task, i) in labListSorted" :key="i">
             <header v-b-toggle="`acc-${i}`" role="tab">
               <b class="mr-1">{{task.number}}.</b>
               <span>{{task.name}}</span>
@@ -28,7 +28,13 @@
       </b-col>
     </b-row>
     <!-- invisible !-->
-    <b-modal centered title="Добавить лабораторную работу" id="add-lab-modal" ref="add-lab-modal">
+    <b-modal
+      @hide="resetModal('add-lab-modal')"
+      centered
+      title="Добавить лабораторную работу"
+      id="add-lab-modal"
+      ref="add-lab-modal"
+    >
       <b-form-group label="Номер работы" label-for="number-field">
         <b-form-input
           type="number"
@@ -61,7 +67,13 @@
       </b-form-group>
       <template #modal-footer>
         <b-btn @click="resetModal('add-lab-modal')" variant="secondary">Отмена</b-btn>
-        <btn-loader load="btn-addLab" or="Добавить" variant="success" :disabled="$v.$invalid" />
+        <btn-loader
+          @click="addLabRab"
+          load="btn-addLab"
+          or="Добавить"
+          variant="success"
+          :disabled="$v.$invalid"
+        />
       </template>
     </b-modal>
     <!-- /invisible !-->
@@ -84,14 +96,29 @@ export default {
       wordForms: ['балл', 'балла', 'баллов']
     })
   ],
+  computed: {
+    labListSorted() {
+      return [...this.$parent.subj.tasklist].sort((a, b) => a.number - b.number)
+    }
+  },
   methods: {
-    num2str(n, text_forms) {
-      n = Math.abs(n) % 100;
-      let n1 = n % 10;
-      if (n > 10 && n < 20) { return text_forms[2]; }
-      if (n1 > 1 && n1 < 5) { return text_forms[1]; }
-      if (n1 == 1) { return text_forms[0]; }
-      return text_forms[2];
+    num2str(n, forms) {
+      n = Math.abs(n) % 100
+      let n1 = n % 10
+      if (n > 10 && n < 20) { return forms[2] }
+      if (n1 > 1 && n1 < 5) { return forms[1] }
+      if (n1 == 1) { return forms[0] }
+      return forms[2];
+    },
+    async addLabRab() {
+      await this.$store.dispatch('addLabRab', {
+        name: this.name,
+        score: this.score,
+        number: this.number,
+        description: this.description,
+        subjectId: this.$parent.subj.id
+      })
+      this.resetModal('add-lab-modal')
     }
   },
   validations: {
@@ -106,9 +133,11 @@ export default {
 <style lang="scss" scoped>
 .list-group-item {
   transition: background-color 0.17s;
-  cursor: pointer;
 
   header {
+    cursor: pointer;
+    filter: blur(3px);
+    transition: filter 0.2s;
     padding: 12px 20px;
     display: flex;
     align-items: center;
@@ -125,6 +154,10 @@ export default {
     &:hover {
       background-color: #f8f9fa;
     }
+  }
+
+  .collapsed {
+    filter: none;
   }
 
   .collapse-content {

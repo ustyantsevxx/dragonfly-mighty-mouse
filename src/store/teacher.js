@@ -31,7 +31,8 @@ const actions = {
       .add({
         name: subj.name,
         course: +subj.course,
-        teacherId: rootState.user.uid
+        teacherId: rootState.user.uid,
+        tasklist: []
       })
     await dispatch('fetch')
   },
@@ -52,6 +53,23 @@ const actions = {
       .collection('subjects')
       .doc(id)
       .delete()
+    commit('unsetLoading')
+  },
+
+  async addLabRab({ dispatch, commit }, labData) {
+    commit('setLoading', 'btn-addLab')
+    await firebase.firestore()
+      .collection('subjects')
+      .doc(labData.subjectId)
+      .update({
+        tasklist: firebase.firestore.FieldValue.arrayUnion({
+          name: labData.name,
+          number: labData.number,
+          description: labData.description,
+          score: labData.score
+        })
+      })
+    await dispatch('fetch')
     commit('unsetLoading')
   }
 }

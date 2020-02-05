@@ -43,8 +43,9 @@
         />
       </b-form-group>
       <b-btn block v-b-toggle.confirm-delete variant="danger">Удалить дисциплину</b-btn>
-      <b-collapse id="confirm-delete" class="mt-2">
+      <b-collapse id="confirm-delete">
         <btn-loader
+          class="mt-2"
           variant="dark"
           block
           @click="deleteSubject"

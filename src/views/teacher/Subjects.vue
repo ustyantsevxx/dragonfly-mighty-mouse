@@ -6,7 +6,7 @@
       </b-col>
 
       <b-col md="8" order-md="1">
-        <b-nav tabs class="border-0">
+        <b-nav tabs class="border-0 ss-nav">
           <b-nav-item to="/subjects" exact-active-class="active">Все курсы</b-nav-item>
           <b-nav-item
             v-for="(c, i) in coursesList"
@@ -145,6 +145,10 @@ export default {
   margin-bottom: 5px;
   align-self: flex-end;
   position: relative;
+}
+
+.ss-nav li a {
+  color: #212529 !important;
 }
 
 #searchclear {

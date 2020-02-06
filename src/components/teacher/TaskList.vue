@@ -13,7 +13,7 @@
               <b class="mr-1">{{task.number}}.</b>
               <span class="text-nowrap">{{task.name}}</span>
               <span class="description">{{task.description}}</span>
-              <b-badge variant="primary" pill>{{`${task.score} ${num2str(task.score, wordForms)}`}}</b-badge>
+              <b-badge variant="primary" pill>{{num2str(task.score, wordForms)}}</b-badge>
               <b-icon icon="arrow-bar-up" class="hider" />
             </header>
             <b-collapse :id="`acc-${i}`" accordion="acc" role="tabpanel">
@@ -24,9 +24,8 @@
                   <b>Описание</b>
                   <p>{{task.description}}</p>
                   <b>Награда</b>
-                  <p>{{`${task.score} ${num2str(task.score, wordForms)}`}}</p>
+                  <p>{{num2str(task.score, wordForms)}}</p>
                 </div>
-
                 <footer class="d-flex justify-content-end">
                   <b-btn
                     v-b-toggle="`acc-${i}`"
@@ -41,7 +40,7 @@
         </b-list-group>
       </b-col>
     </b-row>
-    <!-- invisible !-->
+    <!-- invisible -->
     <b-modal
       @hide="resetModal('add-lab-modal')"
       centered
@@ -119,10 +118,12 @@ export default {
     num2str(n, forms) {
       n = Math.abs(n) % 100
       let n1 = n % 10
-      if (n > 10 && n < 20) { return forms[2] }
-      if (n1 > 1 && n1 < 5) { return forms[1] }
-      if (n1 == 1) { return forms[0] }
-      return forms[2];
+      let index
+      if (n > 10 && n < 20) index = 2
+      else if (n1 > 1 && n1 < 5) index = 1
+      else if (n1 == 1) index = 0
+      else index = 2
+      return n + ' ' + forms[index]
     },
     async addLabRab() {
       await this.$store.dispatch('addLabRab', {
@@ -145,8 +146,8 @@ export default {
     number: { required },
     name: { required },
     description: { required },
-    score: { required },
-  },
+    score: { required }
+  }
 }
 </script>
 
@@ -160,6 +161,7 @@ export default {
     align-items: center;
     padding: 12px 20px;
     cursor: pointer;
+
     .description {
       margin-left: 1em;
       color: #6c757d9d !important;
@@ -167,9 +169,11 @@ export default {
       overflow: hidden;
       white-space: nowrap;
     }
+
     .badge {
       margin-left: auto;
     }
+
     .hider {
       display: block;
       font-size: 1.4rem;
@@ -179,6 +183,7 @@ export default {
       left: 50%;
       transform: translateX(-50%);
     }
+
     b,
     span,
     .description,
@@ -186,6 +191,7 @@ export default {
       opacity: 0;
       transition: opacity 0.2s;
     }
+
     &:hover {
       background-color: #f8f9fa;
     }
@@ -200,6 +206,7 @@ export default {
     .badge {
       opacity: 1;
     }
+
     .hider {
       display: none;
     }
@@ -213,9 +220,11 @@ export default {
 .add-item-cont {
   padding: 0.1em;
   background-color: #f8f9fa;
+
   .add-item {
     justify-content: center;
     align-items: center;
+
     .bi {
       height: 2em;
       width: 2em;

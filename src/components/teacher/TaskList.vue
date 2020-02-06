@@ -11,14 +11,20 @@
           <b-list-group-item class="p-0" v-for="(task, i) in labListSorted" :key="i">
             <header v-b-toggle="`acc-${i}`" role="tab">
               <b class="mr-1">{{task.number}}.</b>
-              <span>{{task.name}}</span>
+              <span class="text-nowrap">{{task.name}}</span>
               <span class="description">{{task.description}}</span>
               <b-badge variant="primary" pill>{{`${task.score} ${num2str(task.score, wordForms)}`}}</b-badge>
             </header>
             <b-collapse :id="`acc-${i}`" accordion="acc" role="tabpanel">
               <div class="collapse-content">
+                <div>
+                  <b>Лабораторная работа №{{task.number}}</b>
+                  <p>{{task.name}}</p>
+                  <b>Описание</b>
+                  <p>{{task.description}}</p>
+                </div>
+
                 <footer class="d-flex justify-content-end">
-                  <b-btn size="sm" variant="secondary" class="mr-2">Скрыть</b-btn>
                   <b-btn size="sm" variant="danger">Удалить</b-btn>
                 </footer>
               </div>
@@ -66,7 +72,7 @@
         />
       </b-form-group>
       <template #modal-footer>
-        <b-btn @click="resetModal('add-lab-modal')" variant="secondary">Отмена</b-btn>
+        <b-btn @click="resetModal('add-lab-modal')" variant="light">Отмена</b-btn>
         <btn-loader
           @click="addLabRab"
           load="btn-addLab"
@@ -130,13 +136,13 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .list-group-item {
   transition: background-color 0.17s;
 
   header {
     cursor: pointer;
-    filter: blur(3px);
+    filter: blur(4px);
     transition: filter 0.2s;
     padding: 12px 20px;
     display: flex;

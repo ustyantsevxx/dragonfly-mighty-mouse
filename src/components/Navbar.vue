@@ -42,6 +42,7 @@ export default {
 
 <style scoped>
 .nav {
+  z-index: 10000;
   background-color: #191414ea;
 }
 

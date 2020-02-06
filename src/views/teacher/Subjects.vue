@@ -56,13 +56,14 @@
       <b-modal
         centered
         title="Добавление дисциплины"
-        ok-title="Сохранить"
+        ok-title="Добавить"
         cancel-title="Отмена"
         id="add-form"
         :ok-disabled="$v.$invalid"
         @ok="addSubject"
         @hide="resetData"
         ok-variant="success"
+        cancel-variant="light"
       >
         <b-form-group label="Название" label-for="name-field">
           <b-form-input id="name-field" :state="inputState($v.name)" v-model.trim="$v.name.$model" />
@@ -123,7 +124,7 @@ export default {
   },
   methods: {
     async addSubject() {
-      this.$store.dispatch('addSubject', { name: this.name, course: this.course })
+      await this.$store.dispatch('addSubject', { name: this.name, course: this.course })
       this.resetData()
     }
   },

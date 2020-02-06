@@ -55,7 +55,7 @@
       </b-collapse>
 
       <template #modal-footer>
-        <b-btn @click="resetModal('edit-form')" variant="secondary">Отмена</b-btn>
+        <b-btn @click="resetModal('edit-form')" variant="light">Отмена</b-btn>
         <btn-loader
           load="updateSubjectBtn"
           or="Обновить"

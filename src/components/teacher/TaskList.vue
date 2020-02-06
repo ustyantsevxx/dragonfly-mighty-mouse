@@ -142,7 +142,8 @@ export default {
 
   header {
     cursor: pointer;
-    filter: blur(4px);
+    background-color: #f8f9fa;
+
     transition: filter 0.2s;
     padding: 12px 20px;
     display: flex;
@@ -163,7 +164,7 @@ export default {
   }
 
   .collapsed {
-    filter: none;
+    background-color: transparent;
   }
 
   .collapse-content {

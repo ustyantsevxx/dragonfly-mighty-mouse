@@ -18,10 +18,10 @@ const actions = {
   async fetch({ commit, rootState }) {
     let list = await firebase.firestore()
       .collection('subjects')
+      .where('teacherId', '==', rootState.user.uid)
       .get()
     list = list.docs
       .map(x => ({ ...x.data(), id: x.id }))
-      .filter(x => x.teacherId === rootState.user.uid)
     commit('assignSubjects', list)
   },
 
@@ -71,7 +71,16 @@ const actions = {
       })
     await dispatch('fetch')
     commit('unsetLoading')
-  }
+  },
+  async deleteLabRab({ dispatch }, data) {
+    await firebase.firestore()
+      .collection('subjects')
+      .doc(data.subjectId)
+      .update({
+        tasklist: firebase.firestore.FieldValue.arrayRemove(data.labToDelete)
+      })
+    await dispatch('fetch')
+  },
 }
 
 

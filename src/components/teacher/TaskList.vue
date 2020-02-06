@@ -14,6 +14,7 @@
               <span class="text-nowrap">{{task.name}}</span>
               <span class="description">{{task.description}}</span>
               <b-badge variant="primary" pill>{{`${task.score} ${num2str(task.score, wordForms)}`}}</b-badge>
+              <b-icon icon="arrow-bar-up" class="hider" />
             </header>
             <b-collapse :id="`acc-${i}`" accordion="acc" role="tabpanel">
               <div class="collapse-content">
@@ -22,10 +23,17 @@
                   <p>{{task.name}}</p>
                   <b>Описание</b>
                   <p>{{task.description}}</p>
+                  <b>Награда</b>
+                  <p>{{`${task.score} ${num2str(task.score, wordForms)}`}}</p>
                 </div>
 
                 <footer class="d-flex justify-content-end">
-                  <b-btn size="sm" variant="danger">Удалить</b-btn>
+                  <b-btn
+                    v-b-toggle="`acc-${i}`"
+                    @click="deleteLab(task)"
+                    size="sm"
+                    variant="danger"
+                  >Удалить</b-btn>
                 </footer>
               </div>
             </b-collapse>
@@ -125,6 +133,12 @@ export default {
         subjectId: this.$parent.subj.id
       })
       this.resetModal('add-lab-modal')
+    },
+    deleteLab(lab) {
+      this.$store.dispatch('deleteLabRab', {
+        labToDelete: lab,
+        subjectId: this.$parent.subj.id
+      })
     }
   },
   validations: {
@@ -141,13 +155,11 @@ export default {
   transition: background-color 0.17s;
 
   header {
-    cursor: pointer;
-    background-color: #f8f9fa;
-
-    transition: filter 0.2s;
-    padding: 12px 20px;
     display: flex;
+    background-color: #f8f9fa;
     align-items: center;
+    padding: 12px 20px;
+    cursor: pointer;
     .description {
       margin-left: 1em;
       color: #6c757d9d !important;
@@ -158,13 +170,39 @@ export default {
     .badge {
       margin-left: auto;
     }
+    .hider {
+      display: block;
+      font-size: 1.4rem;
+      color: #6c757d9d;
+      position: absolute;
+      z-index: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    b,
+    span,
+    .description,
+    .badge {
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
     &:hover {
       background-color: #f8f9fa;
     }
   }
 
   .collapsed {
-    background-color: transparent;
+    background-color: inherit;
+
+    b,
+    span,
+    .description,
+    .badge {
+      opacity: 1;
+    }
+    .hider {
+      display: none;
+    }
   }
 
   .collapse-content {

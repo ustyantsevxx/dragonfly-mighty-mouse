@@ -19,13 +19,8 @@
               <b-input-group-prepend is-text>
                 <b-icon icon="search" />
               </b-input-group-prepend>
-              <b-input v-model.trim="filter" @keydown.esc="filter = null" />
+              <b-input type="search" v-model.trim="filter" />
             </b-input-group>
-            <transition name="global-fade">
-              <span v-if="filter" @click="filter = null" id="searchclear">
-                <b-icon icon="x-circle" />
-              </span>
-            </transition>
           </li>
         </b-nav>
 
@@ -152,18 +147,8 @@ export default {
   color: #212529 !important;
 }
 
-#searchclear {
-  position: absolute;
-  right: 0.5em;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: #a6acb4;
-  z-index: 100;
-}
-
 mark {
   padding: 0 !important;
-  background: var(--light) !important;
+  background: rgb(231, 231, 231) !important;
 }
 </style>

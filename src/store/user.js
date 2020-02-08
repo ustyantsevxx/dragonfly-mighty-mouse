@@ -79,9 +79,9 @@ const actions = {
     }
   },
 
-  async signOut() {
-    await firebase.auth().signOut()
-    location.replace('/')
+  signOut() {
+    location.reload()
+    firebase.auth().signOut()
   },
 
   async verifyEmail({ commit }) {

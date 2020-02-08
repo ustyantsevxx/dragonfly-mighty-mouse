@@ -53,6 +53,17 @@ const actions = {
     }
   },
 
+  async googleSignIn({ commit }) {
+    commit('setLoading', 'btn-googleSign')
+    try {
+      let googleProvider = new firebase.auth.GoogleAuthProvider()
+      await firebase.auth().signInWithPopup(googleProvider)
+    } catch (err) {
+      commit('setToastMsg', { error: true, msg: err.message })
+      commit('unsetLoading')
+    }
+  },
+
   async recoverPassword({ commit }, opt) {
     commit('setLoading', 'restoreBtn')
     try {

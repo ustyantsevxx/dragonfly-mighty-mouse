@@ -19,14 +19,26 @@
                 size="lg"
                 variant="primary"
                 block
+                :disabled="!!loading"
                 load="loginBtn"
                 or="Войти"
               />
             </div>
-
             <div class="mt-2 d-flex justify-content-between">
               <b-link to="/restore">Забыли пароль?</b-link>
               <b-link to="/register">Первый раз?</b-link>
+            </div>
+            <div class="separator">или</div>
+            <div>
+              <btn-loader
+                @click="googleSignIn"
+                variant="light"
+                block
+                :disabled="!!loading"
+                load="btn-googleSign"
+              >
+                <img src="@/assets/glogo.webp" />
+              </btn-loader>
             </div>
           </b-form>
         </b-card>
@@ -47,7 +59,8 @@ export default {
   }),
 
   computed: {
-    signed() { return this.$store.state.user.uid }
+    signed() { return this.$store.state.user.uid },
+    loading() { return this.$store.state.loadingView }
   },
 
   watch: {
@@ -66,7 +79,35 @@ export default {
         password: this.password
       })
       if (!signed) this.password = null
+    },
+    googleSignIn() {
+      this.$store.dispatch('googleSignIn')
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+img {
+  height: 1.5em;
+}
+.separator {
+  margin-bottom: 4px;
+  display: flex;
+  color: rgba(0, 0, 0, 0.2);
+  align-items: center;
+  text-align: center;
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  &::before {
+    margin-right: 0.2em;
+  }
+  &::after {
+    margin-left: 0.2em;
+  }
+}
+</style>

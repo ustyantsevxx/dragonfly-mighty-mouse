@@ -6,7 +6,9 @@
       :disabled="loadingView === load || $attrs.disabled"
     >
       <b-spinner v-if="loadingView === load" small class="align-middle" />
-      <template v-else>{{ or }}</template>
+      <template v-else>
+        <slot>{{ or }}</slot>
+      </template>
     </b-btn>
   </div>
 </template>
@@ -14,12 +16,16 @@
 <script>
 export default {
   inheritAttrs: false,
-
   props: {
-    load: String,
-    or: String
+    load: {
+      type: String,
+      required: true
+    },
+    or: {
+      type: String,
+      default: ''
+    }
   },
-
   computed: {
     loadingView() { return this.$store.state.loadingView }
   }

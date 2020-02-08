@@ -69,3 +69,8 @@
 .pointer {
   cursor: pointer !important;
 }
+
+.btn {
+  transition: background-color .15s ease-in-out,
+    border-color .15s ease-in-out,  !important;
+}

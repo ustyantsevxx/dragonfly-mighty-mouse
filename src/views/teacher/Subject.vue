@@ -1,13 +1,13 @@
 <template>
   <b-container v-if="subj">
-    <b-row class="editable">
+    <b-row>
       <b-col>
         <h1 class="header">
           {{ subj.name }}
           <b-icon
             icon="pencil"
             @click="openModalWithEditData"
-            class="edit-icon"
+            class="hover-icon"
             title="Редактировать"
           />
         </h1>
@@ -16,15 +16,12 @@
 
     <b-row>
       <b-col>
-        <b-badge variant="info">{{subj.course}} курс</b-badge>
+        <b-badge class="mr-1">{{subj.course}} курс</b-badge>
+        <b-badge>{{subj.tasklist.length}} лаб. раб.</b-badge>
       </b-col>
     </b-row>
 
-    <b-row align-h="center">
-      <b-col>
-        <hr />
-      </b-col>
-    </b-row>
+    <hr />
 
     <task-list />
 
@@ -139,16 +136,8 @@ export default {
 <style lang="scss" scoped>
 .header {
   margin-bottom: 0;
-  .edit-icon {
-    transition: opacity 0.3s;
-    opacity: 0;
-    cursor: pointer;
-    &:hover {
-      opacity: 0.4 !important;
-    }
-  }
   &:hover {
-    .edit-icon {
+    .hover-icon {
       opacity: 0.1;
     }
   }

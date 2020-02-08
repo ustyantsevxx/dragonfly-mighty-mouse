@@ -45,6 +45,16 @@
   background-color: white;
 }
 
+.hover-icon {
+  transition: opacity 0.3s;
+  opacity: 0;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.4 !important;
+  }
+}
+
 .global-fade-enter-active,
 .global-fade-leave-active {
   transition: all 0.17s;

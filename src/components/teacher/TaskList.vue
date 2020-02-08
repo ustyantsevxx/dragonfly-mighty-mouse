@@ -1,31 +1,32 @@
 <template>
   <div>
-    <b-row class="mb-2">
-      <b-col>
-        <b-btn v-b-modal.add-lab-modal variant="primary" size="sm">Добавить лабораторную</b-btn>
+    <b-row>
+      <b-col class="d-flex justify-content-between">
+        <h4 class="m-0 text-muted">Список лабораторных работ</h4>
+        <b-link v-b-modal.add-lab-modal size="sm" variant="dark">Создать</b-link>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row class="mt-2">
       <b-col>
-        <b-list-group role="tablist">
-          <b-list-group-item class="p-0" v-for="(task, i) in labListSorted" :key="i">
-            <header v-b-toggle="`acc-${i}`" role="tab">
+        <b-list-group>
+          <b-list-group-item class="lab-item" v-for="(task, i) in labListSorted" :key="i">
+            <header v-b-toggle="`acc-${i}`">
               <b class="mr-1">{{task.number}}.</b>
               <span class="text-nowrap">{{task.name}}</span>
               <span class="description">{{task.description}}</span>
               <b-badge variant="primary" pill>{{num2str(task.score, wordForms)}}</b-badge>
               <b-icon icon="arrow-bar-up" class="hider" />
             </header>
-            <b-collapse :id="`acc-${i}`" accordion="acc" role="tabpanel">
+            <b-collapse :id="`acc-${i}`" accordion="lab-list">
               <div class="collapse-content">
-                <div>
+                <section>
                   <b>Лабораторная работа №{{task.number}}</b>
                   <p>{{task.name}}</p>
                   <b>Описание</b>
                   <p>{{task.description}}</p>
                   <b>Награда</b>
                   <p>{{num2str(task.score, wordForms)}}</p>
-                </div>
+                </section>
                 <footer class="d-flex justify-content-end">
                   <b-btn
                     v-b-toggle="`acc-${i}`"
@@ -42,38 +43,32 @@
     </b-row>
     <!-- invisible -->
     <b-modal
-      @hide="resetModal('add-lab-modal')"
       centered
       title="Добавить лабораторную работу"
       id="add-lab-modal"
       ref="add-lab-modal"
+      @hide="resetModal('add-lab-modal')"
     >
-      <b-form-group label="Номер работы" label-for="number-field">
+      <b-form-group label="Номер работы">
         <b-form-input
           type="number"
           min="1"
-          id="number-field"
           :state="inputState($v.number)"
           v-model.number.trim="$v.number.$model"
         />
       </b-form-group>
 
-      <b-form-group label="Название" label-for="name-field">
-        <b-form-input id="name-field" :state="inputState($v.name)" v-model.trim="$v.name.$model" />
+      <b-form-group label="Название">
+        <b-form-input :state="inputState($v.name)" v-model.trim="$v.name.$model" />
       </b-form-group>
 
-      <b-form-group label="Описание" label-for="descr-field">
-        <b-form-textarea
-          id="descr-field"
-          :state="inputState($v.description)"
-          v-model.trim="$v.description.$model"
-        />
+      <b-form-group label="Описание">
+        <b-form-textarea :state="inputState($v.description)" v-model.trim="$v.description.$model" />
       </b-form-group>
 
-      <b-form-group label="Количество баллов" label-for="score-field">
+      <b-form-group label="Количество баллов">
         <b-form-input
           type="number"
-          id="score-field"
           :state="inputState($v.score)"
           v-model.number.trim="$v.score.$model"
         />
@@ -152,7 +147,8 @@ export default {
 </script>
 
 <style lang="scss">
-.list-group-item {
+.lab-item {
+  padding: 0;
   transition: background-color 0.17s;
 
   header {

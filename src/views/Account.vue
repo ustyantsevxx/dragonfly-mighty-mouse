@@ -12,9 +12,8 @@
       <b-col lg="5" xl="4" class="mb-3">
         <b-card class="p-3 shadow-sm border-0">
           <b-form>
-            <b-form-group label="Имя" label-for="name-field">
+            <b-form-group label="Имя">
               <b-form-input
-                id="name-field"
                 required
                 :state="inputState($v.newName)"
                 v-model.trim="$v.newName.$model"
@@ -22,9 +21,8 @@
               />
             </b-form-group>
 
-            <b-form-group label="Фамилия" label-for="surname-field">
+            <b-form-group label="Фамилия">
               <b-form-input
-                id="surname-field"
                 required
                 :state="inputState($v.newSurname)"
                 v-model.trim="$v.newSurname.$model"

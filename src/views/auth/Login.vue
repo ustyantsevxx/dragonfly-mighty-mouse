@@ -5,12 +5,12 @@
         <b-card class="p-3 shadow-sm border-0">
           <h2 class="mb-4 text-center">Вход в систему</h2>
           <b-form @keydown.enter="sign">
-            <b-form-group label="Эл. почта" label-for="email-field">
-              <b-form-input id="email-field" type="email" required v-model="email" />
+            <b-form-group label="Эл. почта">
+              <b-form-input type="email" required v-model="email" />
             </b-form-group>
 
-            <b-form-group label="Пароль" label-for="password-field">
-              <b-form-input id="password-field" type="password" required v-model="password" />
+            <b-form-group label="Пароль">
+              <b-form-input type="password" required v-model="password" />
             </b-form-group>
 
             <div class="mt-4">

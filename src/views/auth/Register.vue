@@ -5,17 +5,15 @@
         <b-card class="p-3 shadow-sm border-0">
           <h2 class="mb-4 text-center">Регистрация</h2>
           <b-form @submit.prevent="signUp">
-            <b-form-group label="Имя" label-for="name-field">
+            <b-form-group label="Имя">
               <b-form-input
-                id="name-field"
                 :state="$v.name.$dirty ? !$v.name.$error : null"
                 v-model.trim="$v.name.$model"
               />
             </b-form-group>
 
-            <b-form-group label="Фамилия" label-for="surname-field">
+            <b-form-group label="Фамилия">
               <b-form-input
-                id="surname-field"
                 :state="$v.surname.$dirty ? !$v.surname.$error : null"
                 v-model.trim="$v.surname.$model"
               />
@@ -23,9 +21,8 @@
 
             <hr class="mt-4" />
 
-            <b-form-group label="Эл. почта" label-for="email-field">
+            <b-form-group label="Эл. почта">
               <b-form-input
-                id="email-field"
                 type="email"
                 :state="$v.email.$dirty ? !$v.email.$error : null"
                 v-model.trim="$v.email.$model"
@@ -33,9 +30,8 @@
               <b-form-invalid-feedback v-if="!$v.email.email">Некорректный формат почты!</b-form-invalid-feedback>
             </b-form-group>
 
-            <b-form-group label="Пароль" label-for="password-field">
+            <b-form-group label="Пароль">
               <b-form-input
-                id="password-field"
                 type="password"
                 :state="$v.password.$dirty ? !$v.password.$error : null"
                 v-model.trim="$v.password.$model"
@@ -43,21 +39,16 @@
               <b-form-invalid-feedback v-if="!$v.password.minLength">Пароль не короче 6 символов!</b-form-invalid-feedback>
             </b-form-group>
 
-            <b-form-group label="Подтвердите пароль" label-for="confirm-field">
+            <b-form-group label="Подтвердите пароль">
               <b-form-input
-                id="confirm-field"
                 type="password"
-                :state="
-                    $v.confirmPassword.$dirty
-                      ? !$v.confirmPassword.$error
-                      : null
-                  "
+                :state="$v.confirmPassword.$dirty? !$v.confirmPassword.$error: null"
                 v-model.trim="$v.confirmPassword.$model"
               />
               <b-form-invalid-feedback v-if="!$v.confirmPassword.same">Пароли должны совпадать!</b-form-invalid-feedback>
             </b-form-group>
 
-            <div class="mt-4">
+            <div class="mt-4 mb-2">
               <btn-loader
                 size="lg"
                 :disabled="$v.$invalid"
@@ -69,9 +60,7 @@
               />
             </div>
 
-            <div class="mt-2 d-flex justify-content-between">
-              <b-link to="/login">Уже зарегистрированы?</b-link>
-            </div>
+            <b-link to="/login">Уже зарегистрированы?</b-link>
           </b-form>
         </b-card>
       </b-col>

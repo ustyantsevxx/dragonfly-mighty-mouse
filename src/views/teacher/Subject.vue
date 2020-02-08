@@ -26,15 +26,14 @@
     <task-list />
 
     <b-modal centered title="Редактирование дисциплины" ref="edit-form">
-      <b-form-group label="Название" label-for="name-field">
-        <b-form-input id="name-field" :state="inputState($v.name)" v-model.trim="$v.name.$model" />
+      <b-form-group label="Название">
+        <b-form-input :state="inputState($v.name)" v-model.trim="$v.name.$model" />
       </b-form-group>
-      <b-form-group label="Курс" label-for="course-field">
+      <b-form-group label="Курс">
         <b-form-input
           type="number"
           min="1"
           max="6"
-          id="course-field"
           :state="inputState($v.course)"
           v-model.number.trim="$v.course.$model"
         />

@@ -38,9 +38,11 @@ export default {
     },
     async translate(text) {
       const API = process.env.VUE_APP_YANDEX_TRANSLATE_API_KEY
-      let resp = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${API}&text=${text}&lang=en-ru`)
-      resp = await resp.json()
-      return resp.text.join(' ')
+      try {
+        let resp = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${API}&text=${text}&lang=en-ru`)
+        resp = await resp.json()
+        return resp.text.join(' ')
+      } catch { return text }
     }
   }
 }

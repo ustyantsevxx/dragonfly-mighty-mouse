@@ -5,8 +5,8 @@
         <b-card class="p-3 shadow-sm border-0">
           <h2 class="mb-4 text-center">Восстановление пароля</h2>
           <b-form @submit.prevent="restorePassword">
-            <b-form-group label="Эл. почта" label-for="email-field">
-              <b-form-input id="email-field" type="email" required v-model="email" />
+            <b-form-group label="Эл. почта">
+              <b-form-input type="email" required v-model="email" />
             </b-form-group>
             <div class="mt-4">
               <btn-loader

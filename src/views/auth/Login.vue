@@ -28,7 +28,7 @@
               <b-link to="/restore">Забыли пароль?</b-link>
               <b-link to="/register">Первый раз?</b-link>
             </div>
-            <div class="separator">или</div>
+            <!-- <div class="separator">или</div>
             <div>
               <btn-loader
                 @click="googleSignIn"
@@ -39,7 +39,7 @@
               >
                 <img src="@/assets/glogo.webp" />
               </btn-loader>
-            </div>
+            </div>-->
           </b-form>
         </b-card>
       </b-col>

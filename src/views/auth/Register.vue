@@ -48,6 +48,11 @@
               <b-form-invalid-feedback v-if="!$v.confirmPassword.same">Пароли должны совпадать!</b-form-invalid-feedback>
             </b-form-group>
 
+            <b-radio-group v-model="isTeacher">
+              <b-radio :value="false">Студент</b-radio>
+              <b-radio :value="true">Преподаватель</b-radio>
+            </b-radio-group>
+
             <div class="mt-4 mb-2">
               <btn-loader
                 size="lg"
@@ -80,7 +85,8 @@ export default {
     surname: null,
     email: null,
     password: null,
-    confirmPassword: null
+    confirmPassword: null,
+    isTeacher: false
   }),
 
   computed: {
@@ -103,7 +109,8 @@ export default {
         surname: this.surname,
         email: this.email,
         password: this.password,
-        confirmPassword: this.confirmPassword
+        confirmPassword: this.confirmPassword,
+        isTeacher: this.isTeacher
       })
     }
   },

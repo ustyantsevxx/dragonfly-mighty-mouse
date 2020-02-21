@@ -7,7 +7,8 @@ const state = {
   email: null,
   emailVerified: null,
   name: null,
-  surname: null
+  surname: null,
+  isTeacher: null
 }
 
 const getters = {}
@@ -21,6 +22,7 @@ const mutations = {
   setUserData(state, user) {
     state.name = user ? user.name : null
     state.surname = user ? user.surname : null
+    state.isTeacher = user ? user.isTeacher : null
   }
 }
 
@@ -34,7 +36,8 @@ const actions = {
         .doc(creds.user.uid)
         .set({
           name: opt.name,
-          surname: opt.surname
+          surname: opt.surname,
+          isTeacher: opt.isTeacher
         })
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message })

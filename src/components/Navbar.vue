@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="sm" type="dark" class="nav shadow-sm" :sticky="true">
-    <b-navbar-brand to="/" exact active-class="c">Project Scimitar</b-navbar-brand>
+    <b-navbar-brand to="/" exact active-class="c">Dragonfly Mighty Mouse</b-navbar-brand>
     <b-navbar-nav>
       <b-nav-item to="/subjects" exact>Дисциплины</b-nav-item>
     </b-navbar-nav>

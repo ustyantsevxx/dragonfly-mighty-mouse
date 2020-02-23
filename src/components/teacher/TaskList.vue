@@ -170,10 +170,6 @@ export default {
     name: { required },
     description: { required },
     score: { required }
-  },
-
-  mounted() {
-    this.$refs['add-lab-modal'].show()
   }
 }
 </script>

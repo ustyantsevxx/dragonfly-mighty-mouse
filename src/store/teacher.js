@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import 'firebase/storage'
 
 const state = {
   subjects: null
@@ -81,6 +82,12 @@ const actions = {
       })
     await dispatch('fetch')
   },
+  async uploadFile(_, file) {
+    let ref = firebase.storage().ref(`lab_files/${file.name}`)
+    await ref.put(file)
+    let url = await ref.getDownloadURL()
+    console.log(url)
+  }
 }
 
 

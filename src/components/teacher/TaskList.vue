@@ -13,7 +13,7 @@
             <header v-b-toggle="`acc-${i}`">
               <b class="mr-1">{{task.number}}.</b>
               <span class="text-nowrap">{{task.name}}</span>
-              <span class="description">{{task.description}}</span>
+              <span class="description overflow">{{task.description}}</span>
               <b-badge variant="primary" pill>{{num2str(task.score, wordForms)}}</b-badge>
               <b-icon icon="arrow-bar-up" class="hider" />
             </header>
@@ -73,6 +73,28 @@
           v-model.number.trim="$v.score.$model"
         />
       </b-form-group>
+
+      <div>Прикрепленные файлы</div>
+      <hr />
+      <b-list-group v-if="files.length">
+        <b-list-group-item v-for="(f,i) in files" :key="i" class="d-flex align-items-center">
+          <span class="overflow">{{f.name}}</span>
+          <span class="text-nowrap mx-2 text-muted">{{Math.round(f.size / 100)}} КБ</span>
+          <button class="close ml-auto" @click="files.splice(i,1)">×</button>
+        </b-list-group-item>
+      </b-list-group>
+      <div v-else class="text-center text-muted">Нет прикрепленных файлов</div>
+      <hr />
+      <b-file
+        ref="file-input"
+        multiple
+        @input="addFile"
+        browse-text="Обзор"
+        class="overflow"
+        drop-placeholder="Отпустите"
+        placeholder="Выберите файл(-ы) или перетащите сюда"
+      />
+
       <template #modal-footer>
         <b-btn @click="resetModal('add-lab-modal')" variant="light">Отмена</b-btn>
         <btn-loader
@@ -101,6 +123,7 @@ export default {
       name: null,
       description: null,
       score: null,
+      files: [],
       wordForms: ['балл', 'балла', 'баллов']
     })
   ],
@@ -120,12 +143,17 @@ export default {
       else index = 2
       return n + ' ' + forms[index]
     },
+    async addFile(files) {
+      this.files.push(...files)
+      this.$refs['file-input'].reset()
+    },
     async addLabRab() {
       await this.$store.dispatch('addLabRab', {
         name: this.name,
         score: this.score,
         number: this.number,
         description: this.description,
+        files: this.files,
         subjectId: this.$parent.subj.id
       })
       this.resetModal('add-lab-modal')
@@ -142,11 +170,21 @@ export default {
     name: { required },
     description: { required },
     score: { required }
+  },
+
+  mounted() {
+    this.$refs['add-lab-modal'].show()
   }
 }
 </script>
 
 <style lang="scss">
+.overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .lab-item {
   padding: 0;
   transition: background-color 0.17s;
@@ -161,9 +199,6 @@ export default {
     .description {
       margin-left: 1em;
       color: #6c757d9d !important;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
     }
 
     .badge {

@@ -50,6 +50,7 @@
     <!-- invisible -->
     <b-modal
       centered
+      no-close-on-backdrop
       title="Добавить лабораторную работу"
       id="add-lab-modal"
       ref="add-lab-modal"
@@ -263,5 +264,9 @@ export default {
       width: 2em;
     }
   }
+}
+
+p {
+  white-space: pre;
 }
 </style>

@@ -48,8 +48,11 @@ const actions = {
     commit('unsetLoading')
 
   },
-  async deleteSubject({ commit }, id) {
+  async deleteSubject({ state, commit, dispatch }, id) {
     commit('setLoading', 'deleteSubjectBtn')
+    for (let lab of state.subjects.find(s => s.id === id).tasklist)
+      await dispatch('deleteLabRab', { subjectId: id, labToDelete: lab })
+
     await firebase.firestore()
       .collection('subjects')
       .doc(id)

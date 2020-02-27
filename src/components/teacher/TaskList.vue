@@ -28,7 +28,9 @@
                   <p>{{num2str(task.score, wordForms)}}</p>
                   <template v-if="task.files && task.files.length">
                     <b>Прикрепленные файлы</b>
-                    <b-link v-for="(file,i) in task.files" :key="i" :href="file.link">{{file.name}}</b-link>
+                    <div v-for="(file,i) in task.files" :key="i">
+                      <b-link :href="file.link">{{file.name}}</b-link>
+                    </div>
                   </template>
                 </section>
                 <footer class="d-flex justify-content-end">

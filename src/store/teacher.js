@@ -85,6 +85,9 @@ const actions = {
   },
 
   async deleteLabRab({ dispatch }, data) {
+    for (let file of data.labToDelete.files)
+      await firebase.storage().ref().child(file.path).delete()
+
     await firebase.firestore()
       .collection('subjects')
       .doc(data.subjectId)

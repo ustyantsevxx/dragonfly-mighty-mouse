@@ -26,6 +26,10 @@
                   <p>{{task.description}}</p>
                   <b>Награда</b>
                   <p>{{num2str(task.score, wordForms)}}</p>
+                  <b>Прикрепленные файлы</b>
+                  <div v-for="(file,i) in task.files" :key="i">
+                    <b-link :href="file.link">{{file.name}}</b-link>
+                  </div>
                 </section>
                 <footer class="d-flex justify-content-end">
                   <b-btn
@@ -79,7 +83,7 @@
       <b-list-group v-if="files.length">
         <b-list-group-item v-for="(f,i) in files" :key="i" class="d-flex align-items-center">
           <span class="overflow">{{f.name}}</span>
-          <span class="text-nowrap mx-2 text-muted">{{Math.round(f.size / 100)}} КБ</span>
+          <span class="text-nowrap mx-2 text-muted">{{Math.round(f.size / 1024)}} КБ</span>
           <button class="close ml-auto" @click="files.splice(i,1)">×</button>
         </b-list-group-item>
       </b-list-group>

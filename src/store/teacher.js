@@ -59,6 +59,15 @@ const actions = {
 
   async addLabRab({ dispatch, commit }, labData) {
     commit('setLoading', 'btn-addLab')
+
+    let pinnedFiles = []
+    for (let file of labData.files) {
+      let ref = firebase.storage().ref(`lab_files/${Math.random().toString(7)}/${file.name}`)
+      await ref.put(file)
+      let link = await ref.getDownloadURL()
+      pinnedFiles.push({ name: file.name, link, path: ref.fullPath })
+    }
+
     await firebase.firestore()
       .collection('subjects')
       .doc(labData.subjectId)
@@ -67,12 +76,14 @@ const actions = {
           name: labData.name,
           number: labData.number,
           description: labData.description,
-          score: labData.score
+          score: labData.score,
+          files: pinnedFiles
         })
       })
     await dispatch('fetch')
     commit('unsetLoading')
   },
+
   async deleteLabRab({ dispatch }, data) {
     await firebase.firestore()
       .collection('subjects')
@@ -81,12 +92,6 @@ const actions = {
         tasklist: firebase.firestore.FieldValue.arrayRemove(data.labToDelete)
       })
     await dispatch('fetch')
-  },
-  async uploadFile(_, file) {
-    let ref = firebase.storage().ref(`lab_files/${file.name}`)
-    await ref.put(file)
-    let url = await ref.getDownloadURL()
-    console.log(url)
   }
 }
 

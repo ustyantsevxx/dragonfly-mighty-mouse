@@ -11,7 +11,7 @@ const routes = [
   {
     path: '/',
     component: () => import('@/views/Main'),
-    meta: { title: 'Scimitar' }
+    meta: { title: 'Dragonfly Mighty Mouse' }
   },
   ...authRoutes,
   ...teacherRoutes,
@@ -34,22 +34,19 @@ let router = new Router({
   scrollBehavior: () => ({ x: 0, y: 0 })
 })
 
-router.beforeEach((to, _, next) => {
-  const currentUser = firebase.auth().currentUser
+router.beforeEach((to, _from, next) => {
+  const signed = !!firebase.auth().currentUser
   const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
   const requiresGuest = to.matched.some(r => r.meta.requiresGuest)
 
-  if (requiresAuth && !currentUser) {
+  if (requiresAuth && !signed) {
     store.commit('setToastMsg', { error: true, msg: 'Войдите для доступа к данной странице' })
     next({
       path: '/login',
       query: { next: to.fullPath }
     })
   }
-  else if (requiresGuest && currentUser) {
-    next('/')
-    document.title = 'Scimitar'
-  }
+  else if (requiresGuest && signed) next('/')
   else {
     next()
     if (!to.meta.dynamicTitle) document.title = to.meta.title

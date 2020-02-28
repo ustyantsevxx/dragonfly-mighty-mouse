@@ -98,9 +98,12 @@ export default {
     course() {
       if (this.course === this.subj.course)
         this.$v.course.$reset()
+    },
+    subj() {
+      if (this.subj) document.title = this.subj.name
     }
   },
-  async created() {
+  mounted() {
     if (this.subj) document.title = this.subj.name
   },
   methods: {
@@ -116,10 +119,9 @@ export default {
         id: this.subj.id
       })
       this.resetModal('edit-form')
-      document.title = this.subj.name
     },
-    async deleteSubject() {
-      await this.$store.dispatch('deleteSubject', this.subj.id)
+    deleteSubject() {
+      this.$store.dispatch('deleteSubject', this.subj.id)
       this.$router.push('/subjects')
     }
   },

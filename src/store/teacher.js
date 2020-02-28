@@ -2,7 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/storage'
-import { db, storage } from '@/main'
+import { db, storage } from '../main'
 import { firestoreAction } from 'vuexfire'
 
 const state = {
@@ -13,11 +13,11 @@ const mutations = {}
 const getters = {}
 
 const actions = {
-  bindSubjects: firestoreAction(({ bindFirestoreRef, rootState }) => {
-    return bindFirestoreRef(
+  bindSubjects: firestoreAction(({ bindFirestoreRef, rootState }) =>
+    bindFirestoreRef(
       'subjects',
       db.collection('subjects').where('teacherId', '==', rootState.user.uid))
-  }),
+  ),
 
   async addSubject({ rootState }, subj) {
     db.collection('subjects').add({

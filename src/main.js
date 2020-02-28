@@ -29,13 +29,17 @@ firebase.initializeApp({
   measurementId: process.env.VUE_APP__FIREBASE_MESID
 })
 
+export const db = firebase.firestore()
+export const storage = firebase.storage()
+export const auth = firebase.auth()
+
 let app
 
-firebase.auth().onAuthStateChanged(async user => {
+auth.onAuthStateChanged(async user => {
   let userData
 
   if (user) {
-    userData = await firebase.firestore().collection('users').doc(user.uid).get()
+    userData = await db.collection('users').doc(user.uid).get()
     userData = userData.data()
   }
 

@@ -65,10 +65,8 @@ export default {
 
   watch: {
     signed() {
-      if (this.signed) {
-        this.$router.replace(this.$route.query.next || '/')
-        this.$store.commit('unsetLoading')
-      }
+      if (this.signed)
+        location.replace(this.$route.query.next || '/')
     }
   },
 

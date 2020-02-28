@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import { db, auth } from '@/main'
 
 const state = {
   uid: null,
@@ -30,15 +31,12 @@ const actions = {
   async signUp({ commit }, opt) {
     commit('setLoading', 'registerBtn')
     try {
-      let creds = await firebase.auth().createUserWithEmailAndPassword(opt.email, opt.password)
-      firebase.firestore()
-        .collection('users')
-        .doc(creds.user.uid)
-        .set({
-          name: opt.name,
-          surname: opt.surname,
-          isTeacher: opt.isTeacher
-        })
+      let creds = await auth.createUserWithEmailAndPassword(opt.email, opt.password)
+      db.collection('users').doc(creds.user.uid).set({
+        name: opt.name,
+        surname: opt.surname,
+        isTeacher: opt.isTeacher
+      })
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message })
     }
@@ -48,7 +46,7 @@ const actions = {
   async signIn({ commit }, opt) {
     commit('setLoading', 'loginBtn')
     try {
-      await firebase.auth().signInWithEmailAndPassword(opt.email, opt.password)
+      await auth.signInWithEmailAndPassword(opt.email, opt.password)
       return true
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message })
@@ -60,7 +58,7 @@ const actions = {
     commit('setLoading', 'btn-googleSign')
     try {
       let googleProvider = new firebase.auth.GoogleAuthProvider()
-      await firebase.auth().signInWithPopup(googleProvider)
+      await auth.signInWithPopup(googleProvider)
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message })
       commit('unsetLoading')
@@ -70,7 +68,7 @@ const actions = {
   async recoverPassword({ commit }, opt) {
     commit('setLoading', 'restoreBtn')
     try {
-      await firebase.auth().sendPasswordResetEmail(opt.email, {
+      await auth.sendPasswordResetEmail(opt.email, {
         url: 'https://project-scimitar.web.app/login',
       })
       commit('setToastMsg', { msg: 'Ссылка востановления отправлена' })
@@ -84,13 +82,13 @@ const actions = {
 
   signOut() {
     location.reload()
-    firebase.auth().signOut()
+    auth.signOut()
   },
 
   async verifyEmail({ commit }) {
     commit('setLoading')
     try {
-      await firebase.auth().currentUser.sendEmailVerification()
+      await auth.currentUser.sendEmailVerification()
       commit('setToastMsg', { msg: 'Ссылка подтверждения отправлена' })
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message })
@@ -101,13 +99,10 @@ const actions = {
   async updateData({ commit, state }, data) {
     commit('setLoading', 'updateDataBtn')
     try {
-      await firebase.firestore()
-        .collection('users')
-        .doc(state.uid)
-        .set({
-          name: data.name,
-          surname: data.surname
-        })
+      await db.collection('users').doc(state.uid).set({
+        name: data.name,
+        surname: data.surname
+      })
       commit('setUserData', data)
       commit('setToastMsg', { msg: 'Имя успешно изменено' })
     } catch (err) {
@@ -119,9 +114,9 @@ const actions = {
   async updateEmail({ commit, state }, data) {
     commit('setLoading', 'updatePassBtn')
     try {
-      let user = await firebase.auth().signInWithEmailAndPassword(state.email, data.password)
-      await firebase.auth().currentUser.updateEmail(data.newEmail)
-      await firebase.auth().currentUser.sendEmailVerification()
+      let user = await auth.signInWithEmailAndPassword(state.email, data.password)
+      await auth.currentUser.updateEmail(data.newEmail)
+      await auth.currentUser.sendEmailVerification()
       commit('setAuthData', user.user)
       commit('setToastMsg', { msg: 'Запрос на смену эл. почты отправлен' })
       return true
@@ -135,8 +130,8 @@ const actions = {
   async updatePassword({ commit, state }, passwords) {
     commit('setLoading', 'updatePassBtn')
     try {
-      let user = await firebase.auth().signInWithEmailAndPassword(state.email, passwords.old)
-      await firebase.auth().currentUser.updatePassword(passwords.new)
+      let user = await auth.signInWithEmailAndPassword(state.email, passwords.old)
+      await auth.currentUser.updatePassword(passwords.new)
       commit('setAuthData', user.user)
       commit('setToastMsg', { msg: 'Пароль успешно изменен' })
       return true

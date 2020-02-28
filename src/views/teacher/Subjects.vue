@@ -114,9 +114,6 @@ export default {
         : []
     }
   },
-  beforeCreate() {
-    this.$store.dispatch('fetch')
-  },
   methods: {
     async addSubject() {
       await this.$store.dispatch('addSubject', { name: this.name, course: this.course })

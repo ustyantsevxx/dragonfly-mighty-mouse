@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { vuexfireMutations } from 'vuexfire'
 Vue.use(Vuex)
 
 import user from './user'
@@ -12,6 +13,7 @@ export default new Vuex.Store({
     toastMsg: null
   },
   mutations: {
+    ...vuexfireMutations,
     setLoading: (s, view) => s.loadingView = view,
     setToastMsg: (s, msg) => s.toastMsg = msg,
     unsetLoading: s => s.loadingView = null,

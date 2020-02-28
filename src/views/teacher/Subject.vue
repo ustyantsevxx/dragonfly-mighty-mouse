@@ -101,8 +101,6 @@ export default {
     }
   },
   async created() {
-    if (this.$store.state.teacher.subjects === null)
-      await this.$store.dispatch('fetch')
     if (this.subj) document.title = this.subj.name
   },
   methods: {

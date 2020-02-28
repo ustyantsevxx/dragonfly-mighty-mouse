@@ -23,6 +23,11 @@ export default {
     }
   },
 
+  beforeCreate() {
+    if (this.$store.state.teacher.subjects === null)
+      this.$store.dispatch('bindSubjects')
+  },
+
   methods: {
     async toast(isError) {
       let russianMsg = await this.translate(this.toastMsg.msg)

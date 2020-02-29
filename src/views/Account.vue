@@ -41,6 +41,24 @@
             />
           </b-form>
         </b-card>
+
+        <b-card class="color-card p-3 shadow-sm border-0">
+          <b-form>
+            <b-form-group label="Цветовая схема">
+              <b-form-input type="color" v-model="newColor" />
+            </b-form-group>
+
+            <btn-loader
+              variant="success"
+              block
+              class="mt-2"
+              v-if="this.newColor !== this.color"
+              @click="updateData"
+              load="updateDataBtn"
+              or="Сохранить"
+            />
+          </b-form>
+        </b-card>
       </b-col>
 
       <b-col lg="5" xl="5">
@@ -62,13 +80,15 @@ export default {
   mixins: [
     baseMixin({
       newName: null,
-      newSurname: null
+      newSurname: null,
+      newColor: null
     }),
   ],
 
   computed: {
     name() { return this.$store.state.user.name },
     surname() { return this.$store.state.user.surname },
+    color() { return this.$store.state.user.color },
     notChanged() {
       return this.newName === this.name && this.newSurname === this.surname
     }
@@ -88,13 +108,15 @@ export default {
   beforeMount() {
     this.newName = this.name
     this.newSurname = this.surname
+    this.newColor = this.color
   },
 
   methods: {
     updateData() {
       this.$store.dispatch('updateData', {
         name: this.newName,
-        surname: this.newSurname
+        surname: this.newSurname,
+        color: this.newColor
       })
       this.$v.$reset()
     }
@@ -106,3 +128,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.color-card {
+  margin-top: 30px;
+}
+</style>

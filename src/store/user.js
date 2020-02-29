@@ -9,7 +9,8 @@ const state = {
   emailVerified: null,
   name: null,
   surname: null,
-  isTeacher: null
+  isTeacher: null,
+  color: null
 }
 
 const getters = {}
@@ -24,6 +25,7 @@ const mutations = {
     state.name = user ? user.name : null
     state.surname = user ? user.surname : null
     state.isTeacher = user ? user.isTeacher : null
+    state.color = user ? user.color : null
   }
 }
 
@@ -101,10 +103,11 @@ const actions = {
     try {
       await db.collection('users').doc(state.uid).set({
         name: data.name,
-        surname: data.surname
+        surname: data.surname,
+        color: data.color
       })
       commit('setUserData', data)
-      commit('setToastMsg', { msg: 'Имя успешно изменено' })
+      commit('setToastMsg', { msg: 'Изменения сохранены' })
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message })
     }

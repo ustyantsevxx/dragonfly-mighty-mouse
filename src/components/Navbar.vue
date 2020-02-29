@@ -1,5 +1,11 @@
 <template>
-  <b-navbar toggleable="sm" type="dark" class="nav shadow-sm" :sticky="true">
+  <b-navbar
+    toggleable="sm"
+    type="dark"
+    class="nav shadow-sm"
+    :sticky="true"
+    :style="{backgroundColor: color}"
+  >
     <b-navbar-brand to="/" exact active-class="c">Dragonfly Mighty Mouse</b-navbar-brand>
     <b-navbar-nav>
       <b-nav-item to="/subjects" exact>Дисциплины</b-nav-item>
@@ -26,7 +32,8 @@ export default {
     ...mapState({
       name: s => s.user.name,
       surname: s => s.user.surname,
-      signed: s => s.user.uid
+      signed: s => s.user.uid,
+      color: s => s.user.color + 'ea'
     })
   },
 

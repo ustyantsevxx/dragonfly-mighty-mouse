@@ -62,18 +62,18 @@
       </template>
     </b-modal>
   </b-container>
-  <loader v-else />
+  <page-loader v-else />
 </template>
 
 <script>
 import { required } from 'vuelidate/lib/validators'
 import BtnLoader from '@/components/BtnLoader'
 import TaskList from '@/components/teacher/TaskList'
-import Loader from '@/components/Loader'
+import PageLoader from '@/components/PageLoader'
 import baseMixin from '@/mixins/base'
 
 export default {
-  components: { Loader, BtnLoader, TaskList },
+  components: { PageLoader, BtnLoader, TaskList },
   mixins: [
     baseMixin({
       name: null,

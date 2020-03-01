@@ -2,7 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 import 'firebase/storage'
-import { db, storage } from '../main'
+import { db, storage } from '../../main'
 import { firestoreAction } from 'vuexfire'
 
 const state = {

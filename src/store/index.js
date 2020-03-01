@@ -3,8 +3,8 @@ import Vuex from 'vuex'
 import { vuexfireMutations } from 'vuexfire'
 Vue.use(Vuex)
 
-import user from './user'
-import teacher from './teacher'
+import user from './modules/user'
+import teacher from './modules/teacher'
 
 export default new Vuex.Store({
   modules: { user, teacher },

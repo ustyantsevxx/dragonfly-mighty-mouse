@@ -10,19 +10,19 @@ import teacherRoutes from './teacher'
 const routes = [
   {
     path: '/',
-    component: () => import('@/views/Main'),
+    component: () => import('@/views/MainView'),
     meta: { title: 'Dragonfly Mighty Mouse' }
   },
   ...authRoutes,
   ...teacherRoutes,
   {
     path: '/account',
-    component: () => import('@/views/Account'),
+    component: () => import('@/views/AccountView'),
     meta: { requiresAuth: true, title: 'Мой профиль' }
   },
   {
     path: '*',
-    component: () => import('@/views/Error'),
+    component: () => import('@/views/ErrorView'),
     meta: { title: 'Ошибка 404' }
   }
 ]

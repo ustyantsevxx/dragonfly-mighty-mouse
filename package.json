@@ -1,5 +1,5 @@
 {
-  "name": "scimitar",
+  "name": "dragonfly-mighty-mouse",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,9 +10,7 @@
   "dependencies": {
     "bootstrap-vue": "^2.5.0",
     "core-js": "^3.6.4",
-    "dotenv": "^8.2.0",
     "firebase": "^7.9.1",
-    "pretty-file-icons": "^2.2.1",
     "vue": "^2.6.11",
     "vue-router": "^3.1.5",
     "vue-text-highlight": "^2.0.10",

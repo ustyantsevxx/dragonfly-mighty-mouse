@@ -2,7 +2,7 @@
   <div>
     <b-row>
       <b-col class="d-flex justify-content-between">
-        <h4 class="m-0 text-muted">Список лабораторных работ</h4>
+        <h4 class="m-0 text-muted">Лабораторные работы</h4>
         <b-link v-b-modal.add-lab-modal size="sm" variant="dark">Создать</b-link>
       </b-col>
     </b-row>

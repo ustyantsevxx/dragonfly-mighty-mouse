@@ -64,7 +64,6 @@ export default {
   },
   beforeCreate() {
     this.$store.dispatch('bindGroup', this.$parent.subj.id)
-
   },
   methods: {
     async addGroup() {

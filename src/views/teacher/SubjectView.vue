@@ -25,6 +25,11 @@
 
     <task-list />
 
+    <hr />
+
+    <group-list />
+
+    <!-- invisible -->
     <b-modal centered title="Редактирование дисциплины" ref="edit-form">
       <b-form-group label="Название">
         <b-form-input :state="inputState($v.name)" v-model.trim="$v.name.$model" />
@@ -61,6 +66,7 @@
         />
       </template>
     </b-modal>
+    <!-- /invisible -->
   </b-container>
   <page-loader v-else />
 </template>
@@ -69,11 +75,12 @@
 import { required } from 'vuelidate/lib/validators'
 import BtnLoader from '@/components/BtnLoader'
 import TaskList from '@/components/teacher/TaskList'
+import GroupList from '@/components/teacher/GroupList'
 import PageLoader from '@/components/PageLoader'
 import baseMixin from '@/mixins/base'
 
 export default {
-  components: { PageLoader, BtnLoader, TaskList },
+  components: { PageLoader, BtnLoader, TaskList, GroupList },
   mixins: [
     baseMixin({
       name: null,

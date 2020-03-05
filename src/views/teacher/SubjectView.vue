@@ -18,7 +18,7 @@
       <b-col class="badges mt-2">
         <b-badge variant="info" class="mr-2">{{subj.course}} курс</b-badge>
         <b-badge variant="success" class="mr-2">{{subj.tasklist.length}} лаб</b-badge>
-        <b-badge variant="danger">0 групп</b-badge>
+        <b-badge variant="danger" v-if="groups">{{groups.length}} групп</b-badge>
       </b-col>
     </b-row>
 
@@ -93,6 +93,9 @@ export default {
       return this.$store.state.teacher.subjects
         ? this.$store.state.teacher.subjects.find(x => x.id === this.$route.params.id)
         : null
+    },
+    groups() {
+      return this.$store.state.teacher.groups ?? null
     },
     notChanged() {
       return this.name === this.subj.name && this.course === this.subj.course

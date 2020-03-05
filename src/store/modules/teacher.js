@@ -6,7 +6,8 @@ import { db, storage } from '../../main'
 import { firestoreAction } from 'vuexfire'
 
 const state = {
-  subjects: null
+  subjects: null,
+  groups: null
 }
 
 const mutations = {}
@@ -17,6 +18,12 @@ const actions = {
     bindFirestoreRef(
       'subjects',
       db.collection('subjects').where('teacherId', '==', rootState.user.uid))
+  ),
+
+  bindGroup: firestoreAction(({ bindFirestoreRef }, subjectId) =>
+    bindFirestoreRef(
+      'groups',
+      db.collection('groups').where('subjectId', '==', subjectId))
   ),
 
   async addSubject({ rootState }, subj) {
@@ -71,6 +78,13 @@ const actions = {
       await storage.ref().child(file.path).delete()
     await db.collection('subjects').doc(data.subjectId).update({
       tasklist: firebase.firestore.FieldValue.arrayRemove(data.labToDelete)
+    })
+  },
+
+  async addGroup(_, groupData) {
+    await db.collection('groups').add({
+      name: groupData.name,
+      subjectId: groupData.subjectId
     })
   }
 }

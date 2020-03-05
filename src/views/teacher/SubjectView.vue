@@ -15,17 +15,18 @@
     </b-row>
 
     <b-row>
-      <b-col>
-        <b-badge class="mr-1">{{subj.course}} курс</b-badge>
-        <b-badge>{{subj.tasklist.length}} лаб. раб.</b-badge>
+      <b-col class="badges mt-2">
+        <b-badge variant="info" class="mr-2">{{subj.course}} курс</b-badge>
+        <b-badge variant="success" class="mr-2">{{subj.tasklist.length}} лаб</b-badge>
+        <b-badge variant="danger">0 групп</b-badge>
       </b-col>
     </b-row>
 
-    <hr />
+    <hr class="my-4" />
 
     <task-list />
 
-    <hr />
+    <hr class="my-4" />
 
     <group-list />
 
@@ -146,6 +147,12 @@ export default {
     .hover-icon {
       opacity: 0.1;
     }
+  }
+}
+
+.badges {
+  span {
+    font-size: 1em;
   }
 }
 </style>

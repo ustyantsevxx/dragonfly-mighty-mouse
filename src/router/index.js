@@ -4,27 +4,15 @@ import store from '@/store'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 Vue.use(Router)
-import authRoutes from './auth'
-import teacherRoutes from './teacher'
+
+import appRoutes from './routes/appRoutes'
+import authRoutes from './routes/authRoutes'
+import teacherRoutes from './routes/teacherRoutes'
 
 const routes = [
-  {
-    path: '/',
-    component: () => import('@/views/MainView'),
-    meta: { title: 'Dragonfly Mighty Mouse' }
-  },
+  ...appRoutes,
   ...authRoutes,
-  ...teacherRoutes,
-  {
-    path: '/account',
-    component: () => import('@/views/AccountView'),
-    meta: { requiresAuth: true, title: 'Мой профиль' }
-  },
-  {
-    path: '*',
-    component: () => import('@/views/ErrorView'),
-    meta: { title: 'Ошибка 404' }
-  }
+  ...teacherRoutes
 ]
 
 let router = new Router({

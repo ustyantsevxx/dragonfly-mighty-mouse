@@ -3,16 +3,17 @@
     <b-row>
       <b-col class="d-flex justify-content-between">
         <h4 class="m-0 text-muted">Группы</h4>
-        <b-link v-b-modal.add-group-modal size="sm" variant="dark">Добавить группу</b-link>
+        <b-link v-b-modal.add-group-modal>Добавить группу</b-link>
       </b-col>
     </b-row>
 
     <b-row class="mt-2" v-if="groups">
       <b-col>
         <b-card no-body>
-          <b-tabs pills card>
+          <b-tabs pills card v-model="openedGroupIndex">
             <b-tab :title="group.name" v-for="(group, i) in groups" :key="i">
-              <b-card-text>{{group.name}}</b-card-text>
+              <b-link @click="copyLink">Пригласить студентов</b-link>
+              <input type="hidden" :id="'invite-link-' + i" />
             </b-tab>
           </b-tabs>
         </b-card>
@@ -54,12 +55,13 @@ export default {
   components: { BtnLoader },
   mixins: [
     baseMixin({
-      newGroupName: null
+      newGroupName: null,
+      openedGroupIndex: 0
     })
   ],
   computed: {
     groups() {
-      return this.$store.state.teacher.groups ?? null
+      return this.$store.state.teacher.groups
     }
   },
   beforeCreate() {
@@ -72,6 +74,17 @@ export default {
         subjectId: this.$parent.subj.id
       })
       this.resetModal('add-group-modal')
+    },
+    copyLink() {
+      let a = document.querySelector('#invite-link-' + this.openedGroupIndex)
+      a.setAttribute('type', 'text')
+      a.value = `${location.origin}/join-group/${this.groups[this.openedGroupIndex].id}`
+      a.select()
+      document.execCommand('copy')
+      a.value = ''
+      a.setAttribute('type', 'hidden')
+      window.getSelection().removeAllRanges()
+      this.$store.commit('setToastMsg', { msg: 'Ссылка приглашения скопирована!' })
     }
   },
   validations: {

@@ -29,8 +29,10 @@ export default {
   },
 
   methods: {
-    async toast(isError) {
-      let russianMsg = await this.translate(this.toastMsg.msg)
+    async toast() {
+      let russianMsg = this.toastMsg.translate
+        ? await this.translate(this.toastMsg.msg)
+        : this.toastMsg.msg
       this.$bvToast.toast(russianMsg, {
         variant: this.toastMsg.error ? 'danger' : 'success',
         solid: true,

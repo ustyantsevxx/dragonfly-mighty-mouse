@@ -85,7 +85,7 @@ export default {
       a.value = ''
       a.setAttribute('type', 'hidden')
       window.getSelection().removeAllRanges()
-      this.$store.commit('setToastMsg', { msg: 'Ссылка приглашения скопирована!' })
+      this.$store.commit('setToastMsg', { msg: 'Ссылка приглашения скопирована!', translate: false })
     }
   },
   validations: {

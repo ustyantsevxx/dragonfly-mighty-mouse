@@ -1,3 +1,4 @@
+import firebase from 'firebase/app'
 import { db } from '../../main'
 
 const state = {}
@@ -18,6 +19,11 @@ const actions = {
         course: subject.get('course')
       }
     }
+  },
+  async joinGroup({ rootState }, id) {
+    await db.collection('groups').doc(id).update({
+      students: firebase.firestore.FieldValue.arrayUnion(rootState.user.uid)
+    })
   }
 }
 

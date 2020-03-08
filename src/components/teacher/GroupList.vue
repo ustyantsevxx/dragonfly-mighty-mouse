@@ -14,6 +14,7 @@
             <b-tab :title="group.name" v-for="(group, i) in groups" :key="i">
               <b-link @click="copyLink">Пригласить студентов</b-link>
               <input type="hidden" :id="'invite-link-' + i" />
+              <div v-for="(student, j) in group.students" :key="j">{{student}}</div>
             </b-tab>
           </b-tabs>
         </b-card>

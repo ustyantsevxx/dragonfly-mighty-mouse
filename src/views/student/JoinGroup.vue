@@ -13,7 +13,7 @@
             Вступив, вы сможете смотреть ведомость всей группы,
             а также видеть список доступных лабораторных работ по дисциплине.
           </p>
-          <b-button variant="success">Присоединиться</b-button>
+          <b-button variant="success" @click="join">Присоединиться</b-button>
         </b-jumbotron>
       </b-col>
     </b-row>
@@ -28,6 +28,11 @@ export default {
   async beforeCreate() {
     let a = await this.$store.dispatch('groupInfo', this.$route.params.id)
     this.info = a
+  },
+  methods: {
+    join() {
+      this.$store.dispatch('joinGroup', this.$route.params.id)
+    }
   }
 }
 </script>

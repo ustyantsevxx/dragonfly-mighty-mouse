@@ -14,7 +14,7 @@
               <b class="mr-1">{{task.number}}.</b>
               <span class="text-nowrap">{{task.name}}</span>
               <span class="description overflow">{{task.description}}</span>
-              <b-badge variant="primary" pill>{{num2str(task.score, wordForms)}}</b-badge>
+              <b-badge variant="primary" pill>{{form(task.score, wordForms)}}</b-badge>
               <b-icon icon="arrow-bar-up" class="hider" />
             </header>
             <b-collapse :id="`acc-${i}`" accordion="lab-list">
@@ -25,7 +25,7 @@
                   <b>Описание</b>
                   <p>{{task.description}}</p>
                   <b>Награда</b>
-                  <p>{{num2str(task.score, wordForms)}}</p>
+                  <p>{{form(task.score, wordForms)}}</p>
                   <template v-if="task.files && task.files.length">
                     <b>Прикрепленные файлы</b>
                     <div v-for="(file,i) in task.files" :key="i">
@@ -121,6 +121,7 @@
 import { required } from 'vuelidate/lib/validators'
 import BtnLoader from '@/components/BtnLoader'
 import baseMixin from '@/mixins/base'
+import { num2str } from '@/assets/functions'
 
 export default {
   components: { BtnLoader },
@@ -140,16 +141,6 @@ export default {
     }
   },
   methods: {
-    num2str(n, forms) {
-      n = Math.abs(n) % 100
-      let n1 = n % 10
-      let index
-      if (n > 10 && n < 20) index = 2
-      else if (n1 > 1 && n1 < 5) index = 1
-      else if (n1 == 1) index = 0
-      else index = 2
-      return n + ' ' + forms[index]
-    },
     async addFile(files) {
       this.files.push(...files)
       this.$refs['file-input'].reset()
@@ -170,7 +161,8 @@ export default {
         labToDelete: lab,
         subjectId: this.$parent.subj.id
       })
-    }
+    },
+    form: (n, forms) => num2str(n, forms)
   },
   validations: {
     number: { required },

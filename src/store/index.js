@@ -3,11 +3,12 @@ import Vuex from 'vuex'
 import { vuexfireMutations } from 'vuexfire'
 Vue.use(Vuex)
 
-import user from './modules/user'
-import teacher from './modules/teacher'
+import user from './modules/userModule'
+import teacher from './modules/teacherModule'
+import student from './modules/studentModule'
 
 export default new Vuex.Store({
-  modules: { user, teacher },
+  modules: { user, teacher, student },
   state: {
     loadingView: null,
     toastMsg: null

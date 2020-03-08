@@ -8,11 +8,13 @@ Vue.use(Router)
 import appRoutes from './routes/appRoutes'
 import authRoutes from './routes/authRoutes'
 import teacherRoutes from './routes/teacherRoutes'
+import studentRoutes from './routes/studentRoutes'
 
 const routes = [
   ...appRoutes,
   ...authRoutes,
-  ...teacherRoutes
+  ...teacherRoutes,
+  ...studentRoutes
 ]
 
 let router = new Router({
@@ -43,8 +45,10 @@ router.beforeEach((to, _from, next) => {
       store.commit('setToastMsg', { error: true, msg: 'У вас нет доступа к данной странице!' })
       next('/')
     }
-    else next()
-    if (!to.meta.dynamicTitle) document.title = to.meta.title
+    else {
+      next()
+      if (!to.meta.dynamicTitle) document.title = to.meta.title
+    }
   }
 })
 

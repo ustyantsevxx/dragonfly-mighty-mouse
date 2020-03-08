@@ -26,6 +26,9 @@ router.beforeEach((to, _from, next) => {
   const signed = !!firebase.auth().currentUser
   const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
   const requiresGuest = to.matched.some(r => r.meta.requiresGuest)
+  const requiresTeacher = to.matched.some(r => r.meta.requiresTeacher)
+  const requiresStudent = to.matched.some(r => r.meta.requiresStudent)
+  const isTeacher = store.state.user.isTeacher
 
   if (requiresAuth && !signed) {
     store.commit('setToastMsg', { error: true, msg: 'Войдите для доступа к данной странице' })
@@ -36,7 +39,11 @@ router.beforeEach((to, _from, next) => {
   }
   else if (requiresGuest && signed) next('/')
   else {
-    next()
+    if (requiresTeacher && !isTeacher || requiresStudent && isTeacher) {
+      store.commit('setToastMsg', { error: true, msg: 'У вас нет доступа к данной странице!' })
+      next('/')
+    }
+    else next()
     if (!to.meta.dynamicTitle) document.title = to.meta.title
   }
 })

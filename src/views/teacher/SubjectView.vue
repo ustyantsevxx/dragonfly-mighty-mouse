@@ -17,8 +17,14 @@
     <b-row>
       <b-col class="badges mt-2">
         <b-badge variant="info" class="mr-2">{{subj.course}} курс</b-badge>
-        <b-badge variant="success" class="mr-2">{{subj.tasklist.length}} лаб</b-badge>
-        <b-badge variant="danger" v-if="groups">{{groups.length}} групп</b-badge>
+        <b-badge
+          variant="success"
+          class="mr-2"
+        >{{ num2str(subj.tasklist.length, ['лабораторная', 'лабораторные' ,'лабораторных']) }}</b-badge>
+        <b-badge
+          variant="danger"
+          v-if="groups"
+        >{{num2str(groups.length, ['группа', 'группы' ,'групп'])}}</b-badge>
       </b-col>
     </b-row>
 
@@ -74,6 +80,7 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators'
+import { num2str } from '@/assets/functions'
 import BtnLoader from '@/components/BtnLoader'
 import TaskList from '@/components/teacher/TaskList'
 import GroupList from '@/components/teacher/GroupList'
@@ -134,7 +141,8 @@ export default {
     deleteSubject() {
       this.$store.dispatch('deleteSubject', this.subj.id)
       this.$router.push('/subjects')
-    }
+    },
+    num2str: (n, forms) => num2str(n, forms)
   },
   validations: {
     name: { required },

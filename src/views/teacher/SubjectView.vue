@@ -5,6 +5,7 @@
         <h1 class="header">
           {{ subj.name }}
           <b-icon
+            v-if="isTeacher"
             icon="pencil"
             @click="openModalWithEditData"
             class="hover-icon"
@@ -29,11 +30,8 @@
     </b-row>
 
     <hr class="my-4" />
-
     <task-list />
-
     <hr class="my-4" />
-
     <group-list />
 
     <!-- invisible -->
@@ -102,10 +100,13 @@ export default {
         : null
     },
     groups() {
-      return this.$store.state.teacher.groups ?? null
+      return this.$store.state.teacher.groups
     },
     notChanged() {
       return this.name === this.subj.name && this.course === this.subj.course
+    },
+    isTeacher() {
+      return this.$store.state.user.isTeacher
     }
   },
   watch: {

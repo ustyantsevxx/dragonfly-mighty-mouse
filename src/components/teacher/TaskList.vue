@@ -3,7 +3,7 @@
     <b-row>
       <b-col class="d-flex justify-content-between">
         <h4 class="m-0 text-muted">Лабораторные работы</h4>
-        <b-link v-b-modal.add-lab-modal size="sm" variant="dark">Создать</b-link>
+        <b-link v-if="isTeacher" v-b-modal.add-lab-modal size="sm" variant="dark">Создать</b-link>
       </b-col>
     </b-row>
     <b-row class="mt-2">
@@ -35,6 +35,7 @@
                 </section>
                 <footer class="d-flex justify-content-end">
                   <b-btn
+                    v-if="isTeacher"
                     v-b-toggle="`acc-${i}`"
                     @click="deleteLab(task)"
                     size="sm"
@@ -138,6 +139,9 @@ export default {
   computed: {
     labListSorted() {
       return [...this.$parent.subj.tasklist].sort((a, b) => a.number - b.number)
+    },
+    isTeacher() {
+      return this.$store.state.user.isTeacher
     }
   },
   methods: {

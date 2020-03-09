@@ -2,7 +2,7 @@
   <b-container>
     <b-row>
       <b-col md="4" order-md="2">
-        <b-btn variant="primary" v-b-modal.add-form>Добавить</b-btn>
+        <b-btn v-if="isTeacher" variant="primary" v-b-modal.add-form>Добавить</b-btn>
       </b-col>
 
       <b-col md="8" order-md="1">
@@ -112,6 +112,9 @@ export default {
       return this.subjects
         ? [...new Set(this.subjects.map(x => x.course).sort())]
         : []
+    },
+    isTeacher() {
+      return this.$store.state.user.isTeacher
     }
   },
   methods: {

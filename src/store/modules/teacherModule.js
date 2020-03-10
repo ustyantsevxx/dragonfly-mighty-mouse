@@ -49,12 +49,6 @@ const actions = {
     for (let lab of state.subjects.find(s => s.id === id).tasklist)
       await dispatch('deleteLabRab', { subjectId: id, labToDelete: lab })
     await db.collection('subjects').doc(id).delete()
-
-    var batch = db.batch()
-    let b = await db.collection('groups').where('subjectId', '==', id).get()
-    b.forEach(c => batch.delete(c.ref))
-    await batch.commit()
-
     commit('unsetLoading')
   },
 

@@ -17,6 +17,7 @@ import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
 
 import '@/assets/global.scss'
+import './registerServiceWorker'
 
 firebase.initializeApp({
   apiKey: process.env.VUE_APP__FIREBASE_API,

@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
-import firebase from 'firebase/app'
-import 'firebase/auth'
+import { auth } from '../main'
 Vue.use(Router)
 
 import appRoutes from './routes/appRoutes'
@@ -25,7 +24,7 @@ let router = new Router({
 })
 
 router.beforeEach((to, _from, next) => {
-  const signed = !!firebase.auth().currentUser
+  const signed = !!auth.currentUser
   const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
   const requiresGuest = to.matched.some(r => r.meta.requiresGuest)
   const requiresTeacher = to.matched.some(r => r.meta.requiresTeacher)

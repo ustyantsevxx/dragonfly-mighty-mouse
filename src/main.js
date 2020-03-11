@@ -12,6 +12,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import 'firebase/storage'
+import 'firebase/firestore'
 
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)

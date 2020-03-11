@@ -97,11 +97,13 @@ const actions = {
   async updateData({ commit, state }, data) {
     commit('setLoading', 'updateDataBtn')
     try {
-      await db.collection('users').doc(state.uid).update({
+      let userDoc = db.collection('users').doc(state.uid)
+      await userDoc.update({
         name: data.name,
         surname: data.surname
       })
-      commit('setUserData', { ...data, isTeacher: state.isTeacher })
+      let fetchedData = await userDoc.get()
+      commit('setUserData', fetchedData.data())
       commit('setToastMsg', { msg: 'Имя успешно изменено' })
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message })

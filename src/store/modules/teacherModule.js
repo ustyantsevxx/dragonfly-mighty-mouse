@@ -11,11 +11,22 @@ const mutations = {}
 const getters = {}
 
 const actions = {
-  bindSubjects: firestoreAction(({ bindFirestoreRef, rootState }) =>
-    bindFirestoreRef(
-      'subjects',
-      db.collection('subjects').where('teacherId', '==', rootState.user.uid))
-  ),
+  bindSubjects: firestoreAction(async ({ bindFirestoreRef, rootState }) => {
+    if (rootState.user.isTeacher)
+      bindFirestoreRef(
+        'subjects',
+        db.collection('subjects').where('teacherId', '==', rootState.user.uid))
+    else {
+      let groupsWhereStudentPresented = await db.collection('groups')
+        .where('students', 'array-contains', rootState.user.uid).get()
+      let subjectIdList = groupsWhereStudentPresented.docs.map(c => c.data().subjectId)
+      await bindFirestoreRef(
+        'subjects',
+        db.collection('subjects')
+          .where(firebase.firestore.FieldPath.documentId(), 'in', subjectIdList)
+      )
+    }
+  }),
 
   bindGroup: firestoreAction(({ bindFirestoreRef }, subjectId) =>
     bindFirestoreRef(

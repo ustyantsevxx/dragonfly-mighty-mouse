@@ -24,15 +24,17 @@
         >{{ num2str(subj.tasklist.length, ['лабораторная', 'лабораторные' ,'лабораторных']) }}</b-badge>
         <b-badge
           variant="danger"
-          v-if="groups"
+          v-if="groups && isTeacher"
         >{{num2str(groups.length, ['группа', 'группы' ,'групп'])}}</b-badge>
       </b-col>
     </b-row>
 
     <hr class="my-4" />
     <task-list />
-    <hr class="my-4" />
-    <group-list />
+    <template v-if="isTeacher">
+      <hr class="my-4" />
+      <group-list v-if="isTeacher" />
+    </template>
 
     <!-- invisible -->
     <b-modal centered title="Редактирование дисциплины" ref="edit-form">

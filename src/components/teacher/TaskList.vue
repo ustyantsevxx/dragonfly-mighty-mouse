@@ -8,16 +8,23 @@
     </b-row>
     <b-row class="mt-2">
       <b-col>
-        <b-list-group>
+        <b-list-group v-if="labListSorted.length">
           <b-list-group-item class="lab-item" v-for="(task, i) in labListSorted" :key="i">
-            <header v-b-toggle="`acc-${i}`">
+            <header v-b-toggle="`acc-${i}`" :class="{hiddenLab: !task.visible}">
               <b class="mr-1">{{task.number}}.</b>
               <span class="text-nowrap">{{task.name}}</span>
               <span class="description overflow">{{task.description}}</span>
               <b-badge variant="primary" pill>{{form(task.score, wordForms)}}</b-badge>
+              <b-icon
+                v-if="isTeacher"
+                :icon="task.visible ? 'eye-fill' :  'eye-slash-fill'"
+                :variant="task.visible ? 'success' :  'danger'"
+                class="icon-vis ml-2"
+                scale="1.5"
+              ></b-icon>
               <b-icon icon="arrow-bar-up" class="hider" />
             </header>
-            <b-collapse :id="`acc-${i}`" accordion="lab-list">
+            <b-collapse :class="{hiddenLab: !task.visible}" :id="`acc-${i}`" accordion="lab-list">
               <div class="collapse-content">
                 <section>
                   <b>Лабораторная работа №{{task.number}}</b>
@@ -33,29 +40,33 @@
                     </div>
                   </template>
                 </section>
-                <footer class="d-flex justify-content-end">
-                  <b-btn
-                    v-if="isTeacher"
-                    v-b-toggle="`acc-${i}`"
-                    @click="deleteLab(task)"
+                <footer v-if="isTeacher" class="d-flex justify-content-end align-items-center">
+                  <b-form-checkbox
+                    class="mr-3"
+                    switch
                     size="sm"
-                    variant="danger"
-                  >Удалить</b-btn>
+                    v-model="task.visible"
+                    @change="toggleTaskVisibility(task.id, $event)"
+                  >{{task.visible ? 'Открыта' : 'Закрыта' }}</b-form-checkbox>
+                  <b-btn size="sm" variant="secondary" @click="editTaskModal(i)">Редактировать</b-btn>
                 </footer>
               </div>
             </b-collapse>
           </b-list-group-item>
         </b-list-group>
+        <b-card v-else>
+          <b-card-text class="text-center text-muted py-4">Список лабораторных работ пуст.</b-card-text>
+        </b-card>
       </b-col>
     </b-row>
     <!-- invisible -->
     <b-modal
       centered
       no-close-on-backdrop
-      title="Добавить лабораторную работу"
+      :title=" `${editTaskIndex === null ? 'Добавить' : 'Изменить'} лабораторную работу`"
       id="add-lab-modal"
       ref="add-lab-modal"
-      @hide="resetModal('add-lab-modal')"
+      @hide="resetModal('add-lab-modal'); editTaskIndex = null"
     >
       <b-form-group label="Номер работы">
         <b-form-input
@@ -102,14 +113,18 @@
         drop-placeholder="Отпустите"
         placeholder="Выберите файл(-ы) или перетащите сюда"
       />
+      <template v-if="editTaskIndex !== null">
+        <hr />
+        <b-btn variant="danger" @click="deleteTask()" block>Удалить лабораторную</b-btn>
+      </template>
 
       <template #modal-footer>
         <b-btn @click="resetModal('add-lab-modal')" variant="light">Отмена</b-btn>
         <btn-loader
-          @click="addLabRab"
+          @click="taskAction"
           load="btn-addLab"
-          or="Добавить"
-          variant="success"
+          :or="editTaskIndex === null ? 'Добавить' : 'Обновить'"
+          :variant="editTaskIndex === null ? 'success' : 'warning'"
           :disabled="$v.$invalid"
         />
       </template>
@@ -133,38 +148,70 @@ export default {
       description: null,
       score: null,
       files: [],
-      wordForms: ['балл', 'балла', 'баллов']
+      wordForms: ['балл', 'балла', 'баллов'],
+      editTaskIndex: null
     })
   ],
   computed: {
     labListSorted() {
-      return [...this.$parent.subj.tasklist].sort((a, b) => a.number - b.number)
+      return this.$store.state.teacher.tasks
+        ? [...this.$store.state.teacher.tasks].sort((a, b) => a.number - b.number)
+        : []
     },
     isTeacher() {
       return this.$store.state.user.isTeacher
     }
   },
+  beforeCreate() {
+    this.$store.dispatch('bindTasks', this.$parent.subj.id)
+  },
   methods: {
+    taskAction() {
+      this.editTaskIndex === null ? this.addTask() : this.editTask()
+    },
+    editTaskModal(i) {
+      this.editTaskIndex = i
+      this.number = this.labListSorted[i].number
+      this.name = this.labListSorted[i].name
+      this.description = this.labListSorted[i].description
+      this.score = this.labListSorted[i].score
+      this.files = [...this.labListSorted[i].files]
+      this.$refs['add-lab-modal'].show()
+    },
     async addFile(files) {
       this.files.push(...files)
       this.$refs['file-input'].reset()
     },
-    async addLabRab() {
-      await this.$store.dispatch('addLabRab', {
+    async addTask() {
+      await this.$store.dispatch('addTask', {
         name: this.name,
         score: this.score,
         number: this.number,
         description: this.description,
         files: this.files,
-        subjectId: this.$parent.subj.id
+        subjectId: this.$parent.subj.id,
+        visible: false
       })
       this.resetModal('add-lab-modal')
     },
-    deleteLab(lab) {
-      this.$store.dispatch('deleteLabRab', {
-        labToDelete: lab,
-        subjectId: this.$parent.subj.id
+    async editTask() {
+      await this.$store.dispatch('editTask', {
+        id: this.labListSorted[this.editTaskIndex].id,
+        name: this.name,
+        score: this.score,
+        number: this.number,
+        description: this.description,
+        files: this.files,
+        visible: this.labListSorted[this.editTaskIndex].visible
       })
+      this.resetModal('add-lab-modal')
+    },
+    deleteTask() {
+      this.$store.dispatch('deleteTask', this.labListSorted[this.editTaskIndex].id)
+      this.resetModal('add-lab-modal')
+    },
+    toggleTaskVisibility(id, e) {
+      this.$store.dispatch('toggleTaskVisibility', { id, state: e })
     },
     form: (n, forms) => num2str(n, forms)
   },
@@ -217,7 +264,8 @@ export default {
     b,
     span,
     .description,
-    .badge {
+    .badge,
+    .icon-vis {
       opacity: 0;
       transition: opacity 0.2s;
     }
@@ -233,7 +281,8 @@ export default {
     b,
     span,
     .description,
-    .badge {
+    .badge,
+    .icon-vis {
       opacity: 1;
     }
 
@@ -264,5 +313,9 @@ export default {
 
 p {
   white-space: pre;
+}
+
+.hiddenLab {
+  background-color: #eeeeee !important;
 }
 </style>

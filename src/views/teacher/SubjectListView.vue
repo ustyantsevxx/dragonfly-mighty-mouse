@@ -1,81 +1,85 @@
 <template>
-  <b-container>
-    <b-row>
-      <b-col md="4" order-md="2">
-        <b-btn v-if="isTeacher" variant="primary" v-b-modal.add-form>Добавить</b-btn>
-      </b-col>
+  <main>
+    <b-container>
+      <b-row>
+        <b-col md="4" order-md="2">
+          <b-btn v-if="isTeacher" variant="primary" v-b-modal.add-form>Добавить</b-btn>
+        </b-col>
 
-      <b-col md="8" order-md="1">
-        <b-nav tabs class="border-0 ss-nav">
-          <b-nav-item to="/subjects" exact-active-class="active">Все курсы</b-nav-item>
-          <b-nav-item
-            v-for="(c, i) in coursesList"
-            :key="i"
-            :to="`?course=${c}`"
-            exact-active-class="active"
-          >{{ c }}</b-nav-item>
-          <li class="filter" v-if="subjects && subjects.length">
-            <b-input-group size="sm">
-              <b-input-group-prepend is-text>
-                <b-icon icon="search" />
-              </b-input-group-prepend>
-              <b-input type="search" v-model.trim="filter" />
-            </b-input-group>
-          </li>
-        </b-nav>
+        <b-col md="8" order-md="1">
+          <b-nav tabs class="border-0 ss-nav">
+            <b-nav-item to="/subjects" exact-active-class="active">Все курсы</b-nav-item>
+            <b-nav-item
+              v-for="(c, i) in coursesList"
+              :key="i"
+              :to="`?course=${c}`"
+              exact-active-class="active"
+            >{{ c }}</b-nav-item>
+            <li class="filter" v-if="subjects && subjects.length">
+              <b-input-group size="sm">
+                <b-input-group-prepend is-text>
+                  <b-icon icon="search" />
+                </b-input-group-prepend>
+                <b-input type="search" v-model.trim="filter" />
+              </b-input-group>
+            </li>
+          </b-nav>
 
-        <b-table
-          :fields="tableHeaders"
-          :items="subjectsByCourse"
-          :filter="filter"
-          sort-by="course"
-          show-empty
-          hover
-          bordered
-          class="bg-white pointer"
-          @row-clicked.once="$router.push(`subjects/${$event.id}`)"
-        >
-          <template #empty>
-            <div class="text-center text-muted">Список дисциплин пуст</div>
-          </template>
-          <template #emptyfiltered>
-            <div class="text-center text-muted">По запросу ничего не найдено</div>
-          </template>
-          <template #cell(name)="data">
-            <text-highlight v-if="filter" :queries="filter">{{ data.item.name }}</text-highlight>
-            <template v-else>{{ data.item.name }}</template>
-          </template>
-        </b-table>
-      </b-col>
+          <b-table
+            :fields="tableHeaders"
+            :items="subjectsByCourse"
+            :filter="filter"
+            sort-by="course"
+            show-empty
+            hover
+            bordered
+            class="bg-white pointer"
+            @row-clicked.once="$router.push(`subjects/${$event.id}`)"
+          >
+            <template #empty>
+              <div class="text-center text-muted">Список дисциплин пуст</div>
+            </template>
+            <template #emptyfiltered>
+              <div class="text-center text-muted">По запросу ничего не найдено</div>
+            </template>
+            <template #cell(name)="data">
+              <text-highlight v-if="filter" :queries="filter">{{ data.item.name }}</text-highlight>
+              <template v-else>{{ data.item.name }}</template>
+            </template>
+          </b-table>
+        </b-col>
+      </b-row>
+    </b-container>
 
-      <b-modal
-        centered
-        title="Добавление дисциплины"
-        ok-title="Добавить"
-        cancel-title="Отмена"
-        id="add-form"
-        :ok-disabled="$v.$invalid"
-        @ok="addSubject"
-        @hide="resetData"
-        ok-variant="success"
-        cancel-variant="light"
-      >
-        <b-form-group label="Название" label-for="name-field">
-          <b-form-input id="name-field" :state="inputState($v.name)" v-model.trim="$v.name.$model" />
-        </b-form-group>
-        <b-form-group label="Курс" label-for="course-field">
-          <b-form-input
-            type="number"
-            min="1"
-            max="6"
-            id="course-field"
-            :state="inputState($v.course)"
-            v-model.trim="$v.course.$model"
-          />
-        </b-form-group>
-      </b-modal>
-    </b-row>
-  </b-container>
+    <!-- invisible -->
+    <b-modal
+      centered
+      title="Добавление дисциплины"
+      ok-title="Добавить"
+      cancel-title="Отмена"
+      id="add-form"
+      :ok-disabled="$v.$invalid"
+      @ok="addSubject"
+      @hide="resetData"
+      ok-variant="success"
+      cancel-variant="light"
+    >
+      <b-form-group label="Название" label-for="name-field">
+        <b-form-input id="name-field" :state="inputState($v.name)" v-model.trim="$v.name.$model" />
+      </b-form-group>
+      <b-form-group label="Курс" label-for="course-field">
+        <b-form-input
+          type="number"
+          min="1"
+          max="6"
+          id="course-field"
+          :state="inputState($v.course)"
+          v-model.trim="$v.course.$model"
+        />
+      </b-form-group>
+    </b-modal>
+    <!-- /invisible -->
+  </main>
 </template>
 
 <script>

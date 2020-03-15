@@ -4,7 +4,8 @@ import { firestoreAction } from 'vuexfire'
 
 const state = {
   subjects: null,
-  groups: null
+  groups: null,
+  tasks: null
 }
 
 const mutations = {}
@@ -34,59 +35,90 @@ const actions = {
       db.collection('groups').where('subjectId', '==', subjectId))
   ),
 
+  bindTasks: firestoreAction(({ bindFirestoreRef, rootState }, subjectId) => {
+    if (rootState.user.isTeacher)
+      bindFirestoreRef(
+        'tasks',
+        db.collection('tasks').where('subjectId', '==', subjectId))
+    else {
+      bindFirestoreRef(
+        'tasks',
+        db.collection('tasks')
+          .where('subjectId', '==', subjectId)
+          .where('visible', '==', true))
+    }
+  }
+  ),
+
   async addSubject({ rootState }, subj) {
     db.collection('subjects').add({
       name: subj.name,
       course: +subj.course,
-      teacherId: rootState.user.uid,
-      tasklist: []
+      teacherId: rootState.user.uid
     })
   },
 
-  async updateSubject({ commit }, data) {
-    commit('setLoading', 'updateSubjectBtn')
+  async updateSubject(_, data) {
     await db.collection('subjects').doc(data.id).update({
       name: data.name,
       course: data.course
     })
-    commit('unsetLoading')
   },
 
-  async deleteSubject({ state, commit, dispatch }, id) {
+  async deleteSubject({ commit }, id) {
     commit('setLoading', 'deleteSubjectBtn')
-    for (let lab of state.subjects.find(s => s.id === id).tasklist)
-      await dispatch('deleteLabRab', { subjectId: id, labToDelete: lab })
     await db.collection('subjects').doc(id).delete()
     commit('unsetLoading')
   },
 
-  async addLabRab({ commit }, labData) {
-    commit('setLoading', 'btn-addLab')
+  async uploadFiles(_, files) {
     let pinnedFiles = []
-    for (let file of labData.files) {
+    for (let file of files) {
       let ref = storage.ref(`lab_files/${Math.random().toString(7)}/${file.name}`)
       await ref.put(file)
       let link = await ref.getDownloadURL()
-      pinnedFiles.push({ name: file.name, link, path: ref.fullPath })
+      pinnedFiles.push({ name: file.name, link, path: ref.fullPath, size: file.size })
     }
-    await db.collection('subjects').doc(labData.subjectId).update({
-      tasklist: firebase.firestore.FieldValue.arrayUnion({
-        name: labData.name,
-        number: labData.number,
-        description: labData.description,
-        score: labData.score,
-        files: pinnedFiles
-      })
+    return pinnedFiles
+  },
+
+  async addTask({ commit, dispatch }, newTask) {
+    commit('setLoading', 'btn-addLab')
+    const pinnedFiles = await dispatch('uploadFiles', newTask.files)
+    await db.collection('tasks').add({
+      name: newTask.name,
+      number: newTask.number,
+      description: newTask.description,
+      score: newTask.score,
+      files: pinnedFiles,
+      visible: newTask.visible,
+      subjectId: newTask.subjectId
     })
     commit('unsetLoading')
   },
 
-  async deleteLabRab(_, data) {
-    for (let file of data.labToDelete.files)
-      await storage.ref().child(file.path).delete()
-    await db.collection('subjects').doc(data.subjectId).update({
-      tasklist: firebase.firestore.FieldValue.arrayRemove(data.labToDelete)
+  async editTask({ commit, dispatch }, task) {
+    commit('setLoading', 'btn-addLab')
+    const pinnedFiles = await dispatch('uploadFiles', task.files)
+    await db.collection('tasks').doc(task.id).update({
+      name: task.name,
+      number: task.number,
+      description: task.description,
+      score: task.score,
+      files: pinnedFiles,
+      visible: task.visible
     })
+    commit('unsetLoading')
+  },
+
+  toggleTaskVisibility(_, data) {
+    db.collection('tasks').doc(data.id).update({
+      visible: data.state
+    })
+  },
+
+  async deleteTask(_, id) {
+    await db.collection('tasks').doc(id).delete()
   },
 
   async addGroup(_, groupData) {

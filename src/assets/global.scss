@@ -21,11 +21,6 @@
 * {
   font-family: 'Source Sans', sans-serif;
 
-  &::selection {
-    //background-color: $primary;
-    //color: invert($primary);
-  }
-
   &:disabled {
     cursor: not-allowed !important;
   }

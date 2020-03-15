@@ -7,9 +7,9 @@
       </b-col>
     </b-row>
 
-    <b-row class="mt-2" v-if="groups">
+    <b-row class="mt-2">
       <b-col>
-        <b-card no-body>
+        <b-card no-body v-if="groups && groups.length">
           <b-tabs pills card v-model="openedGroupIndex">
             <b-tab :title="group.name" v-for="(group, i) in groups" :key="i">
               <b-link @click="copyLink">Пригласить студентов</b-link>
@@ -17,6 +17,9 @@
               <div v-for="(student, j) in group.students" :key="j">{{student}}</div>
             </b-tab>
           </b-tabs>
+        </b-card>
+        <b-card v-else>
+          <b-card-text class="text-center text-muted py-4">Список групп пуст.</b-card-text>
         </b-card>
       </b-col>
     </b-row>

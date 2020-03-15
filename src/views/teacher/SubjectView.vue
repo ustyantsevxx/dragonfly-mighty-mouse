@@ -1,40 +1,47 @@
 <template>
-  <b-container v-if="subj">
-    <b-row>
-      <b-col>
-        <h1 class="header">
-          {{ subj.name }}
-          <b-icon
-            v-if="isTeacher"
-            icon="pencil"
-            @click="openModalWithEditData"
-            class="hover-icon"
-            title="Редактировать"
-          />
-        </h1>
-      </b-col>
-    </b-row>
+  <main>
+    <b-container v-if="subj">
+      <b-row>
+        <b-col>
+          <h1 class="header">
+            {{ subj.name }}
+            <b-icon
+              v-if="isTeacher"
+              icon="pencil"
+              @click="openModalWithEditData"
+              class="hover-icon"
+              title="Редактировать"
+            />
+          </h1>
+        </b-col>
+      </b-row>
 
-    <b-row>
-      <b-col class="badges mt-2">
-        <b-badge variant="info" class="mr-2">{{subj.course}} курс</b-badge>
-        <b-badge
-          variant="success"
-          class="mr-2"
-        >{{ num2str(subj.tasklist.length, ['лабораторная', 'лабораторные' ,'лабораторных']) }}</b-badge>
-        <b-badge
-          variant="danger"
-          v-if="groups && isTeacher"
-        >{{num2str(groups.length, ['группа', 'группы' ,'групп'])}}</b-badge>
-      </b-col>
-    </b-row>
+      <b-row>
+        <b-col class="badges mt-2">
+          <b-badge variant="info" class="mr-2">{{subj.course}} курс</b-badge>
+          <b-badge
+            variant="success"
+            class="mr-2"
+            v-if="tasks"
+          >{{ num2str(tasks.length, ['лабораторная', 'лабораторные' ,'лабораторных']) }}</b-badge>
+          <b-badge
+            variant="danger"
+            v-if="groups && isTeacher"
+          >{{num2str(groups.length, ['группа', 'группы' ,'групп'])}}</b-badge>
+        </b-col>
+      </b-row>
 
-    <hr class="my-4" />
-    <task-list />
-    <template v-if="isTeacher">
       <hr class="my-4" />
-      <group-list v-if="isTeacher" />
-    </template>
+
+      <task-list />
+
+      <template v-if="isTeacher">
+        <hr class="my-4" />
+        <group-list v-if="isTeacher" />
+      </template>
+    </b-container>
+
+    <page-loader v-else />
 
     <!-- invisible -->
     <b-modal centered title="Редактирование дисциплины" ref="edit-form">
@@ -65,7 +72,7 @@
       <template #modal-footer>
         <b-btn @click="resetModal('edit-form')" variant="light">Отмена</b-btn>
         <btn-loader
-          load="updateSubjectBtn"
+          load="btn-updateSubject"
           or="Обновить"
           @click="editSubject"
           variant="success"
@@ -74,8 +81,7 @@
       </template>
     </b-modal>
     <!-- /invisible -->
-  </b-container>
-  <page-loader v-else />
+  </main>
 </template>
 
 <script>
@@ -102,6 +108,9 @@ export default {
         : null
     },
     groups() {
+      return this.$store.state.teacher.groups
+    },
+    tasks() {
       return this.$store.state.teacher.groups
     },
     notChanged() {
@@ -134,12 +143,14 @@ export default {
       this.$refs['edit-form'].show()
     },
     async editSubject() {
+      this.$store.commit('setLoading', 'btn-updateSubject')
       await this.$store.dispatch('updateSubject', {
         name: this.name,
         course: this.course,
         id: this.subj.id
       })
       this.resetModal('edit-form')
+      this.$store.commit('unsetLoading')
     },
     deleteSubject() {
       this.$store.dispatch('deleteSubject', this.subj.id)

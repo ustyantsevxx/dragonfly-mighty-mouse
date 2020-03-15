@@ -1,53 +1,55 @@
 <template>
-  <b-container>
-    <b-row align-h="center">
-      <h1 class="m-0">Редактирование профиля</h1>
-    </b-row>
-    <b-row align-h="center" class="mb-2">
-      <b-col lg="10" xl="9">
-        <hr />
-      </b-col>
-    </b-row>
-    <b-row align-h="center">
-      <b-col lg="5" xl="4" class="mb-3">
-        <b-card class="p-3 shadow-sm border-0">
-          <b-form>
-            <b-form-group label="Имя">
-              <b-form-input
-                required
-                :state="inputState($v.newName)"
-                v-model.trim="$v.newName.$model"
-                placeholder="Ваше имя"
+  <main>
+    <b-container>
+      <b-row align-h="center">
+        <h1 class="m-0">Редактирование профиля</h1>
+      </b-row>
+      <b-row align-h="center" class="mb-2">
+        <b-col lg="10" xl="9">
+          <hr />
+        </b-col>
+      </b-row>
+      <b-row align-h="center">
+        <b-col lg="5" xl="4" class="mb-3">
+          <b-card class="p-3 shadow-sm border-0">
+            <b-form>
+              <b-form-group label="Имя">
+                <b-form-input
+                  required
+                  :state="inputState($v.newName)"
+                  v-model.trim="$v.newName.$model"
+                  placeholder="Ваше имя"
+                />
+              </b-form-group>
+
+              <b-form-group label="Фамилия">
+                <b-form-input
+                  required
+                  :state="inputState($v.newSurname)"
+                  v-model.trim="$v.newSurname.$model"
+                  placeholder="Ваша фамилия"
+                />
+              </b-form-group>
+
+              <btn-loader
+                variant="success"
+                block
+                class="mt-2"
+                v-if="!(notChanged || $v.$invalid)"
+                @click="updateData"
+                load="updateDataBtn"
+                or="Сохранить"
               />
-            </b-form-group>
+            </b-form>
+          </b-card>
+        </b-col>
 
-            <b-form-group label="Фамилия">
-              <b-form-input
-                required
-                :state="inputState($v.newSurname)"
-                v-model.trim="$v.newSurname.$model"
-                placeholder="Ваша фамилия"
-              />
-            </b-form-group>
-
-            <btn-loader
-              variant="success"
-              block
-              class="mt-2"
-              v-if="!(notChanged || $v.$invalid)"
-              @click="updateData"
-              load="updateDataBtn"
-              or="Сохранить"
-            />
-          </b-form>
-        </b-card>
-      </b-col>
-
-      <b-col lg="5" xl="5">
-        <auth-data-edit />
-      </b-col>
-    </b-row>
-  </b-container>
+        <b-col lg="5" xl="5">
+          <auth-data-edit />
+        </b-col>
+      </b-row>
+    </b-container>
+  </main>
 </template>
 
 <script>

@@ -1,11 +1,9 @@
 export default state => {
   return {
     data: () => ({ ...state }),
-
     computed: {
       inputState: () => val => val.$dirty ? !val.$error : null
     },
-
     methods: {
       resetData() {
         Object.assign(this.$data, state)
@@ -13,9 +11,9 @@ export default state => {
       },
       resetModal(modalRef) {
         this.resetData()
-        this.$refs[modalRef].hide()
+        this.$bvModal.hide(modalRef)
         this.$v.$reset()
-      },
+      }
     }
   }
 }

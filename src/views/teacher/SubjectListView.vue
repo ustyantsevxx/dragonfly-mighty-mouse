@@ -3,7 +3,7 @@
     <b-container>
       <b-row>
         <b-col md="4" order-md="2">
-          <b-btn v-if="isTeacher" variant="primary" v-b-modal.add-form>Добавить</b-btn>
+          <b-btn v-if="isTeacher" variant="primary" v-b-modal.modal-subject>Добавить</b-btn>
         </b-col>
 
         <b-col md="8" order-md="1">
@@ -52,54 +52,33 @@
     </b-container>
 
     <!-- invisible -->
-    <b-modal
-      centered
-      title="Добавление дисциплины"
-      ok-title="Добавить"
-      cancel-title="Отмена"
-      id="add-form"
-      :ok-disabled="$v.$invalid"
-      @ok="addSubject"
-      @hide="resetData"
+    <subject-modal
+      id="modal-subject"
+      ref="modal-subject"
       ok-variant="success"
       cancel-variant="light"
-    >
-      <b-form-group label="Название" label-for="name-field">
-        <b-form-input id="name-field" :state="inputState($v.name)" v-model.trim="$v.name.$model" />
-      </b-form-group>
-      <b-form-group label="Курс" label-for="course-field">
-        <b-form-input
-          type="number"
-          min="1"
-          max="6"
-          id="course-field"
-          :state="inputState($v.course)"
-          v-model.trim="$v.course.$model"
-        />
-      </b-form-group>
-    </b-modal>
+      title="Добавление дисциплины"
+      ok-title="Добавить"
+      centered
+      cancel-title="Отмена"
+    />
     <!-- /invisible -->
   </main>
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
-import baseMixin from '@/mixins/base'
+import SubjectModal from '@/components/modals/SubjectModal'
 import TextHighlight from 'vue-text-highlight'
 
 export default {
-  components: { TextHighlight },
-  mixins: [
-    baseMixin({
-      name: null,
-      course: null,
-      filter: null,
-      tableHeaders: [
-        { key: 'name', label: 'Название', sortable: true },
-        { key: 'course', label: 'Курс', sortable: true }
-      ]
-    })
-  ],
+  components: { TextHighlight, SubjectModal },
+  data: () => ({
+    filter: null,
+    tableHeaders: [
+      { key: 'name', label: 'Название', sortable: true },
+      { key: 'course', label: 'Курс', sortable: true }
+    ]
+  }),
   computed: {
     subjects() { return this.$store.state.teacher.subjects },
     subjectsByCourse() {
@@ -120,16 +99,6 @@ export default {
     isTeacher() {
       return this.$store.state.user.isTeacher
     }
-  },
-  methods: {
-    async addSubject() {
-      await this.$store.dispatch('addSubject', { name: this.name, course: this.course })
-      this.resetData()
-    }
-  },
-  validations: {
-    name: { required },
-    course: { required }
   }
 }
 </script>

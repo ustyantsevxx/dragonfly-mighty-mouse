@@ -8,7 +8,7 @@
             <b-icon
               v-if="isTeacher"
               icon="pencil"
-              @click="openModalWithEditData"
+              v-b-modal.modal-subject
               class="hover-icon"
               title="Редактировать"
             />
@@ -27,7 +27,7 @@
           <b-badge
             variant="danger"
             v-if="groups && isTeacher"
-          >{{num2str(groups.length, ['группа', 'группы' ,'групп'])}}</b-badge>
+          >{{ num2str(groups.length, ['группа', 'группы' ,'групп']) }}</b-badge>
         </b-col>
       </b-row>
 
@@ -44,63 +44,30 @@
     <page-loader v-else />
 
     <!-- invisible -->
-    <b-modal centered title="Редактирование дисциплины" ref="edit-form">
-      <b-form-group label="Название">
-        <b-form-input :state="inputState($v.name)" v-model.trim="$v.name.$model" />
-      </b-form-group>
-      <b-form-group label="Курс">
-        <b-form-input
-          type="number"
-          min="1"
-          max="6"
-          :state="inputState($v.course)"
-          v-model.number.trim="$v.course.$model"
-        />
-      </b-form-group>
-      <b-btn block v-b-toggle.confirm-delete variant="danger">Удалить дисциплину</b-btn>
-      <b-collapse id="confirm-delete">
-        <btn-loader
-          class="mt-2"
-          variant="dark"
-          block
-          @click="deleteSubject"
-          load="deleteSubjectBtn"
-          or="Действие необратимо. Продолжить?"
-        />
-      </b-collapse>
-
-      <template #modal-footer>
-        <b-btn @click="resetModal('edit-form')" variant="light">Отмена</b-btn>
-        <btn-loader
-          load="btn-updateSubject"
-          or="Обновить"
-          @click="editSubject"
-          variant="success"
-          :disabled="$v.$invalid || notChanged"
-        />
-      </template>
-    </b-modal>
+    <subject-modal
+      id="modal-subject"
+      ref="modal-subject"
+      :subject="subj"
+      ok-variant="info"
+      cancel-variant="light"
+      title="Редактирование дисциплины"
+      ok-title="Обновить"
+      centered
+      cancel-title="Отмена"
+    />
     <!-- /invisible -->
   </main>
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
 import { num2str } from '@/assets/functions'
-import BtnLoader from '@/components/BtnLoader'
 import TaskList from '@/components/teacher/TaskList'
 import GroupList from '@/components/teacher/GroupList'
 import PageLoader from '@/components/PageLoader'
-import baseMixin from '@/mixins/base'
+import SubjectModal from '@/components/modals/SubjectModal'
 
 export default {
-  components: { PageLoader, BtnLoader, TaskList, GroupList },
-  mixins: [
-    baseMixin({
-      name: null,
-      course: null
-    })
-  ],
+  components: { PageLoader, TaskList, GroupList, SubjectModal },
   computed: {
     subj() {
       return this.$store.state.teacher.subjects
@@ -113,22 +80,11 @@ export default {
     tasks() {
       return this.$store.state.teacher.groups
     },
-    notChanged() {
-      return this.name === this.subj.name && this.course === this.subj.course
-    },
     isTeacher() {
       return this.$store.state.user.isTeacher
     }
   },
   watch: {
-    name() {
-      if (this.name === this.subj.name)
-        this.$v.name.$reset()
-    },
-    course() {
-      if (this.course === this.subj.course)
-        this.$v.course.$reset()
-    },
     subj() {
       if (this.subj) document.title = this.subj.name
     }
@@ -137,30 +93,7 @@ export default {
     if (this.subj) document.title = this.subj.name
   },
   methods: {
-    openModalWithEditData() {
-      this.name = this.subj.name
-      this.course = this.subj.course
-      this.$refs['edit-form'].show()
-    },
-    async editSubject() {
-      this.$store.commit('setLoading', 'btn-updateSubject')
-      await this.$store.dispatch('updateSubject', {
-        name: this.name,
-        course: this.course,
-        id: this.subj.id
-      })
-      this.resetModal('edit-form')
-      this.$store.commit('unsetLoading')
-    },
-    deleteSubject() {
-      this.$store.dispatch('deleteSubject', this.subj.id)
-      this.$router.push('/subjects')
-    },
     num2str: (n, forms) => num2str(n, forms)
-  },
-  validations: {
-    name: { required },
-    course: { required }
   }
 }
 </script>

@@ -5,7 +5,8 @@ import { firestoreAction } from 'vuexfire'
 const state = {
   subjects: null,
   groups: null,
-  tasks: null
+  tasks: null,
+  filesUploadProgress: -1
 }
 
 const mutations = {}
@@ -47,8 +48,7 @@ const actions = {
           .where('subjectId', '==', subjectId)
           .where('visible', '==', true))
     }
-  }
-  ),
+  }),
 
   async addSubject({ rootState }, subj) {
     db.collection('subjects').add({
@@ -65,21 +65,26 @@ const actions = {
     })
   },
 
-  async deleteSubject({ commit }, id) {
-    commit('setLoading', 'deleteSubjectBtn')
+  async deleteSubject(_, id) {
     await db.collection('subjects').doc(id).delete()
-    commit('unsetLoading')
   },
 
-  async uploadFiles(_, files) {
+  async uploadFiles({ state }, files) {
     let pinnedFiles = []
+    state.filesUploadProgress = 0
     for (let file of files) {
       let ref = storage.ref(`lab_files/${Math.random().toString(7)}/${file.name}`)
       await ref.put(file)
       let link = await ref.getDownloadURL()
       pinnedFiles.push({ name: file.name, link, path: ref.fullPath, size: file.size })
+      state.filesUploadProgress++
     }
     return pinnedFiles
+  },
+
+  async removeFiles(_, paths) {
+    for (let path of paths)
+      await storage.ref(path).delete()
   },
 
   async addTask({ commit, dispatch }, newTask) {
@@ -94,21 +99,24 @@ const actions = {
       visible: newTask.visible,
       subjectId: newTask.subjectId
     })
+    state.filesUploadProgress = -1
     commit('unsetLoading')
   },
 
-  async editTask({ commit, dispatch }, task) {
+  async editTask({ state, commit, dispatch }, task) {
     commit('setLoading', 'btn-addLab')
-    const pinnedFiles = await dispatch('uploadFiles', task.files)
+    dispatch('removeFiles', task.oldFilesToDelete)
+    const newFiles = await dispatch('uploadFiles', task.newFilesToUpload)
     await db.collection('tasks').doc(task.id).update({
       name: task.name,
       number: task.number,
       description: task.description,
       score: task.score,
-      files: pinnedFiles,
+      files: task.files.concat(newFiles),
       visible: task.visible
     })
     commit('unsetLoading')
+    state.filesUploadProgress = -1
   },
 
   toggleTaskVisibility(_, data) {

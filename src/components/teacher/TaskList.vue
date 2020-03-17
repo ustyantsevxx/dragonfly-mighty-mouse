@@ -3,7 +3,7 @@
     <b-row>
       <b-col class="d-flex justify-content-between">
         <h4 class="m-0 text-muted">Лабораторные работы</h4>
-        <b-link v-if="isTeacher" v-b-modal.add-lab-modal size="sm" variant="dark">Создать</b-link>
+        <b-link v-if="isTeacher" @click="openModal(null)" size="sm" variant="dark">Создать</b-link>
       </b-col>
     </b-row>
     <b-row class="mt-2">
@@ -30,12 +30,12 @@
                   <b>Лабораторная работа №{{task.number}}</b>
                   <p>{{task.name}}</p>
                   <b>Описание</b>
-                  <p>{{task.description}}</p>
+                  <p class="task-description-p">{{task.description}}</p>
                   <b>Награда</b>
                   <p>{{form(task.score, wordForms)}}</p>
                   <template v-if="task.files && task.files.length">
                     <b>Прикрепленные файлы</b>
-                    <div v-for="(file,i) in task.files" :key="i">
+                    <div v-for="(file,j) in task.files" :key="j">
                       <b-link :href="file.link">{{file.name}}</b-link>
                     </div>
                   </template>
@@ -48,7 +48,7 @@
                     v-model="task.visible"
                     @change="toggleTaskVisibility(task.id, $event)"
                   >{{task.visible ? 'Открыта' : 'Закрыта' }}</b-form-checkbox>
-                  <b-btn size="sm" variant="secondary" @click="editTaskModal(i)">Редактировать</b-btn>
+                  <b-btn size="sm" variant="secondary" @click="openModal(i)">Редактировать</b-btn>
                 </footer>
               </div>
             </b-collapse>
@@ -59,99 +59,23 @@
         </b-card>
       </b-col>
     </b-row>
+
     <!-- invisible -->
-    <b-modal
-      centered
-      no-close-on-backdrop
-      :title=" `${editTaskIndex === null ? 'Добавить' : 'Изменить'} лабораторную работу`"
-      id="add-lab-modal"
-      ref="add-lab-modal"
-      @hide="resetModal('add-lab-modal'); editTaskIndex = null"
-    >
-      <b-form-group label="Номер работы">
-        <b-form-input
-          type="number"
-          min="1"
-          :state="inputState($v.number)"
-          v-model.number.trim="$v.number.$model"
-        />
-      </b-form-group>
-
-      <b-form-group label="Название">
-        <b-form-input :state="inputState($v.name)" v-model.trim="$v.name.$model" />
-      </b-form-group>
-
-      <b-form-group label="Описание">
-        <b-form-textarea :state="inputState($v.description)" v-model.trim="$v.description.$model" />
-      </b-form-group>
-
-      <b-form-group label="Количество баллов">
-        <b-form-input
-          type="number"
-          :state="inputState($v.score)"
-          v-model.number.trim="$v.score.$model"
-        />
-      </b-form-group>
-
-      <div>Прикрепленные файлы</div>
-      <hr />
-      <b-list-group v-if="files.length">
-        <b-list-group-item v-for="(f,i) in files" :key="i" class="d-flex align-items-center">
-          <span class="overflow">{{f.name}}</span>
-          <span class="text-nowrap mx-2 text-muted">{{Math.round(f.size / 1024)}} КБ</span>
-          <button class="close ml-auto" @click="files.splice(i,1)">×</button>
-        </b-list-group-item>
-      </b-list-group>
-      <div v-else class="text-center text-muted">Нет прикрепленных файлов</div>
-      <hr />
-      <b-file
-        ref="file-input"
-        multiple
-        @input="addFile"
-        browse-text="Обзор"
-        class="overflow"
-        drop-placeholder="Отпустите"
-        placeholder="Выберите файл(-ы) или перетащите сюда"
-      />
-      <template v-if="editTaskIndex !== null">
-        <hr />
-        <b-btn variant="danger" @click="deleteTask()" block>Удалить лабораторную</b-btn>
-      </template>
-
-      <template #modal-footer>
-        <b-btn @click="resetModal('add-lab-modal')" variant="light">Отмена</b-btn>
-        <btn-loader
-          @click="taskAction"
-          load="btn-addLab"
-          :or="editTaskIndex === null ? 'Добавить' : 'Обновить'"
-          :variant="editTaskIndex === null ? 'success' : 'warning'"
-          :disabled="$v.$invalid"
-        />
-      </template>
-    </b-modal>
+    <task-modal :task="taskToEdit" id="task-modal" />
     <!-- /invisible !-->
   </div>
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
-import BtnLoader from '@/components/BtnLoader'
-import baseMixin from '@/mixins/base'
+import TaskModal from '@/components/modals/TaskModal'
 import { num2str } from '@/assets/functions'
 
 export default {
-  components: { BtnLoader },
-  mixins: [
-    baseMixin({
-      number: null,
-      name: null,
-      description: null,
-      score: null,
-      files: [],
-      wordForms: ['балл', 'балла', 'баллов'],
-      editTaskIndex: null
-    })
-  ],
+  components: { TaskModal },
+  data: () => ({
+    taskToEdit: null,
+    wordForms: ['балл', 'балла', 'баллов']
+  }),
   computed: {
     labListSorted() {
       return this.$store.state.teacher.tasks
@@ -166,60 +90,16 @@ export default {
     this.$store.dispatch('bindTasks', this.$parent.subj.id)
   },
   methods: {
-    taskAction() {
-      this.editTaskIndex === null ? this.addTask() : this.editTask()
-    },
-    editTaskModal(i) {
-      this.editTaskIndex = i
-      this.number = this.labListSorted[i].number
-      this.name = this.labListSorted[i].name
-      this.description = this.labListSorted[i].description
-      this.score = this.labListSorted[i].score
-      this.files = [...this.labListSorted[i].files]
-      this.$refs['add-lab-modal'].show()
-    },
-    async addFile(files) {
-      this.files.push(...files)
-      this.$refs['file-input'].reset()
-    },
-    async addTask() {
-      await this.$store.dispatch('addTask', {
-        name: this.name,
-        score: this.score,
-        number: this.number,
-        description: this.description,
-        files: this.files,
-        subjectId: this.$parent.subj.id,
-        visible: false
+    openModal(index) {
+      this.taskToEdit = index !== null ? this.labListSorted[index] : null
+      this.$nextTick(() => {
+        this.$bvModal.show('task-modal')
       })
-      this.resetModal('add-lab-modal')
-    },
-    async editTask() {
-      await this.$store.dispatch('editTask', {
-        id: this.labListSorted[this.editTaskIndex].id,
-        name: this.name,
-        score: this.score,
-        number: this.number,
-        description: this.description,
-        files: this.files,
-        visible: this.labListSorted[this.editTaskIndex].visible
-      })
-      this.resetModal('add-lab-modal')
-    },
-    deleteTask() {
-      this.$store.dispatch('deleteTask', this.labListSorted[this.editTaskIndex].id)
-      this.resetModal('add-lab-modal')
     },
     toggleTaskVisibility(id, e) {
       this.$store.dispatch('toggleTaskVisibility', { id, state: e })
     },
     form: (n, forms) => num2str(n, forms)
-  },
-  validations: {
-    number: { required },
-    name: { required },
-    description: { required },
-    score: { required }
   }
 }
 </script>
@@ -310,9 +190,8 @@ export default {
     }
   }
 }
-
-p {
-  white-space: pre;
+.task-description-p {
+  white-space: pre-wrap;
 }
 
 .hiddenLab {

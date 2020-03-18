@@ -1,6 +1,6 @@
 <template>
   <main>
-    <b-container v-if="subj">
+    <b-container v-if="subj" fluid class="px-5">
       <b-row>
         <b-col>
           <h1 class="header">
@@ -19,13 +19,21 @@
       <b-row>
         <b-col class="badges mt-2">
           <b-badge variant="info" class="mr-2">{{subj.course}} курс</b-badge>
+          <template v-if="tasks">
+            <b-badge
+              variant="success"
+              class="mr-0"
+              :class="{over: visibleTasksCount !== tasks.length}"
+            >{{ num2str(tasks.length, taskForms) }}</b-badge>
+            <b-badge
+              variant="danger"
+              class="over1"
+              v-if="isTeacher && visibleTasksCount != tasks.length"
+            >{{ visibleTasksCount }} доступно</b-badge>
+          </template>
           <b-badge
-            variant="success"
-            class="mr-2"
-            v-if="tasks"
-          >{{ num2str(tasks.length, ['лабораторная', 'лабораторные' ,'лабораторных']) }}</b-badge>
-          <b-badge
-            variant="danger"
+            variant="dark"
+            class="ml-2"
             v-if="groups && isTeacher"
           >{{ num2str(groups.length, ['группа', 'группы' ,'групп']) }}</b-badge>
         </b-col>
@@ -65,23 +73,24 @@ import TaskList from '@/components/teacher/TaskList'
 import GroupList from '@/components/teacher/GroupList'
 import PageLoader from '@/components/PageLoader'
 import SubjectModal from '@/components/modals/SubjectModal'
+import { mapState } from 'vuex'
 
 export default {
   components: { PageLoader, TaskList, GroupList, SubjectModal },
+  data: () => ({ taskForms: ['лабораторная', 'лабораторные', 'лабораторных'] }),
   computed: {
     subj() {
       return this.$store.state.teacher.subjects
         ? this.$store.state.teacher.subjects.find(x => x.id === this.$route.params.id)
         : null
     },
-    groups() {
-      return this.$store.state.teacher.groups
-    },
-    tasks() {
-      return this.$store.state.teacher.groups
-    },
-    isTeacher() {
-      return this.$store.state.user.isTeacher
+    ...mapState({
+      tasks: s => s.teacher.tasks,
+      isTeacher: s => s.user.isTeacher,
+      groups: s => s.teacher.groups
+    }),
+    visibleTasksCount() {
+      return this.tasks.filter(x => x.visible).length
     }
   },
   watch: {
@@ -112,5 +121,14 @@ export default {
   span {
     font-size: 1em;
   }
+}
+.over {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.over1 {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
 </style>

@@ -29,8 +29,9 @@ export default {
     this.info = await this.$store.dispatch('groupInfo', this.$route.params.id)
   },
   methods: {
-    join() {
-      this.$store.dispatch('joinGroup', this.$route.params.id)
+    async join() {
+      await this.$store.dispatch('joinGroup', this.$route.params.id)
+      location.assign(`/subjects/${this.info.subject.id}`)
     }
   }
 }

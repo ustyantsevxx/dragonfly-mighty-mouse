@@ -180,3 +180,9 @@ export default {
   }
 }
 </script>
+
+<style>
+#task-modal {
+  padding-top: 3em;
+}
+</style>

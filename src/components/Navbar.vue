@@ -1,12 +1,13 @@
 <template>
-  <b-navbar toggleable="sm" type="dark" class="nav shadow-sm nav-on-top" :sticky="true">
+  <b-navbar toggleable="sm" type="dark" class="nav shadow-sm nav-on-top px-5" :sticky="true">
     <b-navbar-brand to="/" exact active-class="c">Dragonfly Mighty Mouse</b-navbar-brand>
-    <b-navbar-nav>
-      <b-nav-item to="/subjects" exact>Дисциплины</b-nav-item>
-    </b-navbar-nav>
+
     <b-navbar-toggle target="collapse" />
 
     <b-collapse id="collapse" is-nav>
+      <b-navbar-nav>
+        <b-nav-item to="/subjects" exact>Дисциплины</b-nav-item>
+      </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-item v-if="!signed" to="/login">Войти</b-nav-item>
         <template v-else>
@@ -43,6 +44,7 @@ export default {
 <style scoped>
 .nav {
   background-color: #191414ea;
+  border-bottom: 0.3rem solid #ffffff2f;
 }
 
 .router-link-active {

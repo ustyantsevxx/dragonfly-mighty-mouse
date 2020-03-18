@@ -35,20 +35,27 @@
                   <p>{{form(task.score, wordForms)}}</p>
                   <template v-if="task.files && task.files.length">
                     <b>Прикрепленные файлы</b>
-                    <div v-for="(file,j) in task.files" :key="j">
-                      <b-link :href="file.link">{{file.name}}</b-link>
-                    </div>
+                    <b-card-group columns class="mt-2">
+                      <b-card
+                        v-for="(file,j) in task.files"
+                        @click="downloadFile(file.link)"
+                        :key="j"
+                        class="file"
+                      >
+                        <span :class="getClass(file.name)" class="mr-3 ficon"></span>
+                        <span>{{file.name}}</span>
+                      </b-card>
+                    </b-card-group>
                   </template>
                 </section>
                 <footer v-if="isTeacher" class="d-flex justify-content-end align-items-center">
                   <b-form-checkbox
                     class="mr-3"
                     switch
-                    size="sm"
                     v-model="task.visible"
                     @change="toggleTaskVisibility(task.id, $event)"
                   >{{task.visible ? 'Открыта' : 'Закрыта' }}</b-form-checkbox>
-                  <b-btn size="sm" variant="secondary" @click="openModal(i)">Редактировать</b-btn>
+                  <b-btn variant="outline-dark" @click="openModal(i)">Редактировать</b-btn>
                 </footer>
               </div>
             </b-collapse>
@@ -69,6 +76,7 @@
 <script>
 import TaskModal from '@/components/modals/TaskModal'
 import { num2str } from '@/assets/functions'
+import icons from 'file-icons-js'
 
 export default {
   components: { TaskModal },
@@ -87,7 +95,8 @@ export default {
     }
   },
   beforeCreate() {
-    this.$store.dispatch('bindTasks', this.$parent.subj.id)
+    if (this.$store.state.teacher.tasks === null)
+      this.$store.dispatch('bindTasks', this.$parent.subj.id)
   },
   methods: {
     openModal(index) {
@@ -95,6 +104,13 @@ export default {
       this.$nextTick(() => {
         this.$bvModal.show('task-modal')
       })
+    },
+    downloadFile(link) {
+      location.assign(link)
+
+    },
+    getClass(name) {
+      return icons.getClassWithColor(name)
     },
     toggleTaskVisibility(id, e) {
       this.$store.dispatch('toggleTaskVisibility', { id, state: e })
@@ -196,5 +212,21 @@ export default {
 
 .hiddenLab {
   background-color: #eeeeee !important;
+}
+
+.file {
+  cursor: pointer;
+  background: transparent !important;
+  &:hover {
+    background-color: #f8f9fa !important;
+  }
+  .card-body {
+    padding: 0.5em 1em !important;
+    display: flex;
+    align-items: center;
+    .ficon::before {
+      font-size: 2em !important;
+    }
+  }
 }
 </style>

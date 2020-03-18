@@ -18,6 +18,7 @@ import 'firebase/firestore'
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
 
+import 'file-icons-js/css/style.css'
 import '@/assets/global.scss'
 import './registerServiceWorker'
 

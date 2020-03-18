@@ -69,7 +69,8 @@ export default {
     }
   },
   beforeCreate() {
-    this.$store.dispatch('bindGroup', this.$parent.subj.id)
+    if (this.$store.state.teacher.groups === null)
+      this.$store.dispatch('bindGroup', this.$parent.subj.id)
   },
   methods: {
     async addGroup() {

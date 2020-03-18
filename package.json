@@ -10,6 +10,7 @@
   "dependencies": {
     "bootstrap-vue": "^2.7.0",
     "core-js": "^3.6.4",
+    "file-icons-js": "github:websemantics/file-icons-js",
     "firebase": "^7.11.0",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.11",

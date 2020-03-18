@@ -22,11 +22,12 @@ const actions = {
       let groupsWhereStudentPresented = await db.collection('groups')
         .where('students', 'array-contains', rootState.user.uid).get()
       let subjectIdList = groupsWhereStudentPresented.docs.map(c => c.data().subjectId)
-      await bindFirestoreRef(
-        'subjects',
-        db.collection('subjects')
-          .where(firebase.firestore.FieldPath.documentId(), 'in', subjectIdList)
-      )
+      if (subjectIdList.length)
+        await bindFirestoreRef(
+          'subjects',
+          db.collection('subjects')
+            .where(firebase.firestore.FieldPath.documentId(), 'in', subjectIdList)
+        )
     }
   }),
 
@@ -71,8 +72,12 @@ const actions = {
 
   async uploadFiles({ state }, files) {
     let pinnedFiles = []
-    state.filesUploadProgress = 0
+    let filesHere = false
     for (let file of files) {
+      if (!filesHere) {
+        state.filesUploadProgress = 0
+        filesHere = true
+      }
       let ref = storage.ref(`lab_files/${Math.random().toString(7)}/${file.name}`)
       await ref.put(file)
       let link = await ref.getDownloadURL()

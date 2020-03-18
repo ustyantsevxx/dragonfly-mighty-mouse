@@ -37,7 +37,7 @@
                 class="mt-2"
                 v-if="!(notChanged || $v.$invalid)"
                 @click="updateData"
-                load="updateDataBtn"
+                load="btn__updateData"
                 or="Сохранить"
               />
             </b-form>

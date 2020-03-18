@@ -20,7 +20,7 @@
                 variant="primary"
                 block
                 :disabled="!!loading"
-                load="loginBtn"
+                load="btn__signIn"
                 or="Войти"
               />
             </div>

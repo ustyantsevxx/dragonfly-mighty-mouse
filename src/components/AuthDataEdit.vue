@@ -35,7 +35,10 @@
             :state="inputState($v.p.newPassword)"
             v-model.trim="$v.p.newPassword.$model"
           />
-          <b-form-invalid-feedback v-if="!$v.p.newPassword.minLength">Пароль не короче 6 символов!</b-form-invalid-feedback>
+          <b-form-invalid-feedback
+            v-if="!$v.p.newPassword.minLength"
+            v-text="'Пароль не короче 6 символов!'"
+          />
         </b-form-group>
 
         <b-form-group label="Подтвердите новый пароль" label-for="confirm-field">
@@ -45,7 +48,10 @@
             :state="inputState($v.p.confirmPassword)"
             v-model.trim="$v.p.confirmPassword.$model"
           />
-          <b-form-invalid-feedback v-if="!$v.p.confirmPassword.same">Пароли должны совпадать!</b-form-invalid-feedback>
+          <b-form-invalid-feedback
+            v-if="!$v.p.confirmPassword.same"
+            v-text="'Пароли должны совпадать!'"
+          />
         </b-form-group>
       </template>
       <hr />
@@ -64,7 +70,7 @@
         block
         @click="updateData"
         v-if="!(isInvalid || $v.oldPassword.$invalid)"
-        load="updatePassBtn"
+        load="btn__updateAuthData"
         or="Обновить"
       />
     </b-form>

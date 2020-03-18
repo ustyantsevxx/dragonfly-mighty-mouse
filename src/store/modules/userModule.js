@@ -27,7 +27,7 @@ const mutations = {
 
 const actions = {
   async signUp({ commit }, opt) {
-    commit('setLoading', 'registerBtn')
+    commit('setLoading', 'btn__signUp')
     try {
       let creds = await auth.createUserWithEmailAndPassword(opt.email, opt.password)
       db.collection('users').doc(creds.user.uid).set({
@@ -42,7 +42,7 @@ const actions = {
   },
 
   async signIn({ commit }, opt) {
-    commit('setLoading', 'loginBtn')
+    commit('setLoading', 'btn__signIn')
     try {
       await auth.signInWithEmailAndPassword(opt.email, opt.password)
       return true
@@ -63,8 +63,13 @@ const actions = {
     }
   },
 
+  signOut() {
+    location.reload()
+    auth.signOut()
+  },
+
   async recoverPassword({ commit }, opt) {
-    commit('setLoading', 'restoreBtn')
+    commit('setLoading', 'btn__restorePassword')
     try {
       await auth.sendPasswordResetEmail(opt.email, {
         url: 'https://project-scimitar.web.app/login',
@@ -78,24 +83,17 @@ const actions = {
     }
   },
 
-  signOut() {
-    location.reload()
-    auth.signOut()
-  },
-
   async verifyEmail({ commit }) {
-    commit('setLoading')
     try {
       await auth.currentUser.sendEmailVerification()
       commit('setToastMsg', { msg: 'Ссылка подтверждения отправлена' })
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message })
     }
-    commit('unsetLoading')
   },
 
   async updateData({ commit, state }, data) {
-    commit('setLoading', 'updateDataBtn')
+    commit('setLoading', 'btn__updateData')
     try {
       let userDoc = db.collection('users').doc(state.uid)
       await userDoc.update({
@@ -112,7 +110,7 @@ const actions = {
   },
 
   async updateEmail({ commit, state }, data) {
-    commit('setLoading', 'updatePassBtn')
+    commit('setLoading', 'btn__updateAuthData')
     try {
       let user = await auth.signInWithEmailAndPassword(state.email, data.password)
       await auth.currentUser.updateEmail(data.newEmail)
@@ -128,7 +126,7 @@ const actions = {
   },
 
   async updatePassword({ commit, state }, passwords) {
-    commit('setLoading', 'updatePassBtn')
+    commit('setLoading', 'btn__updateAuthData')
     try {
       let user = await auth.signInWithEmailAndPassword(state.email, passwords.old)
       await auth.currentUser.updatePassword(passwords.new)

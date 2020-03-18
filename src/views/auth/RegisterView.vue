@@ -6,17 +6,11 @@
           <h2 class="mb-4 text-center">Регистрация</h2>
           <b-form @submit.prevent="signUp">
             <b-form-group label="Имя">
-              <b-form-input
-                :state="$v.name.$dirty ? !$v.name.$error : null"
-                v-model.trim="$v.name.$model"
-              />
+              <b-form-input :state="inputState($v.name)" v-model.trim="$v.name.$model" />
             </b-form-group>
 
             <b-form-group label="Фамилия">
-              <b-form-input
-                :state="$v.surname.$dirty ? !$v.surname.$error : null"
-                v-model.trim="$v.surname.$model"
-              />
+              <b-form-input :state="inputState($v.surname)" v-model.trim="$v.surname.$model" />
             </b-form-group>
 
             <hr class="mt-4" />
@@ -24,28 +18,37 @@
             <b-form-group label="Эл. почта">
               <b-form-input
                 type="email"
-                :state="$v.email.$dirty ? !$v.email.$error : null"
+                :state="inputState($v.email)"
                 v-model.trim="$v.email.$model"
               />
-              <b-form-invalid-feedback v-if="!$v.email.email">Некорректный формат почты!</b-form-invalid-feedback>
+              <b-form-invalid-feedback
+                v-if="!$v.email.email"
+                v-text="'Некорректный формат почты!'"
+              />
             </b-form-group>
 
             <b-form-group label="Пароль">
               <b-form-input
                 type="password"
-                :state="$v.password.$dirty ? !$v.password.$error : null"
+                :state="inputState($v.password)"
                 v-model.trim="$v.password.$model"
               />
-              <b-form-invalid-feedback v-if="!$v.password.minLength">Пароль не короче 6 символов!</b-form-invalid-feedback>
+              <b-form-invalid-feedback
+                v-if="!$v.password.minLength"
+                v-text="'Пароль не короче 6 символов!'"
+              />
             </b-form-group>
 
             <b-form-group label="Подтвердите пароль">
               <b-form-input
                 type="password"
-                :state="$v.confirmPassword.$dirty? !$v.confirmPassword.$error: null"
+                :state="inputState($v.confirmPassword)"
                 v-model.trim="$v.confirmPassword.$model"
               />
-              <b-form-invalid-feedback v-if="!$v.confirmPassword.same">Пароли должны совпадать!</b-form-invalid-feedback>
+              <b-form-invalid-feedback
+                v-if="!$v.confirmPassword.same"
+                v-text="'Пароли должны совпадать!'"
+              />
             </b-form-group>
 
             <b-radio-group v-model="isTeacher">
@@ -60,7 +63,7 @@
                 type="submit"
                 variant="success"
                 block
-                load="registerBtn"
+                load="btn__signUp"
                 or="Зарегистрироваться"
               />
             </div>
@@ -76,31 +79,29 @@
 <script>
 import { minLength, required, email, sameAs } from 'vuelidate/lib/validators'
 import BtnLoader from '@/components/BtnLoader'
+import baseMixin from '@/mixins/base'
 
 export default {
   components: { BtnLoader },
-
-  data: () => ({
-    name: null,
-    surname: null,
-    email: null,
-    password: null,
-    confirmPassword: null,
-    isTeacher: false
-  }),
-
+  mixins: [
+    baseMixin({
+      name: null,
+      surname: null,
+      email: null,
+      password: null,
+      confirmPassword: null,
+      isTeacher: false
+    })
+  ],
   computed: {
     signed() { return this.$store.state.user.uid }
   },
-
   watch: {
     signed() {
       if (this.signed)
         location.replace('/')
-
     }
   },
-
   methods: {
     signUp() {
       this.$store.dispatch('signUp', {
@@ -113,7 +114,6 @@ export default {
       })
     }
   },
-
   validations: {
     name: { required },
     surname: { required },

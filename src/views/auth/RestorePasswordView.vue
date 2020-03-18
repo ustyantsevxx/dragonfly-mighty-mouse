@@ -14,7 +14,7 @@
                 type="submit"
                 variant="info"
                 block
-                load="restoreBtn"
+                load="btn__restorePassword"
                 or="Отправить ссылку"
               />
             </div>

@@ -9,7 +9,7 @@ const actions = {
   async groupInfo(_, id) {
     let group = await db.collection('groups').doc(id).get()
     group = group.data()
-    let subject = await db.collection('subjects').doc(group.subjectId).get()
+    let subject = await group.subject.get()
     subject = { ...subject.data(), id: subject.id }
     let teacher = await db.collection('users').doc(subject.teacherId).get()
     teacher = teacher.data()
@@ -21,7 +21,7 @@ const actions = {
   },
   async joinGroup({ rootState }, id) {
     await db.collection('groups').doc(id).update({
-      students: firebase.firestore.FieldValue.arrayUnion(rootState.user.uid)
+      students: firebase.firestore.FieldValue.arrayUnion(db.collection('users').doc(rootState.user.uid))
     })
   }
 }

@@ -20,21 +20,21 @@ const actions = {
         db.collection('subjects').where('teacherId', '==', rootState.user.uid))
     else {
       let groupsWhereStudentPresented = await db.collection('groups')
-        .where('students', 'array-contains', rootState.user.uid).get()
-      let subjectIdList = groupsWhereStudentPresented.docs.map(c => c.data().subjectId)
+        .where('students', 'array-contains', db.collection('users').doc(rootState.user.uid)).get()
+      let subjectIdList = groupsWhereStudentPresented.docs.map(c => c.data().subject.id)
       if (subjectIdList.length)
         await bindFirestoreRef(
           'subjects',
-          db.collection('subjects')
-            .where(firebase.firestore.FieldPath.documentId(), 'in', subjectIdList)
+          db.collection('subjects').where(firebase.firestore.FieldPath.documentId(), 'in', subjectIdList)
         )
     }
   }),
 
-  bindGroup: firestoreAction(({ bindFirestoreRef }, subjectId) =>
+  bindGroup: firestoreAction(({ bindFirestoreRef }, subjectId) => {
     bindFirestoreRef(
       'groups',
-      db.collection('groups').where('subjectId', '==', subjectId))
+      db.collection('groups').where('subject', '==', db.collection('subjects').doc(subjectId)))
+  }
   ),
 
   bindTasks: firestoreAction(({ bindFirestoreRef, rootState }, subjectId) => {
@@ -137,7 +137,7 @@ const actions = {
   async addGroup(_, groupData) {
     await db.collection('groups').add({
       name: groupData.name,
-      subjectId: groupData.subjectId
+      subject: db.collection('subjects').doc(groupData.subjectId)
     })
   }
 }

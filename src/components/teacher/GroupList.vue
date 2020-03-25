@@ -14,7 +14,24 @@
             <b-tab :title="group.name" v-for="(group, i) in groups" :key="i">
               <b-link @click="copyLink">Пригласить студентов</b-link>
               <input type="hidden" :id="'invite-link-' + i" />
-              <div v-for="(student, j) in group.students" :key="j">{{student.surname}}</div>
+              <b-table
+                class="mt-3"
+                small
+                bordered
+                :fields="tableHeaders"
+                head-variant="light"
+                :items="items"
+                sort-by="name"
+              >
+                <template v-slot:head()="data">
+                  <div v-b-tooltip.hover="data.field.name">{{ data.label}}</div>
+                </template>
+
+                <template v-for="(t,i) in tableHeaders.slice(1)" #[getslotname(t)]="data">
+                  <div v-if="data.value" :key="i">{{data.value}}</div>
+                  <div v-else :key="i" @click="test(data)">-</div>
+                </template>
+              </b-table>
             </b-tab>
           </b-tabs>
         </b-card>
@@ -24,62 +41,64 @@
       </b-col>
     </b-row>
 
-    <b-modal
-      centered
-      no-close-on-backdrop
-      title="Добавить группу"
-      id="add-group-modal"
-      ref="add-group-modal"
-      @hide="resetModal('add-group-modal')"
-    >
-      <b-form-group label="Код группы">
-        <b-form-input :state="inputState($v.newGroupName)" v-model.trim="$v.newGroupName.$model" />
-      </b-form-group>
-
-      <template #modal-footer>
-        <b-btn @click="resetModal('add-group-modal')" variant="light">Отмена</b-btn>
-        <btn-loader
-          @click="addGroup"
-          load="btn-addGroup"
-          or="Добавить"
-          variant="success"
-          :disabled="$v.$invalid"
-        />
-      </template>
-    </b-modal>
+    <!-- invisible -->
+    <group-modal />
+    <!-- /invisible -->
   </div>
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
-import BtnLoader from '@/components/BtnLoader'
-import baseMixin from '@/mixins/base'
+import GroupModal from '@/components/modals/GroupModal'
 
 export default {
-  components: { BtnLoader },
-  mixins: [
-    baseMixin({
-      newGroupName: null,
-      openedGroupIndex: 0
-    })
-  ],
+  components: { GroupModal },
+  data: () => ({
+    openedGroupIndex: 0
+  }),
   computed: {
     groups() {
       return this.$store.state.teacher.groups
+        ? this.$store.state.teacher.groups
+        : []
+    },
+    getslotname: () => t => {
+      return `cell(${t.key})`
+    },
+    tasks() {
+      return this.$store.state.teacher.tasks
+        ? this.$store.state.teacher.tasks
+        : []
+    },
+    tableHeaders() {
+      let labNumbers = [...this.tasks]
+      labNumbers.sort((a, b) => a.number - b.number)
+      let a = labNumbers.map(t => ({
+        label: `Лаб №${t.number}`,
+        key: t.id,
+        name: t.name,
+        sortable: true
+      }))
+      a.unshift({ label: 'Фамилия Имя', key: 'name', sortable: true })
+      return a
+    },
+    items() {
+      return this.groups[this.openedGroupIndex].students.map(t => {
+        if (t.marks) {
+          let item = {
+            name: `${t.student.surname} ${t.student.name}`,
+            id: t.student.id
+          }
+          t.marks.forEach(m => item[m.task.id] = m.score)
+          return item
+        }
+        else return {}
+      })
     }
   },
   beforeCreate() {
-    if (this.$store.state.teacher.groups === null)
-      this.$store.dispatch('bindGroup', this.$parent.subj.id)
+    this.$store.dispatch('bindGroup', this.$parent.subj.id)
   },
   methods: {
-    async addGroup() {
-      await this.$store.dispatch('addGroup', {
-        name: this.newGroupName,
-        subjectId: this.$parent.subj.id
-      })
-      this.resetModal('add-group-modal')
-    },
     copyLink() {
       let a = document.querySelector('#invite-link-' + this.openedGroupIndex)
       a.setAttribute('type', 'text')
@@ -90,10 +109,16 @@ export default {
       a.setAttribute('type', 'hidden')
       window.getSelection().removeAllRanges()
       this.$store.commit('setToastMsg', { msg: 'Ссылка приглашения скопирована!', translate: false })
+    },
+    test(data) {
+      //this.$store.dispatch('markTask', data)
     }
-  },
-  validations: {
-    newGroupName: { required },
   }
 }
 </script>
+
+<style >
+.tooltip {
+  top: 0 !important;
+}
+</style>

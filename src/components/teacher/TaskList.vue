@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="false">
     <b-row>
       <b-col class="d-flex justify-content-between">
         <h4 class="m-0 text-muted">Лабораторные работы</h4>
@@ -95,8 +95,7 @@ export default {
     }
   },
   beforeCreate() {
-    if (this.$store.state.teacher.tasks === null)
-      this.$store.dispatch('bindTasks', this.$parent.subj.id)
+    this.$store.dispatch('bindTasks', this.$parent.subj.id)
   },
   methods: {
     openModal(index) {

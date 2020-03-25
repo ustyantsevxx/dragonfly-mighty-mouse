@@ -139,6 +139,10 @@ const actions = {
       name: groupData.name,
       subject: db.collection('subjects').doc(groupData.subjectId)
     })
+  },
+
+  async markTask() {
+    db.collection('groups')
   }
 }
 

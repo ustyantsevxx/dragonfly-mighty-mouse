@@ -72,6 +72,7 @@ import TextHighlight from 'vue-text-highlight'
 
 export default {
   components: { TextHighlight, SubjectModal },
+
   data: () => ({
     filter: null,
     tableHeaders: [
@@ -79,6 +80,7 @@ export default {
       { key: 'course', label: 'Курс', sortable: true }
     ]
   }),
+
   computed: {
     subjects() { return this.$store.state.teacher.subjects },
     subjectsByCourse() {

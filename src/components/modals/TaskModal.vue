@@ -85,7 +85,9 @@ import modalMixin from '@/mixins/base'
 
 export default {
   components: { BtnLoader },
+
   props: ['task'],
+
   mixins: [
     modalMixin({
       number: null,
@@ -97,6 +99,7 @@ export default {
       oldFilesToDelete: []
     })
   ],
+
   computed: {
     uploadProgress() {
       return this.$store.state.teacher.filesUploadProgress
@@ -107,6 +110,7 @@ export default {
       else return this.newFilesToUpload.length
     }
   },
+
   methods: {
     async okAction() {
       this.task ? await this.editTask() : await this.addTask()
@@ -172,6 +176,7 @@ export default {
       this.resetModal('task-modal')
     },
   },
+
   validations: {
     number: { required },
     name: { required },

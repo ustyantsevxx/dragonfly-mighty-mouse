@@ -83,6 +83,7 @@ import baseMixin from '@/mixins/base'
 
 export default {
   components: { BtnLoader },
+
   mixins: [
     baseMixin({
       name: null,
@@ -93,15 +94,18 @@ export default {
       isTeacher: false
     })
   ],
+
   computed: {
     signed() { return this.$store.state.user.uid }
   },
+
   watch: {
     signed() {
       if (this.signed)
         location.replace('/')
     }
   },
+
   methods: {
     signUp() {
       this.$store.dispatch('signUp', {
@@ -114,6 +118,7 @@ export default {
       })
     }
   },
+
   validations: {
     name: { required },
     surname: { required },

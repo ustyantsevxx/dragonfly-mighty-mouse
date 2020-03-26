@@ -12,18 +12,22 @@ import Navbar from './components/Navbar'
 
 export default {
   components: { Navbar },
+
   computed: {
     toastMsg() { return this.$store.state.toastMsg }
   },
+
   watch: {
     toastMsg() {
       if (this.toastMsg) this.toast()
     }
   },
+
   beforeCreate() {
     if (this.$store.state.teacher.subjects === null && this.$store.state.user.uid)
       this.$store.dispatch('bindSubjects')
   },
+
   methods: {
     async toast() {
       let russianMsg = this.toastMsg.translate

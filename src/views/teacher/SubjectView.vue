@@ -77,7 +77,11 @@ import { mapState } from 'vuex'
 
 export default {
   components: { PageLoader, TaskList, GroupList, SubjectModal },
-  data: () => ({ taskForms: ['лабораторная', 'лабораторные', 'лабораторных'] }),
+
+  data: () => ({
+    taskForms: ['лабораторная', 'лабораторные', 'лабораторных']
+  }),
+
   computed: {
     subj() {
       return this.$store.state.teacher.subjects
@@ -93,14 +97,17 @@ export default {
       return this.tasks.filter(x => x.visible).length
     }
   },
+
   watch: {
     subj() {
       if (this.subj) document.title = this.subj.name
     }
   },
+
   mounted() {
     if (this.subj) document.title = this.subj.name
   },
+
   methods: {
     num2str: (n, forms) => num2str(n, forms)
   }

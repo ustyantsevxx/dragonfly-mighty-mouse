@@ -16,6 +16,7 @@
 <script>
 export default {
   inheritAttrs: false,
+
   props: {
     load: {
       type: String,
@@ -26,8 +27,11 @@ export default {
       default: ''
     }
   },
+
   computed: {
-    loadingView() { return this.$store.state.loadingView }
+    loadingView() {
+      return this.$store.state.loadingView
+    }
   }
 }
 </script>

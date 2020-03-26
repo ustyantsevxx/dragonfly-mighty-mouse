@@ -30,11 +30,13 @@ import baseMixin from '@/mixins/base'
 
 export default {
   components: { BtnLoader },
+
   mixins: [
     baseMixin({
       newGroupName: null
     })
   ],
+
   methods: {
     async addGroup() {
       await this.$store.dispatch('addGroup', {
@@ -44,11 +46,9 @@ export default {
       this.resetModal('add-group-modal')
     },
   },
+
   validations: {
     newGroupName: { required },
   }
 }
 </script>
-
-<style>
-</style>

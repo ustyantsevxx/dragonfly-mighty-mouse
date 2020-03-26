@@ -89,6 +89,7 @@ export default {
 img {
   height: 1.5em;
 }
+
 .separator {
   margin-bottom: 4px;
   display: flex;

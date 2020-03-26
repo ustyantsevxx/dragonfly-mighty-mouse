@@ -1,9 +1,7 @@
 <template>
   <b-navbar toggleable="sm" type="dark" class="nav shadow-sm nav-on-top px-5" :sticky="true">
     <b-navbar-brand to="/" exact active-class="c">Dragonfly Mighty Mouse</b-navbar-brand>
-
     <b-navbar-toggle target="collapse" />
-
     <b-collapse id="collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item to="/subjects" exact>Дисциплины</b-nav-item>
@@ -30,7 +28,6 @@ export default {
       signed: s => s.user.uid
     })
   },
-
   methods: {
     signOut() {
       if (this.$router.currentRoute.path !== '/')

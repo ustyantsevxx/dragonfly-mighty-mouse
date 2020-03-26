@@ -30,9 +30,9 @@ import BtnLoader from '@/components/BtnLoader'
 
 export default {
   components: { BtnLoader },
-
-  data: () => ({ email: null }),
-
+  data: () => ({
+    email: null
+  }),
   methods: {
     async restorePassword() {
       let r = await this.$store.dispatch('recoverPassword', { email: this.email })

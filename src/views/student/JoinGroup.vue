@@ -25,9 +25,11 @@ export default {
   data: () => ({
     info: null
   }),
+
   async beforeCreate() {
     this.info = await this.$store.dispatch('groupInfo', this.$route.params.id)
   },
+
   methods: {
     async join() {
       await this.$store.dispatch('joinGroup', this.$route.params.id)

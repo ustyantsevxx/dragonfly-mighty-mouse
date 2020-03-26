@@ -43,13 +43,16 @@ import BtnLoader from '@/components/BtnLoader'
 
 export default {
   components: { BtnLoader },
+
   props: ['subject'],
+
   mixins: [
     modalMixin({
       name: null,
       course: null,
     })
   ],
+
   methods: {
     beforeShow() {
       if (this.subject) {
@@ -76,9 +79,9 @@ export default {
       this.$store.dispatch('deleteSubject', this.subject.id)
       this.$router.push('/subjects')
       this.$store.commit('unsetLoading')
-
-    },
+    }
   },
+
   validations: {
     name: { required },
     course: { required }

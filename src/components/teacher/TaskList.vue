@@ -80,10 +80,12 @@ import icons from 'file-icons-js'
 
 export default {
   components: { TaskModal },
+
   data: () => ({
     taskToEdit: null,
     wordForms: ['балл', 'балла', 'баллов']
   }),
+
   computed: {
     labListSorted() {
       return this.$store.state.teacher.tasks
@@ -94,9 +96,11 @@ export default {
       return this.$store.state.user.isTeacher
     }
   },
+
   beforeCreate() {
     this.$store.dispatch('bindTasks', this.$parent.subj.id)
   },
+
   methods: {
     openModal(index) {
       this.taskToEdit = index !== null ? this.labListSorted[index] : null
@@ -104,16 +108,11 @@ export default {
         this.$bvModal.show('task-modal')
       })
     },
-    downloadFile(link) {
-      location.assign(link)
-
+    toggleTaskVisibility(id, state) {
+      this.$store.dispatch('toggleTaskVisibility', { id, state })
     },
-    getClass(name) {
-      return icons.getClassWithColor(name)
-    },
-    toggleTaskVisibility(id, e) {
-      this.$store.dispatch('toggleTaskVisibility', { id, state: e })
-    },
+    getClass: name => icons.getClassWithColor(name),
+    downloadFile: link => location.assign(link),
     form: (n, forms) => num2str(n, forms)
   }
 }

@@ -56,14 +56,16 @@ import { mapState } from 'vuex'
 
 export default {
   components: { GroupModal },
+
   data: () => ({
     openedGroupIndex: 0
   }),
+
   computed: {
     ...mapState({
       groups: s => s.teacher.groups,
       marks: s => s.teacher.marks,
-      tasks: s => s.teacher.tasks,
+      tasks: s => s.teacher.tasks
     }),
     tableHeaders() {
       let tableHeaders = [{
@@ -84,7 +86,7 @@ export default {
         score: t.score,
         sortable: true,
         thClass: 'hide-sort-icon' + (t.visible ? '' : ' text-danger'),
-        tdClass: 'hoverable p-1 text-center',
+        tdClass: 'hoverable p-1 text-center'
       }))
       return tableHeaders
     },
@@ -100,10 +102,12 @@ export default {
       })
     }
   },
+
   beforeCreate() {
     this.$store.dispatch('bindGroup', this.$parent.subj.id)
     this.$store.dispatch('bindMarks', this.$parent.subj.id)
   },
+
   methods: {
     copyLink() {
       let a = document.querySelector('#invite-link-' + this.openedGroupIndex)

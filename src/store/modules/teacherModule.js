@@ -6,6 +6,7 @@ const state = {
   subjects: null,
   groups: null,
   tasks: null,
+  marks: null,
   filesUploadProgress: -1
 }
 
@@ -15,7 +16,7 @@ const getters = {}
 const actions = {
   bindSubjects: firestoreAction(async ({ bindFirestoreRef, rootState }) => {
     if (rootState.user.isTeacher)
-      bindFirestoreRef(
+      return bindFirestoreRef(
         'subjects',
         db.collection('subjects').where('teacherId', '==', rootState.user.uid))
     else {
@@ -23,7 +24,7 @@ const actions = {
         .where('students', 'array-contains', db.collection('users').doc(rootState.user.uid)).get()
       let subjectIdList = groupsWhereStudentPresented.docs.map(c => c.data().subject.id)
       if (subjectIdList.length)
-        await bindFirestoreRef(
+        return bindFirestoreRef(
           'subjects',
           db.collection('subjects').where(firebase.firestore.FieldPath.documentId(), 'in', subjectIdList)
         )
@@ -31,23 +32,29 @@ const actions = {
   }),
 
   bindGroup: firestoreAction(({ bindFirestoreRef }, subjectId) => {
-    bindFirestoreRef(
+    return bindFirestoreRef(
       'groups',
       db.collection('groups').where('subject', '==', db.collection('subjects').doc(subjectId)))
   }),
 
   bindTasks: firestoreAction(({ bindFirestoreRef, rootState }, subjectId) => {
     if (rootState.user.isTeacher)
-      bindFirestoreRef(
+      return bindFirestoreRef(
         'tasks',
         db.collection('tasks').where('subjectId', '==', subjectId))
     else {
-      bindFirestoreRef(
+      return bindFirestoreRef(
         'tasks',
         db.collection('tasks')
           .where('subjectId', '==', subjectId)
           .where('visible', '==', true))
     }
+  }),
+
+  bindMarks: firestoreAction(({ bindFirestoreRef }, subjectId) => {
+    return bindFirestoreRef(
+      'marks',
+      db.collection('marks').where('subject', '==', db.collection('subjects').doc(subjectId)))
   }),
 
   async addSubject({ rootState }, subj) {

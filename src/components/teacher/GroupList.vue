@@ -16,20 +16,23 @@
               <input type="hidden" :id="'invite-link-' + i" />
               <b-table
                 :fields="tableHeaders"
-                :items="items"
+                :items="tableItems"
                 sort-by="name"
+                striped
                 head-variant="light"
-                class="mt-3"
+                v-if="marks && tasks"
                 bordered
                 small
+                class="mt-3 marks-table"
               >
-                <template v-slot:head()="data">
+                <template #head()="data">
                   <div v-b-tooltip.hover="data.field.name">{{ data.label }}</div>
                 </template>
-
-                <template v-for="(t,i) in tableHeaders.slice(1)" #[getslotname(t)]="data">
-                  <div v-if="data.value" :key="i">{{data.value}}</div>
-                  <div v-else :key="i" @click="test(data)">-</div>
+                <template #cell(index)="data">{{ data.index + 1 }}</template>
+                <template #cell(name)="data">{{ data.value }}</template>
+                <template #cell()="data">
+                  <div v-if="data.value">{{data.value}}</div>
+                  <div v-else @click="test(data)">-</div>
                 </template>
               </b-table>
             </b-tab>
@@ -49,6 +52,7 @@
 
 <script>
 import GroupModal from '@/components/modals/GroupModal'
+import { mapState } from 'vuex'
 
 export default {
   components: { GroupModal },
@@ -56,47 +60,49 @@ export default {
     openedGroupIndex: 0
   }),
   computed: {
-    groups() {
-      return this.$store.state.teacher.groups
-        ? this.$store.state.teacher.groups
-        : []
-    },
-    getslotname: () => t => {
-      return `cell(${t.key})`
-    },
-    tasks() {
-      return this.$store.state.teacher.tasks
-        ? this.$store.state.teacher.tasks
-        : []
-    },
+    ...mapState({
+      groups: s => s.teacher.groups,
+      marks: s => s.teacher.marks,
+      tasks: s => s.teacher.tasks,
+    }),
     tableHeaders() {
+      let tableHeaders = [{
+        label: '#',
+        key: 'index'
+      }, {
+        label: 'Фамилия Имя',
+        key: 'name',
+        tdClass: 'font-weight-bold',
+        stickyColumn: true,
+        sortable: true
+      }]
       let labNumbers = [...this.tasks].sort((a, b) => a.number - b.number)
-      labNumbers = labNumbers.map(t => ({
+      labNumbers.forEach(t => tableHeaders.push({
         label: `Лаб №${t.number}`,
         key: t.id,
         name: t.name,
         score: t.score,
-        sortable: true
+        sortable: true,
+        thClass: 'hide-sort-icon' + (t.visible ? '' : ' text-danger'),
+        tdClass: 'hoverable p-1 text-center',
       }))
-      labNumbers.unshift({ label: 'Фамилия Имя', key: 'name', sortable: true })
-      return labNumbers
+      return tableHeaders
     },
-    items() {
+    tableItems() {
       return this.groups[this.openedGroupIndex].students.map(t => {
-        if (t.marks) {
-          let item = {
-            name: `${t.student.surname} ${t.student.name}`,
-            id: t.student.id
-          }
-          t.marks.forEach(m => item[m.task.id] = m.score)
-          return item
+        let item = {
+          name: `${t.surname} ${t.name}`,
+          id: t.id
         }
-        else return {}
+        let studentsMarks = this.marks.filter(m => m.student.id === t.id)
+        studentsMarks.forEach(m => item[m.task.id] = m.score)
+        return item
       })
     }
   },
   beforeCreate() {
     this.$store.dispatch('bindGroup', this.$parent.subj.id)
+    this.$store.dispatch('bindMarks', this.$parent.subj.id)
   },
   methods: {
     copyLink() {
@@ -118,8 +124,30 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .tooltip {
   top: 0 !important;
+}
+
+.marks-table {
+  width: max-content !important;
+}
+
+.hoverable {
+  cursor: pointer;
+  backdrop-filter: brightness(1);
+  transition: backdrop-filter 0.1s ease-in-out;
+
+  &:hover {
+    backdrop-filter: brightness(0.95);
+  }
+}
+
+.table.b-table > thead > tr > [aria-sort="none"] {
+  background-size: 0;
+
+  &:hover {
+    background-size: 0.65em 1em;
+  }
 }
 </style>

@@ -34,8 +34,7 @@ const actions = {
     bindFirestoreRef(
       'groups',
       db.collection('groups').where('subject', '==', db.collection('subjects').doc(subjectId)))
-  }
-  ),
+  }),
 
   bindTasks: firestoreAction(({ bindFirestoreRef, rootState }, subjectId) => {
     if (rootState.user.isTeacher)

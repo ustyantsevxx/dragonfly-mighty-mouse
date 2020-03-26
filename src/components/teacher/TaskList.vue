@@ -1,5 +1,5 @@
 <template>
-  <div v-if="false">
+  <div>
     <b-row>
       <b-col class="d-flex justify-content-between">
         <h4 class="m-0 text-muted">Лабораторные работы</h4>

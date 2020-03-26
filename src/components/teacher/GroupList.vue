@@ -15,16 +15,16 @@
               <b-link @click="copyLink">Пригласить студентов</b-link>
               <input type="hidden" :id="'invite-link-' + i" />
               <b-table
-                class="mt-3"
-                small
-                bordered
                 :fields="tableHeaders"
-                head-variant="light"
                 :items="items"
                 sort-by="name"
+                head-variant="light"
+                class="mt-3"
+                bordered
+                small
               >
                 <template v-slot:head()="data">
-                  <div v-b-tooltip.hover="data.field.name">{{ data.label}}</div>
+                  <div v-b-tooltip.hover="data.field.name">{{ data.label }}</div>
                 </template>
 
                 <template v-for="(t,i) in tableHeaders.slice(1)" #[getslotname(t)]="data">
@@ -70,16 +70,16 @@ export default {
         : []
     },
     tableHeaders() {
-      let labNumbers = [...this.tasks]
-      labNumbers.sort((a, b) => a.number - b.number)
-      let a = labNumbers.map(t => ({
+      let labNumbers = [...this.tasks].sort((a, b) => a.number - b.number)
+      labNumbers = labNumbers.map(t => ({
         label: `Лаб №${t.number}`,
         key: t.id,
         name: t.name,
+        score: t.score,
         sortable: true
       }))
-      a.unshift({ label: 'Фамилия Имя', key: 'name', sortable: true })
-      return a
+      labNumbers.unshift({ label: 'Фамилия Имя', key: 'name', sortable: true })
+      return labNumbers
     },
     items() {
       return this.groups[this.openedGroupIndex].students.map(t => {
@@ -111,13 +111,14 @@ export default {
       this.$store.commit('setToastMsg', { msg: 'Ссылка приглашения скопирована!', translate: false })
     },
     test(data) {
+      console.log(data)
       //this.$store.dispatch('markTask', data)
     }
   }
 }
 </script>
 
-<style >
+<style>
 .tooltip {
   top: 0 !important;
 }

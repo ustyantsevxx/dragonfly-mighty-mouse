@@ -41,12 +41,16 @@
 
       <hr class="my-4" />
 
-      <task-list />
+      <b-nav pills class="mb-2">
+        <b-nav-item exact-active-class="active" to="tasklist">Лабораторные работы</b-nav-item>
+        <b-nav-item exact-active-class="active" to="groups">Группы и баллы</b-nav-item>
+      </b-nav>
 
-      <template v-if="isTeacher">
-        <hr class="my-4" />
-        <group-list v-if="isTeacher" />
-      </template>
+      <transition name="global-fade" mode="out-in">
+        <keep-alive>
+          <router-view />
+        </keep-alive>
+      </transition>
     </b-container>
 
     <page-loader v-else />
@@ -69,14 +73,12 @@
 
 <script>
 import { num2str } from '@/assets/functions'
-import TaskList from '@/components/teacher/TaskList'
-import GroupList from '@/components/teacher/GroupList'
 import PageLoader from '@/components/PageLoader'
 import SubjectModal from '@/components/modals/SubjectModal'
 import { mapState } from 'vuex'
 
 export default {
-  components: { PageLoader, TaskList, GroupList, SubjectModal },
+  components: { PageLoader, SubjectModal },
 
   data: () => ({
     taskForms: ['лабораторная', 'лабораторные', 'лабораторных']
@@ -102,6 +104,13 @@ export default {
     subj() {
       if (this.subj) document.title = this.subj.name
     }
+  },
+
+  beforeCreate() {
+    let id = this.$route.params.id
+    this.$store.dispatch('bindTasks', id)
+    this.$store.dispatch('bindGroup', id)
+    this.$store.dispatch('bindMarks', id)
   },
 
   mounted() {

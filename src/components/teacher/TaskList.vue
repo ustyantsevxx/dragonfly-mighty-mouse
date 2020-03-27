@@ -1,12 +1,12 @@
 <template>
   <div>
-    <b-row>
+    <!-- <b-row>
       <b-col class="d-flex justify-content-between">
         <h4 class="m-0 text-muted">Лабораторные работы</h4>
         <b-link v-if="isTeacher" @click="openModal(null)" size="sm" variant="dark">Создать</b-link>
       </b-col>
-    </b-row>
-    <b-row class="mt-2">
+    </b-row>-->
+    <b-row>
       <b-col>
         <b-list-group v-if="labListSorted.length">
           <b-list-group-item class="lab-item" v-for="(task, i) in labListSorted" :key="i">
@@ -64,6 +64,9 @@
         <b-card v-else>
           <b-card-text class="text-center text-muted py-4">Список лабораторных работ пуст.</b-card-text>
         </b-card>
+        <b-list-group-item @click="openModal(null)" v-if="isTeacher" class="adder text-center py-1">
+          <b-icon icon="plus" scale="1.6" />
+        </b-list-group-item>
       </b-col>
     </b-row>
 
@@ -97,10 +100,6 @@ export default {
     }
   },
 
-  beforeCreate() {
-    this.$store.dispatch('bindTasks', this.$parent.subj.id)
-  },
-
   methods: {
     openModal(index) {
       this.taskToEdit = index !== null ? this.labListSorted[index] : null
@@ -124,7 +123,10 @@ export default {
   overflow: hidden;
   white-space: nowrap;
 }
-
+.adder {
+  cursor: pointer;
+  border-top: none;
+}
 .lab-item {
   padding: 0;
   transition: background-color 0.17s;

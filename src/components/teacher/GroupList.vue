@@ -1,16 +1,9 @@
 <template>
   <div>
     <b-row>
-      <b-col class="d-flex justify-content-between">
-        <h4 class="m-0 text-muted">Группы</h4>
-        <b-link v-b-modal.add-group-modal>Добавить группу</b-link>
-      </b-col>
-    </b-row>
-
-    <b-row class="mt-2">
       <b-col>
         <b-card no-body v-if="groups && groups.length">
-          <b-tabs pills card v-model="openedGroupIndex">
+          <b-tabs vertical pills card v-model="openedGroupIndex">
             <b-tab :title="group.name" v-for="(group, i) in groups" :key="i">
               <b-link @click="copyLink">Пригласить студентов</b-link>
               <input type="hidden" :id="'invite-link-' + i" />
@@ -32,10 +25,15 @@
                 <template #cell(name)="data">{{ data.value }}</template>
                 <template #cell()="data">
                   <div v-if="data.value">{{data.value}}</div>
-                  <div v-else @click="test(data)">-</div>
+                  <div v-else @click="test(data)"></div>
                 </template>
               </b-table>
             </b-tab>
+            <template v-slot:tabs-end>
+              <b-nav-item v-b-modal.add-group-modal class="text-center">
+                <b-icon icon="plus" />
+              </b-nav-item>
+            </template>
           </b-tabs>
         </b-card>
         <b-card v-else>
@@ -103,11 +101,6 @@ export default {
     }
   },
 
-  beforeCreate() {
-    this.$store.dispatch('bindGroup', this.$parent.subj.id)
-    this.$store.dispatch('bindMarks', this.$parent.subj.id)
-  },
-
   methods: {
     copyLink() {
       let a = document.querySelector('#invite-link-' + this.openedGroupIndex)
@@ -139,11 +132,10 @@ export default {
 
 .hoverable {
   cursor: pointer;
-  backdrop-filter: brightness(1);
-  transition: backdrop-filter 0.1s ease-in-out;
+  transition: background-color 0.09s ease-in-out;
 
   &:hover {
-    backdrop-filter: brightness(0.95);
+    background-color: #e9ecef !important;
   }
 }
 

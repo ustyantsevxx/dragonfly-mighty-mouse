@@ -1,11 +1,5 @@
 <template>
   <div>
-    <!-- <b-row>
-      <b-col class="d-flex justify-content-between">
-        <h4 class="m-0 text-muted">Лабораторные работы</h4>
-        <b-link v-if="isTeacher" @click="openModal(null)" size="sm" variant="dark">Создать</b-link>
-      </b-col>
-    </b-row>-->
     <b-row>
       <b-col>
         <b-list-group v-if="labListSorted.length">

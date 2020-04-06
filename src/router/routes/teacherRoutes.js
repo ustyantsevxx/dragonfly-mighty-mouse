@@ -6,12 +6,12 @@ export default [
   },
   {
     path: '/subjects/:id',
-    redirect: '/subjects/:id/tasklist',
+    redirect: '/subjects/:id/tasks',
     component: () => import('@/views/teacher/SubjectView'),
     meta: { requiresAuth: true, dynamicTitle: true },
     children: [
       {
-        path: 'tasklist',
+        path: 'tasks',
         component: () => import('@/components/teacher/TaskList'),
         meta: { requiresAuth: true },
       },

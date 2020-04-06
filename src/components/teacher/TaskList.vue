@@ -66,6 +66,7 @@
         </b-card>
         <b-list-group-item @click="openModal(null)" v-if="isTeacher" class="adder text-center py-1">
           <b-icon icon="plus" scale="1.6" />
+          <span class="ml-2">Создать</span>
         </b-list-group-item>
       </b-col>
     </b-row>
@@ -123,10 +124,12 @@ export default {
   overflow: hidden;
   white-space: nowrap;
 }
+
 .adder {
   cursor: pointer;
   border-top: none;
 }
+
 .lab-item {
   padding: 0;
   transition: background-color 0.17s;

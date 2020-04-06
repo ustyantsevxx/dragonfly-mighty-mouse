@@ -42,7 +42,7 @@
       <hr class="my-4" />
 
       <b-nav pills class="mb-2">
-        <b-nav-item exact-active-class="active" to="tasklist">Лабораторные работы</b-nav-item>
+        <b-nav-item exact-active-class="active" to="tasks">Лабораторные работы</b-nav-item>
         <b-nav-item exact-active-class="active" to="groups">Группы и баллы</b-nav-item>
       </b-nav>
 

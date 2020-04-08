@@ -135,29 +135,27 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.tooltip {
-  top: 0 !important;
-}
-
-.marks-table {
-  width: max-content !important;
-}
-
-.hoverable {
-  cursor: pointer;
-  transition: background-color 0.09s ease-in-out;
-
-  &:hover {
-    background-color: #e9ecef !important;
+<style lang="scss" scoped>
+/deep/ {
+  .marks-table {
+    width: max-content !important;
   }
-}
 
-.table.b-table > thead > tr > [aria-sort="none"] {
-  background-size: 0;
+  .hoverable {
+    cursor: pointer;
+    transition: background-color 0.09s ease-in-out;
 
-  &:hover {
-    background-size: 0.65em 1em;
+    &:hover {
+      background-color: #e9ecef !important;
+    }
+  }
+
+  .table.b-table > thead > tr > [aria-sort="none"] {
+    background-size: 0;
+
+    &:hover {
+      background-size: 0.65em 1em;
+    }
   }
 }
 </style>

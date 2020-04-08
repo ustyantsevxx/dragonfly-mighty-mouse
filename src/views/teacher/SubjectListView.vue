@@ -7,7 +7,7 @@
         </b-col>
 
         <b-col md="8" order-md="1">
-          <b-nav tabs class="border-0 ss-nav">
+          <b-nav tabs class="border-0 course-list-nav">
             <b-nav-item to="/subjects" exact-active-class="active">Все курсы</b-nav-item>
             <b-nav-item
               v-for="(c, i) in coursesList"
@@ -105,7 +105,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .empty-msg {
   text-align: center;
   font-size: 2em;
@@ -118,11 +118,11 @@ export default {
   position: relative;
 }
 
-.ss-nav li a {
+.course-list-nav li a {
   color: #212529 !important;
 }
 
-mark {
+/deep/ mark {
   padding: 0 !important;
   background: rgb(231, 231, 231) !important;
 }

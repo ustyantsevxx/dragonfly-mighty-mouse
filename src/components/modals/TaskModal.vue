@@ -186,8 +186,8 @@ export default {
 }
 </script>
 
-<style>
-#task-modal {
+<style lang="scss" scoped>
+/deep/ #task-modal {
   padding-top: 3em;
 }
 </style>

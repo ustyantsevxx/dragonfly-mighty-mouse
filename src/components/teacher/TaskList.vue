@@ -112,117 +112,119 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.overflow {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
+<style lang="scss" scoped>
+/deep/ {
+  .overflow {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 
-.adder {
-  cursor: pointer;
-  border-top: none;
-}
-
-.lab-item {
-  padding: 0;
-  transition: background-color 0.17s;
-
-  header {
-    display: flex;
-    background-color: #f8f9fa;
-    align-items: center;
-    padding: 12px 20px;
+  .adder {
     cursor: pointer;
+    border-top: none;
+  }
 
-    .description {
-      margin-left: 1em;
-      color: #6c757d9d !important;
-    }
+  .lab-item {
+    padding: 0;
+    transition: background-color 0.17s;
 
-    .badge {
-      margin-left: auto;
-    }
-
-    .hider {
-      display: block;
-      font-size: 1.4rem;
-      color: #6c757d9d;
-      position: absolute;
-      z-index: 0;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    b,
-    span,
-    .description,
-    .badge,
-    .icon-vis {
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    &:hover {
+    header {
+      display: flex;
       background-color: #f8f9fa;
+      align-items: center;
+      padding: 12px 20px;
+      cursor: pointer;
+
+      .description {
+        margin-left: 1em;
+        color: #6c757d9d !important;
+      }
+
+      .badge {
+        margin-left: auto;
+      }
+
+      .hider {
+        display: block;
+        font-size: 1.4rem;
+        color: #6c757d9d;
+        position: absolute;
+        z-index: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      b,
+      span,
+      .description,
+      .badge,
+      .icon-vis {
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+
+      &:hover {
+        background-color: #f8f9fa;
+      }
+    }
+
+    .collapsed {
+      background-color: inherit;
+
+      b,
+      span,
+      .description,
+      .badge,
+      .icon-vis {
+        opacity: 1;
+      }
+
+      .hider {
+        display: none;
+      }
+    }
+
+    .collapse-content {
+      padding: 12px 20px;
     }
   }
 
-  .collapsed {
-    background-color: inherit;
+  .add-item-cont {
+    padding: 0.1em;
+    background-color: #f8f9fa;
 
-    b,
-    span,
-    .description,
-    .badge,
-    .icon-vis {
-      opacity: 1;
-    }
+    .add-item {
+      justify-content: center;
+      align-items: center;
 
-    .hider {
-      display: none;
-    }
-  }
-
-  .collapse-content {
-    padding: 12px 20px;
-  }
-}
-
-.add-item-cont {
-  padding: 0.1em;
-  background-color: #f8f9fa;
-
-  .add-item {
-    justify-content: center;
-    align-items: center;
-
-    .bi {
-      height: 2em;
-      width: 2em;
+      .bi {
+        height: 2em;
+        width: 2em;
+      }
     }
   }
-}
-.task-description-p {
-  white-space: pre-wrap;
-}
-
-.hiddenLab {
-  background-color: #eeeeee !important;
-}
-
-.file {
-  cursor: pointer;
-  background: transparent !important;
-  &:hover {
-    background-color: #f8f9fa !important;
+  .task-description-p {
+    white-space: pre-wrap;
   }
-  .card-body {
-    padding: 0.5em 1em !important;
-    display: flex;
-    align-items: center;
-    .ficon::before {
-      font-size: 2em !important;
+
+  .hiddenLab {
+    background-color: #eeeeee !important;
+  }
+
+  .file {
+    cursor: pointer;
+    background: transparent !important;
+    &:hover {
+      background-color: #f8f9fa !important;
+    }
+    .card-body {
+      padding: 0.5em 1em !important;
+      display: flex;
+      align-items: center;
+      .ficon::before {
+        font-size: 2em !important;
+      }
     }
   }
 }

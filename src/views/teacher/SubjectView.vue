@@ -1,6 +1,6 @@
 <template>
   <main>
-    <b-container v-if="subj" fluid class="px-5">
+    <b-container v-if="subj && groups && tasks" fluid class="px-5">
       <b-row>
         <b-col>
           <h1 class="header">
@@ -91,8 +91,8 @@ export default {
         : null
     },
     ...mapState({
-      tasks: s => s.teacher.tasks,
       isTeacher: s => s.user.isTeacher,
+      tasks: s => s.teacher.tasks,
       groups: s => s.teacher.groups
     }),
     visibleTasksCount() {
@@ -101,24 +101,28 @@ export default {
   },
 
   watch: {
-    subj() {
-      if (this.subj) document.title = this.subj.name
-    }
+    subj() { this.changeTitle() }
   },
-
+ 
   beforeCreate() {
     let id = this.$route.params.id
-    this.$store.dispatch('bindTasks', id)
     this.$store.dispatch('bindGroup', id)
     this.$store.dispatch('bindMarks', id)
+    this.$store.dispatch('bindTasks', id)
   },
 
   mounted() {
-    if (this.subj) document.title = this.subj.name
+    if (this.subj) this.changeTitle()
   },
 
   methods: {
-    num2str: (n, forms) => num2str(n, forms)
+    num2str: (n, forms) => num2str(n, forms),
+    changeTitle() {
+      if (this.$route.path.includes('tasks'))
+        document.title = `Лабораторные | ${this.subj.name}`
+      else if (this.$route.path.includes('groups'))
+        document.title = `Группы и баллы | ${this.subj.name}`
+    }
   }
 }
 </script>

@@ -8,17 +8,17 @@ export default [
     path: '/subjects/:id',
     redirect: '/subjects/:id/tasks',
     component: () => import('@/views/teacher/SubjectView'),
-    meta: { requiresAuth: true, dynamicTitle: true },
+    meta: { requiresAuth: true },
     children: [
       {
         path: 'tasks',
         component: () => import('@/components/teacher/TaskList'),
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, dynamicTitle: true }
       },
       {
         path: 'groups',
         component: () => import('@/components/teacher/GroupList'),
-        meta: { requiresAuth: true, requiresTeacher: true },
+        meta: { requiresAuth: true, dynamicTitle: true, requiresTeacher: true }
       }
     ]
   }

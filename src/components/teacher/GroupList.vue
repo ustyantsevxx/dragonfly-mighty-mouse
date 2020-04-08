@@ -22,7 +22,6 @@
                   <div v-b-tooltip.hover="data.field.name">{{ data.label }}</div>
                 </template>
                 <template #cell(index)="data">{{ data.index + 1 }}</template>
-                <template #cell(name)="data">{{ data.value }}</template>
                 <template #cell()="data">
                   <div v-if="data.value">{{data.value}}</div>
                   <div v-else @click="test(data)"></div>
@@ -65,6 +64,7 @@ export default {
       marks: s => s.teacher.marks,
       tasks: s => s.teacher.tasks
     }),
+
     tableHeaders() {
       let tableHeaders = [{
         label: '#',
@@ -76,6 +76,7 @@ export default {
         stickyColumn: true,
         sortable: true
       }]
+
       let labNumbers = [...this.tasks].sort((a, b) => a.number - b.number)
       labNumbers.forEach(t => tableHeaders.push({
         label: `Лаб №${t.number}`,
@@ -86,17 +87,30 @@ export default {
         thClass: 'hide-sort-icon' + (t.visible ? '' : ' text-danger'),
         tdClass: 'hoverable p-1 text-center'
       }))
+
+      tableHeaders.push({
+        label: 'Всего',
+        key: 'total',
+        tdClass: 'font-weight-bold text-center',
+        sortable: true
+      })
+
       return tableHeaders
     },
+
     tableItems() {
       return this.groups[this.openedGroupIndex].students.map(t => {
-        let item = {
+        let row = {
           name: `${t.surname} ${t.name}`,
-          id: t.id
+          id: t.id,
+          total: 0
         }
         let studentsMarks = this.marks.filter(m => m.student.id === t.id)
-        studentsMarks.forEach(m => item[m.task.id] = m.score)
-        return item
+        studentsMarks.forEach(m => {
+          row[m.task.id] = m.score
+          row.total += m.score
+        })
+        return row
       })
     }
   },

@@ -23,10 +23,11 @@
                 </template>
                 <template #cell(index)="data">{{ data.index + 1 }}</template>
                 <template #cell()="data">
-                  <div v-if="data.value">{{data.value}}</div>
-                  <div v-else @click="test(data)"></div>
+                  <div class="score-cell" @click="test(data)">
+                    <div class="score-value">{{data.value}}</div>
+                  </div>
                 </template>
-              </b-table>
+              </template>
             </b-tab>
             <template v-slot:tabs-end>
               <b-nav-item v-b-modal.add-group-modal class="text-center">
@@ -85,7 +86,7 @@ export default {
         score: t.score,
         sortable: true,
         thClass: 'hide-sort-icon' + (t.visible ? '' : ' text-danger'),
-        tdClass: 'hoverable p-1 text-center'
+        tdClass: 'hoverable-cell'
       }))
 
       tableHeaders.push({
@@ -139,14 +140,25 @@ export default {
 /deep/ {
   .marks-table {
     width: max-content !important;
-  }
 
-  .hoverable {
-    cursor: pointer;
-    transition: background-color 0.09s ease-in-out;
+    .hoverable-cell {
+      cursor: pointer;
+      transition: background-color 0.09s ease-in-out;
+      position: relative;
+      padding: 0;
 
-    &:hover {
-      background-color: #e9ecef !important;
+      &:hover {
+        background-color: #e9ecef !important;
+      }
+
+      .score-cell {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
   }
 

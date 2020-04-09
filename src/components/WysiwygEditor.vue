@@ -1,6 +1,6 @@
 <template>
   <div class="editor">
-    <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+    <editor-menu-bar v-if="editable" :editor="editor" v-slot="{ commands, isActive }" class="mb-2">
       <div class="menubar">
         <b-btn-toolbar>
           <b-btn-group size="sm" class="mr-1">
@@ -54,11 +54,14 @@
               <b-icon icon="arrow-clockwise" />
             </b-btn>
           </b-btn-group>
+          <b-btn-group size="sm" class="mr-1">
+            <b-btn :class="{ 'active': isActive.paragraph() }" @click="commands.paragraph">Сброс</b-btn>
+          </b-btn-group>
         </b-btn-toolbar>
       </div>
     </editor-menu-bar>
 
-    <editor-content class="mt-2 content border rounded" :editor="editor" />
+    <editor-content class="content border rounded" :editor="editor" />
   </div>
 </template>
 
@@ -80,10 +83,23 @@ import {
 export default {
   components: { EditorContent, EditorMenuBar },
 
+  props: {
+    editable: {
+      type: Boolean,
+      default: true
+    },
+    content: {
+      type: Object,
+      default: null,
+    }
+  },
+
   data() {
     return {
       json: '',
       editor: new Editor({
+        editable: this.editable,
+        content: this.content,
         extensions: [
           new BulletList(),
           new CodeBlock(),
@@ -126,8 +142,8 @@ export default {
 .menubar {
   button {
     color: #212529;
-    background-color: #f8f9fa;
-    border-color: #f8f9fa;
+    background-color: #e0e0e0;
+    border-color: #e0e0e0;
   }
 }
 </style>

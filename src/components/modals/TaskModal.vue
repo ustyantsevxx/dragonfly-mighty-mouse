@@ -21,8 +21,8 @@
       <b-form-input :state="inputState($v.name)" v-model.trim="$v.name.$model" />
     </b-form-group>
 
-    <b-form-group label="Описание">
-      <wysiwyg-editor @input="description = $event" />
+    <b-form-group label="Описание (необязательно)">
+      <wysiwyg-editor @input="description = $event" :content="description" />
     </b-form-group>
 
     <b-form-group label="Количество баллов">
@@ -33,7 +33,7 @@
       />
     </b-form-group>
 
-    <div>Прикрепленные файлы</div>
+    <div>Прикрепленные файлы (необязательно)</div>
     <hr />
     <b-list-group v-if="files.length">
       <b-list-group-item

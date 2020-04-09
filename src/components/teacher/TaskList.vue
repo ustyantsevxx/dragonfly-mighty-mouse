@@ -7,7 +7,7 @@
             <header v-b-toggle="`acc-${i}`" :class="{hiddenLab: !task.visible}">
               <b class="mr-1">{{task.number}}.</b>
               <span class="text-nowrap">{{task.name}}</span>
-              <span class="description overflow">{{task.description}}</span>
+              <span class="description overflow">{{ taskDescriptionMapped(task.description) }}</span>
               <b-badge variant="primary" pill>{{form(task.score, wordForms)}}</b-badge>
               <b-icon
                 v-if="isTeacher"
@@ -18,13 +18,16 @@
               ></b-icon>
               <b-icon icon="arrow-bar-up" class="hider" />
             </header>
-            <b-collapse :class="{hiddenLab: !task.visible}" :id="`acc-${i}`" accordion="lab-list">
+            <b-collapse :id="`acc-${i}`" accordion="lab-list">
               <div class="collapse-content">
                 <section>
-                  <b>Лабораторная работа №{{task.number}}</b>
-                  <p>{{task.name}}</p>
-                  <b>Описание</b>
-                  <p class="task-description-p">{{task.description}}</p>
+                  <h3>
+                    Лабораторная работа №{{task.number}} &mdash;
+                    <b>{{task.name}}</b>
+                  </h3>
+                  <p class="mt-3">
+                    <wysiwyg-editor :editable="false" :content="task.description" />
+                  </p>
                   <b>Награда</b>
                   <p>{{form(task.score, wordForms)}}</p>
                   <template v-if="task.files && task.files.length">
@@ -48,7 +51,11 @@
                     switch
                     v-model="task.visible"
                     @change="toggleTaskVisibility(task.id, $event)"
-                  >{{task.visible ? 'Открыта' : 'Закрыта' }}</b-form-checkbox>
+                  >
+                    <span
+                      :class="{'text-danger': !task.visible}"
+                    >{{task.visible ? 'Открыта' : 'Закрыта' }}</span>
+                  </b-form-checkbox>
                   <b-btn variant="outline-dark" @click="openModal(i)">Редактировать</b-btn>
                 </footer>
               </div>
@@ -75,9 +82,10 @@
 import TaskModal from '@/components/modals/TaskModal'
 import { num2str } from '@/assets/functions'
 import icons from 'file-icons-js'
+import WysiwygEditor from '@/components/WysiwygEditor'
 
 export default {
-  components: { TaskModal },
+  components: { TaskModal, WysiwygEditor },
 
   data: () => ({
     taskToEdit: null,
@@ -92,6 +100,23 @@ export default {
     },
     isTeacher() {
       return this.$store.state.user.isTeacher
+    },
+    taskDescriptionMapped() {
+      return descr => {
+        let result = ''
+        let iter = o => {
+          let temp = ''
+          if (o.content) {
+            o.content.forEach(item => {
+              if (item.text) temp += item.text
+              iter(item)
+            })
+          }
+          result += temp
+        }
+        iter(descr)
+        return result
+      }
     }
   },
 
@@ -118,6 +143,13 @@ export default {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+  }
+
+  .content {
+    background-color: #f8f9fa;
+    border: none !important;
+    padding: 1rem;
+    border-radius: 0 !important;
   }
 
   .adder {

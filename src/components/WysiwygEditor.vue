@@ -23,14 +23,14 @@
 
           <b-btn-group size="sm" class="mx-1">
             <b-btn
-              :class="{ 'active': isActive.heading({ level: 3 }) }"
-              @click="commands.heading({ level: 3 })"
+              :class="{ 'active': isActive.heading({ level: 4 }) }"
+              @click="commands.heading({ level: 4 })"
             >
               <b-icon icon="type-h1" />
             </b-btn>
             <b-btn
-              :class="{ 'active': isActive.heading({ level: 4 }) }"
-              @click="commands.heading({ level: 4 })"
+              :class="{ 'active': isActive.heading({ level: 5 }) }"
+              @click="commands.heading({ level: 5 })"
             >
               <b-icon icon="type-h2" />
             </b-btn>
@@ -103,7 +103,7 @@ export default {
         extensions: [
           new BulletList(),
           new CodeBlock(),
-          new Heading({ levels: [3, 4] }),
+          new Heading({ levels: [5, 6] }),
           new ListItem(),
           new OrderedList(),
           new Bold(),

@@ -21,7 +21,7 @@
       <b-form-input :state="inputState($v.name)" v-model.trim="$v.name.$model" />
     </b-form-group>
 
-    <b-form-group label="Описание (необязательно)">
+    <b-form-group label="Постановка задачи (необязательно)">
       <wysiwyg-editor @input="description = $event" :content="description" />
     </b-form-group>
 
@@ -33,21 +33,19 @@
       />
     </b-form-group>
 
-    <div>Прикрепленные файлы (необязательно)</div>
-    <hr />
-    <b-list-group v-if="files.length">
+    <div class="font-weight-bold">Прикрепленные файлы (необязательно)</div>
+    <b-list-group class="mt-2 mb-3" v-if="files.length || newFilesToUpload.length">
       <b-list-group-item
         v-for="(f,i) in files.concat(newFilesToUpload)"
         :key="i"
-        class="d-flex align-items-center"
+        class="d-flex align-items-center bg-light"
       >
         <span class="overflow">{{f.name}}</span>
         <span class="text-nowrap mx-2 text-muted">{{Math.round(f.size / 1024)}} КБ</span>
         <button class="close ml-auto" @click="fileAction(f)">×</button>
       </b-list-group-item>
     </b-list-group>
-    <div v-else class="text-center text-muted">Нет прикрепленных файлов</div>
-    <hr />
+    <div v-else class="text-center text-muted py-4">Нет прикрепленных файлов</div>
     <b-file
       ref="file-input"
       multiple
@@ -61,12 +59,11 @@
       <hr />
       <b-progress :value="uploadProgress" :max="maxForProgressBar" variant="dark" animated></b-progress>
     </template>
-    <template v-if="task">
-      <hr />
-      <b-btn variant="danger" @click="deleteTask()" block>Удалить лабораторную</b-btn>
-    </template>
 
     <template #modal-footer>
+      <template v-if="task">
+        <b-btn variant="outline-danger" @click="deleteTask()" class="mr-auto">Удалить лабораторную</b-btn>
+      </template>
       <b-btn @click="resetModal('task-modal')" variant="light">Отмена</b-btn>
       <btn-loader
         @click="okAction"

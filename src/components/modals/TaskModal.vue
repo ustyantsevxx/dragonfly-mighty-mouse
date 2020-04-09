@@ -3,6 +3,7 @@
     @show="beforeShow"
     v-bind="$attrs"
     centered
+    size="lg"
     no-close-on-backdrop
     :title="`${task ? 'Измен' : 'Добав'}ить лабораторную работу`"
     @hide="resetData"
@@ -21,7 +22,7 @@
     </b-form-group>
 
     <b-form-group label="Описание">
-      <b-form-textarea :state="inputState($v.description)" v-model.trim="$v.description.$model" />
+      <wysiwyg-editor @input="description = $event" />
     </b-form-group>
 
     <b-form-group label="Количество баллов">
@@ -82,9 +83,10 @@
 import { required } from 'vuelidate/lib/validators'
 import BtnLoader from '@/components/BtnLoader'
 import modalMixin from '@/mixins/base'
+import WysiwygEditor from '@/components/WysiwygEditor'
 
 export default {
-  components: { BtnLoader },
+  components: { BtnLoader, WysiwygEditor },
 
   props: ['task'],
 

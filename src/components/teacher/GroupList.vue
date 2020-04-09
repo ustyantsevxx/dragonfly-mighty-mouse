@@ -27,7 +27,7 @@
                     <div class="score-value">{{data.value}}</div>
                   </div>
                 </template>
-              </template>
+              </b-table>
             </b-tab>
             <template v-slot:tabs-end>
               <b-nav-item v-b-modal.add-group-modal class="text-center">

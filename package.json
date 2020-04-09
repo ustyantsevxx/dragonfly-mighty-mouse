@@ -13,6 +13,7 @@
     "file-icons-js": "github:websemantics/file-icons-js",
     "firebase": "^7.13.2",
     "register-service-worker": "^1.7.1",
+    "tiptap": "^1.26.8",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6",
     "vue-text-highlight": "^2.0.10",

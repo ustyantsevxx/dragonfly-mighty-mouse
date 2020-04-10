@@ -147,7 +147,6 @@ export default {
 
   .content {
     background-color: #f8f9fa;
-    border: none !important;
     padding: 1rem;
     border-radius: 0 !important;
   }

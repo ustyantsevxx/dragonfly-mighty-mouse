@@ -62,7 +62,12 @@
 
     <template #modal-footer>
       <template v-if="task">
-        <b-btn variant="outline-danger" @click="deleteTask()" class="mr-auto">Удалить лабораторную</b-btn>
+        <confirm-btn
+          @click="deleteTask"
+          variant="outline-danger"
+          class="mr-auto"
+          text="Удалить лабораторную"
+        />
       </template>
       <b-btn @click="resetModal('task-modal')" variant="light">Отмена</b-btn>
       <btn-loader
@@ -79,11 +84,12 @@
 <script>
 import { required } from 'vuelidate/lib/validators'
 import BtnLoader from '@/components/BtnLoader'
+import ConfirmBtn from '@/components/ConfirmationButton'
 import modalMixin from '@/mixins/base'
 import WysiwygEditor from '@/components/WysiwygEditor'
 
 export default {
-  components: { BtnLoader, WysiwygEditor },
+  components: { BtnLoader, WysiwygEditor, ConfirmBtn },
 
   props: ['task'],
 

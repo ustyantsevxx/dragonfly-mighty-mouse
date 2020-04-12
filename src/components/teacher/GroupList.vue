@@ -129,8 +129,14 @@ export default {
       this.$store.commit('setToastMsg', { msg: 'Ссылка приглашения скопирована!', translate: false })
     },
     test(data) {
-      console.log(data)
-      //this.$store.dispatch('markTask', data)
+      let markData = {
+        studentId: data.item.id,
+        taskId: data.field.key,
+        groupId: this.groups[this.openedGroupIndex].id,
+        subjectId: this.$route.params.id,
+        score: data.field.score
+      }
+      this.$store.dispatch('markTask', markData)
     }
   }
 }

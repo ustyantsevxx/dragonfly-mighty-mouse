@@ -147,8 +147,14 @@ const actions = {
     })
   },
 
-  async markTask() {
-    db.collection('groups')
+  async markTask(_, markData) {
+    db.collection('marks').add({
+      student: db.collection('users').doc(markData.studentId),
+      task: db.collection('tasks').doc(markData.taskId),
+      group: db.collection('groups').doc(markData.groupId),
+      subject: db.collection('subjects').doc(markData.subjectId),
+      score: markData.score
+    })
   }
 }
 

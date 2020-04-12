@@ -101,9 +101,9 @@ export default {
   },
 
   watch: {
-    subj() { this.changeTitle() }
+    subj() { if (this.subj) this.changeTitle() }
   },
- 
+
   beforeCreate() {
     let id = this.$route.params.id
     this.$store.dispatch('bindGroup', id)

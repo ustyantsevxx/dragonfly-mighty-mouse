@@ -21,17 +21,13 @@
     </b-form-group>
 
     <template v-if="subject">
-      <b-btn block v-b-toggle.confirm-delete variant="danger">Удалить дисциплину</b-btn>
-      <b-collapse id="confirm-delete">
-        <btn-loader
-          class="mt-2"
-          variant="dark"
-          block
-          @click="deleteSubject"
-          load="btn-deleteSubject"
-          or="Действие необратимо. Продолжить?"
-        />
-      </b-collapse>
+      <confirm-btn
+        block
+        variant="danger"
+        text="Удалить дисциплину"
+        confirm-text="Действие необратимо. Продолжить?"
+        @click="deleteSubject"
+      />
     </template>
   </b-modal>
 </template>
@@ -39,10 +35,10 @@
 <script>
 import { required } from 'vuelidate/lib/validators'
 import modalMixin from '@/mixins/base'
-import BtnLoader from '@/components/BtnLoader'
+import ConfirmBtn from '@/components/ConfirmationButton'
 
 export default {
-  components: { BtnLoader },
+  components: { ConfirmBtn },
 
   props: ['subject'],
 
@@ -75,10 +71,8 @@ export default {
       })
     },
     deleteSubject() {
-      this.$store.commit('setLoading', 'btn-deleteSubject')
       this.$store.dispatch('deleteSubject', this.subject.id)
       this.$router.push('/subjects')
-      this.$store.commit('unsetLoading')
     }
   },
 

@@ -2,11 +2,7 @@
   <main>
     <b-container>
       <b-row>
-        <b-col md="4" order-md="2">
-          <b-btn v-if="isTeacher" variant="primary" v-b-modal.modal-subject>Добавить</b-btn>
-        </b-col>
-
-        <b-col md="8" order-md="1">
+        <b-col md="8">
           <b-nav tabs class="border-0 course-list-nav">
             <b-nav-item to="/subjects" exact-active-class="active">Все курсы</b-nav-item>
             <b-nav-item
@@ -23,6 +19,7 @@
                 <b-input type="search" v-model.trim="filter" />
               </b-input-group>
             </li>
+            <b-link v-if="isTeacher" class="ml-2" v-b-modal.modal-subject>Добавить</b-link>
           </b-nav>
 
           <b-table
@@ -115,11 +112,13 @@ export default {
   margin-left: auto;
   margin-bottom: 5px;
   align-self: flex-end;
-  position: relative;
 }
 
-.course-list-nav li a {
-  color: #212529 !important;
+.course-list-nav {
+  align-items: center;
+  li a {
+    color: #212529 !important;
+  }
 }
 
 /deep/ mark {

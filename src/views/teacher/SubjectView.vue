@@ -1,6 +1,6 @@
 <template>
   <main>
-    <b-container v-if="subj && groups && tasks" fluid class="px-5">
+    <b-container v-if="subj && groups && tasks" fluid>
       <b-row>
         <b-col>
           <h1 class="header">

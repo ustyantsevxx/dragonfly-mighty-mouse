@@ -53,7 +53,7 @@
       @input="addFile"
       browse-text="Обзор"
       class="overflow"
-      placeholder="Выберите файлы для прикрепления к работе"
+      placeholder="Выберите файлы для прикрепления"
     />
     <template v-if="uploadProgress > -1">
       <hr />

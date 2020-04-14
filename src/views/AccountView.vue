@@ -2,7 +2,7 @@
   <main>
     <b-container>
       <b-row align-h="center">
-        <h1 class="m-0">Редактирование профиля</h1>
+        <h1 class="header m-0">Редактирование профиля</h1>
       </b-row>
       <b-row align-h="center" class="mb-2">
         <b-col lg="10" xl="9">
@@ -108,3 +108,11 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+@media screen and (max-width: 1080px) {
+  .header {
+    font-size: 1.5rem;
+  }
+}
+</style>

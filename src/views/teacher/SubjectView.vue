@@ -1,6 +1,6 @@
 <template>
   <main>
-    <b-container v-if="subj && groups && tasks" fluid>
+    <b-container v-if="subj && groups && tasks">
       <b-row>
         <b-col>
           <h1 class="header">
@@ -41,9 +41,9 @@
 
       <hr class="my-4" />
 
-      <b-nav pills class="mb-2">
-        <b-nav-item exact-active-class="active" to="tasks">Лабораторные работы</b-nav-item>
-        <b-nav-item exact-active-class="active" to="groups">Группы и баллы</b-nav-item>
+      <b-nav fill pills class="mb-2 tabs-nav">
+        <b-nav-item exact-active-class="active link-active" to="tasks">Лабораторные работы</b-nav-item>
+        <b-nav-item exact-active-class="active link-active" to="groups">Группы и баллы</b-nav-item>
       </b-nav>
 
       <transition name="global-fade" mode="out-in">
@@ -128,12 +128,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "bootstrap/scss/bootstrap";
 .header {
   margin-bottom: 0;
   &:hover {
     .hover-icon {
       opacity: 0.1;
     }
+  }
+}
+
+@media screen and (max-width: 1080px) {
+  .header {
+    font-size: 1.5rem;
+  }
+}
+
+/deep/ {
+  .link-active {
+    background: $dark !important;
+    color: $white !important;
+  }
+
+  li a {
+    color: black;
   }
 }
 

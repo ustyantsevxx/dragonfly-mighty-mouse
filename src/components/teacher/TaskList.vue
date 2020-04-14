@@ -145,6 +145,12 @@ export default {
     white-space: nowrap;
   }
 
+  @media screen and (max-width: 1080px) {
+    .overflow {
+      display: none;
+    }
+  }
+
   .content {
     background-color: #f8f9fa;
     padding: 1rem;

@@ -4,22 +4,38 @@
       <b-row>
         <b-col md="8">
           <b-nav tabs class="border-0 course-list-nav">
-            <b-nav-item to="/subjects" exact-active-class="active">Все курсы</b-nav-item>
-            <b-nav-item
-              v-for="(c, i) in coursesList"
-              :key="i"
-              :to="`?course=${c}`"
-              exact-active-class="active"
-            >{{ c }}</b-nav-item>
-            <li class="filter" v-if="subjects && subjects.length">
-              <b-input-group size="sm">
-                <b-input-group-prepend is-text>
-                  <b-icon icon="search" />
-                </b-input-group-prepend>
-                <b-input type="search" v-model.trim="filter" />
-              </b-input-group>
-            </li>
-            <b-link v-if="isTeacher" class="ml-2" v-b-modal.modal-subject>Добавить</b-link>
+            <b-container class="px-0">
+              <b-row no-gutters class="d-flex justify-content-between">
+                <b-col md="auto" order-md="2">
+                  <div class="d-flex add-search">
+                    <div>
+                      <li class="filter" v-if="subjects && subjects.length">
+                        <b-input-group size="sm">
+                          <b-input-group-prepend is-text>
+                            <b-icon icon="search" />
+                          </b-input-group-prepend>
+                          <b-input type="search" v-model.trim="filter" />
+                        </b-input-group>
+                      </li>
+                    </div>
+                    <div>
+                      <b-link v-if="isTeacher" class="ml-2" v-b-modal.modal-subject>Добавить</b-link>
+                    </div>
+                  </div>
+                </b-col>
+                <b-col md="auto" order-md="1">
+                  <div class="d-flex">
+                    <b-nav-item to="/subjects" exact-active-class="active">Все курсы</b-nav-item>
+                    <b-nav-item
+                      v-for="(c, i) in coursesList"
+                      :key="i"
+                      :to="`?course=${c}`"
+                      exact-active-class="active"
+                    >{{ c }}</b-nav-item>
+                  </div>
+                </b-col>
+              </b-row>
+            </b-container>
           </b-nav>
 
           <b-table
@@ -124,5 +140,12 @@ export default {
 /deep/ mark {
   padding: 0 !important;
   background: rgb(231, 231, 231) !important;
+}
+
+@media screen and (max-width: 768px) {
+  .add-search {
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
 }
 </style>

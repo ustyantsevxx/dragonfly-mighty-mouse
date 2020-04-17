@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="sm" type="dark" class="nav shadow-sm nav-on-top" :sticky="true">
+  <b-navbar toggleable="sm" type="dark" class="nav shadow-sm" sticky>
     <b-navbar-brand to="/" exact active-class="c">Dragonfly Mighty Mouse</b-navbar-brand>
     <b-navbar-toggle target="collapse" />
     <b-collapse id="collapse" is-nav>

@@ -209,7 +209,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 1080px) {
+@media screen and (max-width: 768px) {
   .marks-table {
     width: 100%;
   }

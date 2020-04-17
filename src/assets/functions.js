@@ -8,3 +8,8 @@ export const num2str = (n, forms) => {
   else index = 2
   return n + ' ' + forms[index]
 }
+
+export const isMobile = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+    .test(navigator.userAgent)
+}

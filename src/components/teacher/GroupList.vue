@@ -2,10 +2,11 @@
   <div>
     <b-row>
       <b-col>
-        <b-card no-body v-if="groups && groups.length">
+        <b-card no-body>
           <b-card-header class="d-flex justify-content-between align-items-center">
             <b-nav v-if="!isMobile()" card-header pills>
               <b-nav-item
+                class="hover"
                 :active="openedGroupIndex === i"
                 v-for="(group, i) in groups"
                 :key="i"
@@ -23,7 +24,7 @@
             </b-dd>
             <b-link v-b-modal.add-group-modal>Добавить</b-link>
           </b-card-header>
-          <b-card-body>
+          <b-card-body v-if="groups && groups.length">
             <b-link @click="copyLink">Пригласить студентов</b-link>
             <input type="hidden" :id="'invite-link-' + openedGroupIndex" />
             <b-table
@@ -49,9 +50,7 @@
               </template>
             </b-table>
           </b-card-body>
-        </b-card>
-        <b-card v-else>
-          <b-card-text class="text-center text-muted py-4">Список групп пуст.</b-card-text>
+          <b-card-text v-else class="text-center text-muted py-4">Список групп пуст.</b-card-text>
         </b-card>
       </b-col>
     </b-row>
@@ -193,6 +192,18 @@ export default {
 
   th.b-table-sticky-column {
     background-color: #e9ecef !important;
+  }
+
+  .active {
+    transition: background-color 0.25s ease-in-out;
+  }
+  .hover {
+    transition: background-color 0.15s ease-in-out;
+    border-radius: 0.25rem;
+
+    &:hover {
+      background-color: #e9ecef;
+    }
   }
 }
 

@@ -3,7 +3,7 @@
     <b-row>
       <b-col>
         <b-card no-body v-if="groups && groups.length">
-          <b-card-header>
+          <b-card-header class="d-flex justify-content-between align-items-center">
             <b-nav v-if="!isMobile()" card-header pills>
               <b-nav-item
                 :active="openedGroupIndex === i"
@@ -12,18 +12,16 @@
                 @click="openedGroupIndex = i"
               >{{group.name}}</b-nav-item>
             </b-nav>
-            <b-dropdown
-              v-else
-              :text="groups[openedGroupIndex].name"
-              class="m-md-2"
-              variant="primary"
-            >
-              <b-dropdown-item
+            <b-dd v-else class="m-md-2" variant="primary">
+              <template #button-content>{{groups[openedGroupIndex].name}}</template>
+              <b-dd-header>Выберите группу</b-dd-header>
+              <b-dd-item-btn
                 @click="openedGroupIndex = i"
                 v-for="(group, i) in groups"
                 :key="i"
-              >{{group.name}}</b-dropdown-item>
-            </b-dropdown>
+              >{{group.name}}</b-dd-item-btn>
+            </b-dd>
+            <b-link v-b-modal.add-group-modal>Добавить</b-link>
           </b-card-header>
           <b-card-body>
             <b-link @click="copyLink">Пригласить студентов</b-link>

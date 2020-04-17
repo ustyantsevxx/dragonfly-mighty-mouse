@@ -11,5 +11,5 @@ export const num2str = (n, forms) => {
 
 export const isMobile = () => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-    .test(navigator.userAgent)
+    .test(navigator.userAgent) || screen.width < 1080
 }

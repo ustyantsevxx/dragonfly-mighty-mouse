@@ -2,6 +2,7 @@
   <b-modal
     @show="beforeShow"
     v-bind="$attrs"
+    :centered="!isMobile()"
     :ok-disabled="$v.$invalid"
     @ok="okAction"
     @hide="resetData"

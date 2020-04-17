@@ -1,6 +1,6 @@
 <template>
   <b-modal
-    centered
+    :centered="!isMobile()"
     title="Добавить группу"
     id="add-group-modal"
     ref="add-group-modal"

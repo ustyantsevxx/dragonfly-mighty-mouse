@@ -64,7 +64,6 @@
       cancel-variant="light"
       title="Редактирование дисциплины"
       ok-title="Обновить"
-      centered
       cancel-title="Отмена"
     />
     <!-- /invisible -->

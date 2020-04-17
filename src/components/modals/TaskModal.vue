@@ -2,7 +2,7 @@
   <b-modal
     @show="beforeShow"
     v-bind="$attrs"
-    centered
+    :centered="!isMobile()"
     size="lg"
     no-close-on-backdrop
     :title="`${task ? 'Измен' : 'Добав'}ить лабораторную работу`"
@@ -190,9 +190,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-/deep/ #task-modal {
-  padding-top: 3em;
-}
-</style>

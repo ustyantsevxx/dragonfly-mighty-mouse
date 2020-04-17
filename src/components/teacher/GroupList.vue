@@ -4,24 +4,26 @@
       <b-col>
         <b-card no-body>
           <b-card-header class="d-flex justify-content-between align-items-center">
-            <b-nav v-if="!isMobile()" card-header pills>
-              <b-nav-item
-                class="hover"
-                :active="openedGroupIndex === i"
-                v-for="(group, i) in groups"
-                :key="i"
-                @click="openedGroupIndex = i"
-              >{{group.name}}</b-nav-item>
-            </b-nav>
-            <b-dd v-else class="m-md-2" variant="primary">
-              <template #button-content>{{groups[openedGroupIndex].name}}</template>
-              <b-dd-header>Выберите группу</b-dd-header>
-              <b-dd-item-btn
-                @click="openedGroupIndex = i"
-                v-for="(group, i) in groups"
-                :key="i"
-              >{{group.name}}</b-dd-item-btn>
-            </b-dd>
+            <div>
+              <b-nav v-if="!isMobile()" card-header pills>
+                <b-nav-item
+                  class="hover"
+                  :active="openedGroupIndex === i"
+                  v-for="(group, i) in groups"
+                  :key="i"
+                  @click="openedGroupIndex = i"
+                >{{group.name}}</b-nav-item>
+              </b-nav>
+              <b-dd v-else class="m-md-2" variant="primary">
+                <template #button-content>{{groups[openedGroupIndex].name}}</template>
+                <b-dd-header>Выберите группу</b-dd-header>
+                <b-dd-item-btn
+                  @click="openedGroupIndex = i"
+                  v-for="(group, i) in groups"
+                  :key="i"
+                >{{group.name}}</b-dd-item-btn>
+              </b-dd>
+            </div>
             <b-link v-b-modal.add-group-modal>Добавить</b-link>
           </b-card-header>
           <b-card-body v-if="groups && groups.length">

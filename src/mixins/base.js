@@ -1,3 +1,5 @@
+import { isMobile } from '@/assets/functions'
+
 export default state => {
   return {
     data: () => ({
@@ -17,7 +19,8 @@ export default state => {
         this.resetData()
         this.$bvModal.hide(modalRef)
         this.$v.$reset()
-      }
+      },
+      isMobile: () => isMobile()
     }
   }
 }

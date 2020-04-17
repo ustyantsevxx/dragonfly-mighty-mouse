@@ -72,7 +72,6 @@
       cancel-variant="light"
       title="Добавление дисциплины"
       ok-title="Добавить"
-      centered
       cancel-title="Отмена"
     />
     <!-- /invisible -->

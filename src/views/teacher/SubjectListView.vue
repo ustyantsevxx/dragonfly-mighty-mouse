@@ -18,7 +18,7 @@
                         </b-input-group>
                       </li>
                     </div>
-                    <div>
+                    <div class="add-btn-container">
                       <b-link v-if="isTeacher" class="ml-2" v-b-modal.modal-subject>Добавить</b-link>
                     </div>
                   </div>
@@ -126,7 +126,6 @@ export default {
 
 .filter {
   margin-left: auto;
-  margin-bottom: 5px;
   align-self: flex-end;
 }
 
@@ -135,6 +134,11 @@ export default {
   li a {
     color: #212529 !important;
   }
+}
+
+.add-btn-container {
+  display: flex;
+  align-items: center;
 }
 
 /deep/ mark {

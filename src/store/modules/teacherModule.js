@@ -143,6 +143,7 @@ const actions = {
   async addGroup(_, groupData) {
     await db.collection('groups').add({
       name: groupData.name,
+      students: [],
       subject: db.collection('subjects').doc(groupData.subjectId)
     })
   },

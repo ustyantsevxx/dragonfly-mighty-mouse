@@ -41,7 +41,7 @@
 
       <hr class="my-4" />
 
-      <b-nav fill pills class="mb-2 tabs-nav">
+      <b-nav fill pills class="mb-4 tabs-nav">
         <b-nav-item exact-active-class="active link-active" to="tasks">Лабораторные работы</b-nav-item>
         <b-nav-item exact-active-class="active link-active" to="groups">Группы и баллы</b-nav-item>
       </b-nav>

@@ -3,38 +3,54 @@
     <b-row>
       <b-col>
         <b-card no-body v-if="groups && groups.length">
-          <b-tabs vertical pills card v-model="openedGroupIndex">
-            <b-tab :title="group.name" v-for="(group, i) in groups" :key="i">
-              <b-link @click="copyLink">Пригласить студентов</b-link>
-              <input type="hidden" :id="'invite-link-' + i" />
-              <b-table
-                :fields="tableHeaders"
-                :items="tableItems"
-                sort-by="name"
-                striped
-                head-variant="light"
-                v-if="marks && tasks"
-                bordered
-                small
-                class="mt-3 marks-table"
-              >
-                <template #head()="data">
-                  <div v-b-tooltip.hover="data.field.name">{{ data.label }}</div>
-                </template>
-                <template #cell(index)="data">{{ data.index + 1 }}</template>
-                <template #cell()="data">
-                  <div class="score-cell" @click="test(data)">
-                    <div class="score-value">{{data.value}}</div>
-                  </div>
-                </template>
-              </b-table>
-            </b-tab>
-            <template v-slot:tabs-end>
-              <b-nav-item v-b-modal.add-group-modal class="text-center">
-                <b-icon icon="plus" />
-              </b-nav-item>
-            </template>
-          </b-tabs>
+          <b-card-header>
+            <b-nav v-if="!isMobile()" card-header pills>
+              <b-nav-item
+                :active="openedGroupIndex === i"
+                v-for="(group, i) in groups"
+                :key="i"
+                @click="openedGroupIndex = i"
+              >{{group.name}}</b-nav-item>
+            </b-nav>
+            <b-dropdown
+              v-else
+              :text="groups[openedGroupIndex].name"
+              class="m-md-2"
+              variant="primary"
+            >
+              <b-dropdown-item
+                @click="openedGroupIndex = i"
+                v-for="(group, i) in groups"
+                :key="i"
+              >{{group.name}}</b-dropdown-item>
+            </b-dropdown>
+          </b-card-header>
+          <b-card-body>
+            <b-link @click="copyLink">Пригласить студентов</b-link>
+            <input type="hidden" :id="'invite-link-' + openedGroupIndex" />
+            <b-table
+              :fields="tableHeaders"
+              :items="tableItems"
+              sort-by="name"
+              striped
+              responsive
+              head-variant="light"
+              v-if="marks && tasks"
+              bordered
+              small
+              class="mt-3 marks-table"
+            >
+              <template #head()="data">
+                <div v-b-tooltip.hover="data.field.name">{{ data.label }}</div>
+              </template>
+              <template #cell(index)="data">{{ data.index + 1 }}</template>
+              <template #cell()="data">
+                <div class="score-cell" @click="test(data)">
+                  <div class="score-value">{{data.value}}</div>
+                </div>
+              </template>
+            </b-table>
+          </b-card-body>
         </b-card>
         <b-card v-else>
           <b-card-text class="text-center text-muted py-4">Список групп пуст.</b-card-text>
@@ -49,6 +65,7 @@
 </template>
 
 <script>
+import { isMobile } from '@/assets/functions'
 import GroupModal from '@/components/modals/GroupModal'
 import { mapState } from 'vuex'
 
@@ -73,7 +90,7 @@ export default {
       }, {
         label: 'Фамилия Имя',
         key: 'name',
-        tdClass: 'font-weight-bold',
+        tdClass: 'font-weight-bold text-nowrap',
         stickyColumn: true,
         sortable: true
       }]
@@ -85,7 +102,7 @@ export default {
         name: t.name,
         score: t.score,
         sortable: true,
-        thClass: 'hide-sort-icon' + (t.visible ? '' : ' text-danger'),
+        thClass: 'hide-sort-icon  text-nowrap' + (t.visible ? '' : ' text-danger'),
         tdClass: 'hoverable-cell'
       }))
 
@@ -137,7 +154,8 @@ export default {
         score: data.field.score
       }
       this.$store.dispatch('markTask', markData)
-    }
+    },
+    isMobile: () => isMobile()
   }
 }
 </script>
@@ -145,8 +163,7 @@ export default {
 <style lang="scss" scoped>
 /deep/ {
   .marks-table {
-    width: max-content !important;
-
+    width: max-content;
     .hoverable-cell {
       cursor: pointer;
       transition: background-color 0.09s ease-in-out;
@@ -174,6 +191,16 @@ export default {
     &:hover {
       background-size: 0.65em 1em;
     }
+  }
+
+  th.b-table-sticky-column {
+    background-color: #e9ecef !important;
+  }
+}
+
+@media screen and (max-width: 1080px) {
+  .marks-table {
+    width: 100%;
   }
 }
 </style>

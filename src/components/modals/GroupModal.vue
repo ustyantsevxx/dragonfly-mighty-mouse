@@ -6,7 +6,7 @@
     ref="add-group-modal"
     @hide="resetModal('add-group-modal')"
   >
-    <b-form-group label="Код группы">
+    <b-form-group label="Название группы">
       <b-form-input :state="inputState($v.newGroupName)" v-model.trim="$v.newGroupName.$model" />
     </b-form-group>
 

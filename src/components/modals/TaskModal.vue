@@ -1,8 +1,8 @@
 <template>
   <b-modal
+    centered
     @show="beforeShow"
     v-bind="$attrs"
-    :centered="!isMobile()"
     size="lg"
     no-close-on-backdrop
     :title="`${task ? 'Измен' : 'Добав'}ить лабораторную работу`"

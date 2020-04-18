@@ -4,11 +4,9 @@
       :fields="tableHeaders"
       :items="tableItems"
       sort-by="name"
-      striped
       responsive
-      head-variant="light"
-      v-if="marks && tasks"
       bordered
+      v-if="marks && tasks"
       small
       class="mt-3 marks-table"
     >
@@ -45,7 +43,7 @@ export default {
 
     tableHeaders() {
       let tableHeaders = [{
-        label: '#',
+        label: '',
         key: 'index'
       }, {
         label: 'Фамилия Имя',
@@ -139,10 +137,6 @@ export default {
     &:hover {
       background-size: 0.65em 1em;
     }
-  }
-
-  th.b-table-sticky-column {
-    background-color: #e9ecef !important;
   }
 }
 

@@ -148,6 +148,16 @@ const actions = {
     })
   },
 
+  async editGroup(_, groupData) {
+    await db.collection('groups').doc(groupData.id).update({
+      name: groupData.name
+    })
+  },
+
+  async deleteGroup(_, id) {
+    await db.collection('groups').doc(id).delete()
+  },
+
   async markTask(_, markData) {
     db.collection('marks').add({
       student: db.collection('users').doc(markData.studentId),

@@ -24,9 +24,18 @@
                 >{{group.name}}</b-dd-item-btn>
               </b-dd>
             </div>
-            <b-link v-b-modal.add-group-modal>Добавить</b-link>
+            <b-link @click.prevent="openModal()">Добавить</b-link>
           </b-card-header>
           <b-card-body v-if="groups && groups.length">
+            <h2 class="group-name">
+              {{group.name}}
+              <b-icon
+                icon="pencil"
+                @click="openModal(true)"
+                class="hover-icon"
+                title="Редактировать"
+              />
+            </h2>
             <b-link @click="copyLink">Пригласить студентов</b-link>
             <input type="hidden" :id="'invite-link-' + openedGroupIndex" />
             <marks-table :group-index="openedGroupIndex" />
@@ -37,7 +46,7 @@
     </b-row>
 
     <!-- invisible -->
-    <group-modal />
+    <group-modal :group="groupToEdit" />
     <!-- /invisible -->
   </div>
 </template>
@@ -51,12 +60,16 @@ export default {
   components: { GroupModal, MarksTable },
 
   data: () => ({
+    groupToEdit: null,
     openedGroupIndex: 0
   }),
 
   computed: {
     groups() {
       return this.$store.state.teacher.groups
+    },
+    group() {
+      return this.groups[this.openedGroupIndex]
     }
   },
 
@@ -72,7 +85,13 @@ export default {
       window.getSelection().removeAllRanges()
       this.$store.commit('setToastMsg', { msg: 'Ссылка приглашения скопирована!', translate: false })
     },
-    isMobile: () => isMobile()
+    isMobile: () => isMobile(),
+    openModal(create = false) {
+      this.groupToEdit = create ? this.group : null
+      this.$nextTick(() => {
+        this.$bvModal.show('add-group-modal')
+      })
+    },
   }
 }
 </script>
@@ -87,6 +106,15 @@ export default {
 
   &:hover {
     background-color: #e9ecef;
+  }
+}
+
+.group-name {
+  margin-bottom: 0;
+  &:hover {
+    .hover-icon {
+      opacity: 0.1;
+    }
   }
 }
 </style>

@@ -36,7 +36,7 @@
           </b-card-header>
           <b-card-body v-if="groups && groups.length">
             <h2 class="group-name">
-              {{ group.name }}
+              {{ selectedGroup.name }}
               <b-icon
                 v-if="isTeacher"
                 icon="pencil"
@@ -84,7 +84,7 @@ export default {
     groups() {
       return this.$store.state.groups
     },
-    group() {
+    selectedGroup() {
       return this.groups[this.openedGroupIndex]
     }
   },
@@ -108,7 +108,7 @@ export default {
     },
     isMobile: () => isMobile(),
     openModal(create = false) {
-      this.groupToEdit = create ? this.group : null
+      this.groupToEdit = create ? this.selectedGroup : null
       this.$nextTick(() => {
         this.$bvModal.show('add-group-modal')
       })

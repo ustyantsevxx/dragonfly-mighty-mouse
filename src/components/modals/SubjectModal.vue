@@ -50,7 +50,12 @@ import {
 export default {
   components: { ConfirmBtn },
 
-  props: ['subject'],
+  props: {
+    subject: {
+      type: Object,
+      default: null
+    }
+  },
 
   mixins: [
     modalMixin({

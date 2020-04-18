@@ -107,7 +107,12 @@ import { ADD_TASK, UPDATE_TASK, DELETE_TASK } from '@/store/actions.type'
 export default {
   components: { BtnLoader, WysiwygEditor, ConfirmBtn },
 
-  props: ['task'],
+  props: {
+    task: {
+      type: Object,
+      default: null
+    }
+  },
 
   mixins: [
     modalMixin({

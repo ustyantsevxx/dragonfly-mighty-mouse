@@ -46,7 +46,12 @@ import { ADD_GROUP, UPDATE_GROUP, DELETE_GROUP } from '@/store/actions.type'
 export default {
   components: { BtnLoader, ConfirmBtn },
 
-  props: ['group'],
+  props: {
+    group: {
+      type: Object,
+      default: null
+    }
+  },
 
   mixins: [
     baseMixin({

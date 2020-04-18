@@ -8,7 +8,8 @@
 export default {
   props: {
     active: {
-      default: true
+      default: true,
+      type: Boolean
     }
   }
 }

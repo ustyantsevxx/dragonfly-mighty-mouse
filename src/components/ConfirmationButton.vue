@@ -22,12 +22,13 @@ export default {
   data: () => ({ confirm: false }),
 
   props: {
-    'confirm-text': {
+    confirmText: {
       type: String,
       required: false,
       default: 'Уверены?'
     },
     text: {
+      default: '',
       type: String,
       required: false
     }

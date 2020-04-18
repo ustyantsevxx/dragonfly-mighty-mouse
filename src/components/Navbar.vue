@@ -1,6 +1,8 @@
 <template>
   <b-navbar toggleable="sm" type="dark" class="nav shadow-sm" sticky>
-    <b-navbar-brand to="/" exact active-class="c">Dragonfly Mighty Mouse</b-navbar-brand>
+    <b-navbar-brand to="/" exact active-class="c">
+      Dragonfly Mighty Mouse
+    </b-navbar-brand>
     <b-navbar-toggle target="collapse" />
     <b-collapse id="collapse" is-nav>
       <b-navbar-nav>
@@ -9,7 +11,7 @@
       <b-navbar-nav class="ml-auto">
         <b-nav-item v-if="!signed" to="/login">Войти</b-nav-item>
         <template v-else>
-          <b-nav-item to="/account">{{ name + " " + surname }}</b-nav-item>
+          <b-nav-item to="/account">{{ name + ' ' + surname }}</b-nav-item>
           <b-nav-item @click="signOut">Выйти</b-nav-item>
         </template>
       </b-navbar-nav>
@@ -31,8 +33,7 @@ export default {
   },
   methods: {
     signOut() {
-      if (this.$router.currentRoute.path !== '/')
-        this.$router.push('/')
+      if (this.$router.currentRoute.path !== '/') this.$router.push('/')
       this.$store.dispatch(LOGOUT)
     }
   }

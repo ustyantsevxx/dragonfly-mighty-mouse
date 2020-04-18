@@ -15,7 +15,9 @@
             <label for="email-field" class="m-0">Эл. почта</label>
             &nbsp;
             <b-badge v-if="!emailVerified" variant="light">
-              <b-link @click.prevent="verifyEmail">Отправить подтверждение</b-link>
+              <b-link @click.prevent="verifyEmail">
+                Отправить подтверждение
+              </b-link>
             </b-badge>
           </div>
         </template>
@@ -41,7 +43,10 @@
           />
         </b-form-group>
 
-        <b-form-group label="Подтвердите новый пароль" label-for="confirm-field">
+        <b-form-group
+          label="Подтвердите новый пароль"
+          label-for="confirm-field"
+        >
           <b-form-input
             id="confirm-field"
             type="password"
@@ -93,14 +98,14 @@ export default {
     newEmail: null,
     p: {
       newPassword: null,
-      confirmPassword: null,
+      confirmPassword: null
     },
     oldPassword: null,
     emailJustChanged: false,
     selectedRadio: 'email',
     options: [
       { text: 'Эл. почта', value: 'email', selected: true },
-      { text: 'Пароль', value: 'password' },
+      { text: 'Пароль', value: 'password' }
     ]
   }),
 
@@ -108,19 +113,20 @@ export default {
     emailVerified() {
       return this.$store.state.user.emailVerified || this.emailJustChanged
     },
-    email() { return this.$store.state.user.email },
+    email() {
+      return this.$store.state.user.email
+    },
     isInvalid() {
       if (this.selectedRadio === 'email')
         return this.$v.newEmail.$invalid || this.newEmail === this.email
       else return this.$v.p.$invalid
     },
-    inputState: () => val => val.$dirty ? !val.$error : null
+    inputState: () => val => (val.$dirty ? !val.$error : null)
   },
 
   watch: {
     newEmail() {
-      if (this.newEmail === this.email)
-        this.$v.newEmail.$reset()
+      if (this.newEmail === this.email) this.$v.newEmail.$reset()
     }
   },
 
@@ -136,8 +142,7 @@ export default {
           old: this.oldPassword,
           new: this.p.newPassword
         })
-      }
-      else {
+      } else {
         success = await this.$store.dispatch(UPDATE_EMAIL, {
           password: this.oldPassword,
           newEmail: this.newEmail
@@ -161,7 +166,7 @@ export default {
     newEmail: { required, email },
     p: {
       newPassword: { required, minLength: minLength(6) },
-      confirmPassword: { required, same: sameAs('newPassword') },
+      confirmPassword: { required, same: sameAs('newPassword') }
     },
     oldPassword: { required }
   }

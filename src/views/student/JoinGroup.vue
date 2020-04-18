@@ -6,13 +6,19 @@
           <b-jumbotron>
             <template #header>Приглашение в группу</template>
             <template #lead>
-              <div>{{info.teacherName}} приглашает вас присоединиться к группе "{{info.groupName}}"</div>
-              <div>Дисциплина "{{info.subject.name}}", {{info.subject.course}} курс</div>
+              <div>
+                {{ info.teacherName }} приглашает вас присоединиться к группе
+                "{{ info.groupName }}"
+              </div>
+              <div>
+                Дисциплина "{{ info.subject.name }}",
+                {{ info.subject.course }} курс
+              </div>
             </template>
             <hr class="my-3" />
             <p>
-              Вступив, вы сможете смотреть ведомость всей группы,
-              а также видеть список доступных лабораторных работ по дисциплине.
+              Вступив, вы сможете смотреть ведомость всей группы, а также видеть
+              список доступных лабораторных работ по дисциплине.
             </p>
             <b-button variant="success" @click="join">Присоединиться</b-button>
           </b-jumbotron>
@@ -23,10 +29,7 @@
 </template>
 
 <script>
-import {
-  GET_GROUP_INFO,
-  JOIN_GROUP
-} from '@/store/actions.type'
+import { GET_GROUP_INFO, JOIN_GROUP } from '@/store/actions.type'
 
 export default {
   data: () => ({
@@ -34,7 +37,10 @@ export default {
   }),
 
   async beforeCreate() {
-    this.info = await this.$store.dispatch(GET_GROUP_INFO, this.$route.params.id)
+    this.info = await this.$store.dispatch(
+      GET_GROUP_INFO,
+      this.$route.params.id
+    )
   },
 
   methods: {

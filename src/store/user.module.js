@@ -12,7 +12,6 @@ import {
   UPDATE_PROFILE
 } from './actions.type'
 
-
 const state = {
   uid: null,
   email: null,
@@ -52,7 +51,10 @@ const actions = {
   async [REGISTER]({ commit }, opt) {
     commit('setLoading', 'btn__signUp')
     try {
-      let creds = await auth.createUserWithEmailAndPassword(opt.email, opt.password)
+      let creds = await auth.createUserWithEmailAndPassword(
+        opt.email,
+        opt.password
+      )
       db.collection('users').doc(creds.user.uid).set({
         name: opt.name,
         surname: opt.surname,
@@ -84,7 +86,7 @@ const actions = {
     commit('setLoading', 'btn__restorePassword')
     try {
       await auth.sendPasswordResetEmail(opt.email, {
-        url: 'https://project-scimitar.web.app/login',
+        url: 'https://project-scimitar.web.app/login'
       })
       commit('setToastMsg', { msg: 'Ссылка востановления отправлена' })
       commit('unsetLoading')
@@ -124,7 +126,10 @@ const actions = {
   async [UPDATE_EMAIL]({ commit, state }, data) {
     commit('setLoading', 'btn__updateAuthData')
     try {
-      let user = await auth.signInWithEmailAndPassword(state.email, data.password)
+      let user = await auth.signInWithEmailAndPassword(
+        state.email,
+        data.password
+      )
       await auth.currentUser.updateEmail(data.newEmail)
       await auth.currentUser.sendEmailVerification()
       commit('setAuthData', user.user)
@@ -140,7 +145,10 @@ const actions = {
   async [UPDATE_PASSWORD]({ commit, state }, passwords) {
     commit('setLoading', 'btn__updateAuthData')
     try {
-      let user = await auth.signInWithEmailAndPassword(state.email, passwords.old)
+      let user = await auth.signInWithEmailAndPassword(
+        state.email,
+        passwords.old
+      )
       await auth.currentUser.updatePassword(passwords.new)
       commit('setAuthData', user.user)
       commit('setToastMsg', { msg: 'Пароль успешно изменен' })
@@ -152,6 +160,5 @@ const actions = {
     }
   }
 }
-
 
 export default { state, getters, mutations, actions }

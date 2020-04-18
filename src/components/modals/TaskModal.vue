@@ -18,7 +18,10 @@
     </b-form-group>
 
     <b-form-group label="Название">
-      <b-form-input :state="inputState($v.name)" v-model.trim="$v.name.$model" />
+      <b-form-input
+        :state="inputState($v.name)"
+        v-model.trim="$v.name.$model"
+      />
     </b-form-group>
 
     <b-form-group label="Постановка задачи (необязательно)">
@@ -34,18 +37,25 @@
     </b-form-group>
 
     <div class="font-weight-bold">Прикрепленные файлы (необязательно)</div>
-    <b-list-group class="mt-2 mb-3" v-if="files.length || newFilesToUpload.length">
+    <b-list-group
+      class="mt-2 mb-3"
+      v-if="files.length || newFilesToUpload.length"
+    >
       <b-list-group-item
-        v-for="(f,i) in files.concat(newFilesToUpload)"
+        v-for="(f, i) in files.concat(newFilesToUpload)"
         :key="i"
         class="d-flex align-items-center bg-light"
       >
-        <span class="overflow">{{f.name}}</span>
-        <span class="text-nowrap mx-2 text-muted">{{Math.round(f.size / 1024)}} КБ</span>
+        <span class="overflow">{{ f.name }}</span>
+        <span class="text-nowrap mx-2 text-muted">
+          {{ Math.round(f.size / 1024) }} КБ
+        </span>
         <button class="close ml-auto" @click="fileAction(f)">×</button>
       </b-list-group-item>
     </b-list-group>
-    <div v-else class="text-center text-muted py-4">Нет прикрепленных файлов</div>
+    <div v-else class="text-center text-muted py-4">
+      Нет прикрепленных файлов
+    </div>
     <b-file
       ref="file-input"
       multiple
@@ -57,7 +67,12 @@
     />
     <template v-if="uploadProgress > -1">
       <hr />
-      <b-progress :value="uploadProgress" :max="maxForProgressBar" variant="dark" animated></b-progress>
+      <b-progress
+        :value="uploadProgress"
+        :max="maxForProgressBar"
+        variant="dark"
+        animated
+      ></b-progress>
     </template>
 
     <template #modal-footer>
@@ -73,7 +88,7 @@
       <btn-loader
         @click="okAction"
         load="btn-addLab"
-        :or="task ?'Обновить' : 'Добавить'"
+        :or="task ? 'Обновить' : 'Добавить'"
         :variant="task ? 'warning' : 'success'"
         :disabled="$v.$invalid"
       />
@@ -87,11 +102,7 @@ import BtnLoader from '@/components/BtnLoader'
 import ConfirmBtn from '@/components/ConfirmationButton'
 import modalMixin from '@/mixins/base'
 import WysiwygEditor from '@/components/WysiwygEditor'
-import {
-  ADD_TASK,
-  UPDATE_TASK,
-  DELETE_TASK
-} from '@/store/actions.type'
+import { ADD_TASK, UPDATE_TASK, DELETE_TASK } from '@/store/actions.type'
 
 export default {
   components: { BtnLoader, WysiwygEditor, ConfirmBtn },
@@ -115,8 +126,7 @@ export default {
       return this.$store.state.teacher.filesUploadProgress
     },
     maxForProgressBar() {
-      if (!this.task)
-        return this.files.length
+      if (!this.task) return this.files.length
       else return this.newFilesToUpload.length
     }
   },
@@ -132,13 +142,11 @@ export default {
       if (this.task) {
         if (file instanceof File) {
           this.newFilesToUpload.splice(this.newFilesToUpload.indexOf(file), 1)
-        }
-        else {
+        } else {
           this.files.splice(this.files.indexOf(file), 1)
           this.oldFilesToDelete.push(file.path)
         }
-      }
-      else this.files.splice(this.files.indexOf(file), 1)
+      } else this.files.splice(this.files.indexOf(file), 1)
     },
     beforeShow() {
       if (this.task) {
@@ -147,12 +155,10 @@ export default {
         this.description = this.task.description
         this.score = this.task.score
         this.files = [...this.task.files]
-      }
-      else this.files = []
+      } else this.files = []
     },
     async addFile(files) {
-      if (!this.task)
-        this.files.push(...files)
+      if (!this.task) this.files.push(...files)
       else this.newFilesToUpload.push(...files)
 
       this.$refs['file-input'].reset()
@@ -184,7 +190,7 @@ export default {
     async deleteTask() {
       this.$store.dispatch(DELETE_TASK, this.task.id)
       this.resetModal('task-modal')
-    },
+    }
   },
 
   validations: {

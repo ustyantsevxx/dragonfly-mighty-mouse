@@ -24,10 +24,10 @@ import './registerServiceWorker'
 
 firebase.initializeApp({
   apiKey: process.env.VUE_APP__FIREBASE_API,
-  authDomain: "project-scimitar.firebaseapp.com",
-  databaseURL: "https://project-scimitar.firebaseio.com",
-  projectId: "project-scimitar",
-  storageBucket: "project-scimitar.appspot.com",
+  authDomain: 'project-scimitar.firebaseapp.com',
+  databaseURL: 'https://project-scimitar.firebaseio.com',
+  projectId: 'project-scimitar',
+  storageBucket: 'project-scimitar.appspot.com',
   messagingSenderId: process.env.VUE_APP__FIREBASE_MSI,
   appId: process.env.VUE_APP__FIREBASE_APPID,
   measurementId: process.env.VUE_APP__FIREBASE_MESID

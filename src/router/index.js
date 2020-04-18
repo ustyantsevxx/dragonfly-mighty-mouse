@@ -93,17 +93,15 @@ router.beforeEach((to, _from, next) => {
       path: '/login',
       query: { next: to.fullPath }
     })
-  }
-  else if (requiresGuest && signed) next('/')
+  } else if (requiresGuest && signed) next('/')
   else {
-    if (requiresTeacher && !isTeacher || requiresStudent && isTeacher) {
+    if ((requiresTeacher && !isTeacher) || (requiresStudent && isTeacher)) {
       store.commit('setToastMsg', {
         error: true,
         msg: 'У вас нет доступа к данной странице!'
       })
       next('/')
-    }
-    else {
+    } else {
       next()
       if (!to.meta.dynamicTitle) document.title = to.meta.title
     }

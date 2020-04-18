@@ -57,9 +57,7 @@ import { required } from 'vuelidate/lib/validators'
 import AuthDataEdit from '../components/AuthDataEdit'
 import BtnLoader from '../components/BtnLoader'
 import baseMixin from '@/mixins/base'
-import {
-  UPDATE_PROFILE,
-} from '@/store/actions.type'
+import { UPDATE_PROFILE } from '@/store/actions.type'
 
 export default {
   components: { AuthDataEdit, BtnLoader },
@@ -68,12 +66,16 @@ export default {
     baseMixin({
       newName: null,
       newSurname: null
-    }),
+    })
   ],
 
   computed: {
-    name() { return this.$store.state.user.name },
-    surname() { return this.$store.state.user.surname },
+    name() {
+      return this.$store.state.user.name
+    },
+    surname() {
+      return this.$store.state.user.surname
+    },
     notChanged() {
       return this.newName === this.name && this.newSurname === this.surname
     }
@@ -81,12 +83,10 @@ export default {
 
   watch: {
     newName() {
-      if (this.newName === this.name)
-        this.$v.newName.$reset()
+      if (this.newName === this.name) this.$v.newName.$reset()
     },
     newSurname() {
-      if (this.newSurname === this.surname)
-        this.$v.newSurname.$reset()
+      if (this.newSurname === this.surname) this.$v.newSurname.$reset()
     }
   },
 
@@ -107,8 +107,8 @@ export default {
 
   validations: {
     newName: { required },
-    newSurname: { required },
-  },
+    newSurname: { required }
+  }
 }
 </script>
 

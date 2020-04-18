@@ -38,7 +38,9 @@ export default {
   }),
   methods: {
     async restorePassword() {
-      let r = await this.$store.dispatch(RESTORE_PASSWORD, { email: this.email })
+      let r = await this.$store.dispatch(RESTORE_PASSWORD, {
+        email: this.email
+      })
       if (r) this.$router.push('/login')
     }
   }

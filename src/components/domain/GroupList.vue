@@ -3,7 +3,9 @@
     <b-row>
       <b-col>
         <b-card no-body>
-          <b-card-header class="d-flex justify-content-between align-items-center">
+          <b-card-header
+            class="d-flex justify-content-between align-items-center"
+          >
             <div>
               <b-nav v-if="!isMobile()" card-header pills>
                 <b-nav-item
@@ -12,23 +14,29 @@
                   v-for="(group, i) in groups"
                   :key="i"
                   @click="openedGroupIndex = i"
-                >{{group.name}}</b-nav-item>
+                >
+                  {{ group.name }}
+                </b-nav-item>
               </b-nav>
               <b-dd v-else class="m-md-2" variant="primary">
-                <template #button-content>{{groups[openedGroupIndex].name}}</template>
+                <template #button-content>
+                  {{ groups[openedGroupIndex].name }}
+                </template>
                 <b-dd-header>Выберите группу</b-dd-header>
                 <b-dd-item-btn
                   @click="openedGroupIndex = i"
                   v-for="(group, i) in groups"
                   :key="i"
-                >{{group.name}}</b-dd-item-btn>
+                >
+                  {{ group.name }}
+                </b-dd-item-btn>
               </b-dd>
             </div>
             <b-link @click.prevent="openModal()">Добавить</b-link>
           </b-card-header>
           <b-card-body v-if="groups && groups.length">
             <h2 class="group-name">
-              {{group.name}}
+              {{ group.name }}
               <b-icon
                 v-if="isTeacher"
                 icon="pencil"
@@ -43,7 +51,9 @@
             </template>
             <marks-table :group-index="openedGroupIndex" />
           </b-card-body>
-          <b-card-text v-else class="text-center text-muted py-4">Список групп пуст.</b-card-text>
+          <b-card-text v-else class="text-center text-muted py-4">
+            Список групп пуст
+          </b-card-text>
         </b-card>
       </b-col>
     </b-row>
@@ -83,13 +93,18 @@ export default {
     copyLink() {
       let a = document.querySelector('#invite-link-' + this.openedGroupIndex)
       a.setAttribute('type', 'text')
-      a.value = `${location.origin}/join-group/${this.groups[this.openedGroupIndex].id}`
+      a.value = `${location.origin}/join-group/${
+        this.groups[this.openedGroupIndex].id
+      }`
       a.select()
       document.execCommand('copy')
       a.value = ''
       a.setAttribute('type', 'hidden')
       window.getSelection().removeAllRanges()
-      this.$store.commit('setToastMsg', { msg: 'Ссылка приглашения скопирована!', translate: false })
+      this.$store.commit('setToastMsg', {
+        msg: 'Ссылка приглашения скопирована!',
+        translate: false
+      })
     },
     isMobile: () => isMobile(),
     openModal(create = false) {
@@ -97,7 +112,7 @@ export default {
       this.$nextTick(() => {
         this.$bvModal.show('add-group-modal')
       })
-    },
+    }
   }
 }
 </script>

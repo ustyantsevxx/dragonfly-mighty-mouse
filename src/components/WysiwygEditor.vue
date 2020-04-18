@@ -1,6 +1,11 @@
 <template>
   <div class="editor">
-    <editor-menu-bar v-if="editable" :editor="editor" v-slot="{ commands, isActive }" class="mb-2">
+    <editor-menu-bar
+      v-if="editable"
+      :editor="editor"
+      v-slot="{ commands, isActive }"
+      class="mb-2"
+    >
       <div class="menubar">
         <b-btn-toolbar>
           <b-container fluid class="px-0">
@@ -8,16 +13,18 @@
               <b-col md="auto">
                 <b-btn-group size="sm" class="mr-2">
                   <b-btn
-                    :class="{ 'active': isActive.paragraph() }"
+                    :class="{ active: isActive.paragraph() }"
                     @click="commands.paragraph"
-                  >Абзац</b-btn>
+                  >
+                    Абзац
+                  </b-btn>
                 </b-btn-group>
 
                 <b-btn-group size="sm" class="mr-1">
                   <b-btn
                     v-b-tooltip.hover
                     title="Полужирный"
-                    :class="{ 'active': isActive.bold() }"
+                    :class="{ active: isActive.bold() }"
                     @click="commands.bold"
                   >
                     <b-icon icon="type-bold" />
@@ -25,7 +32,7 @@
                   <b-btn
                     v-b-tooltip.hover
                     title="Курсив"
-                    :class="{ 'active': isActive.italic() }"
+                    :class="{ active: isActive.italic() }"
                     @click="commands.italic"
                   >
                     <b-icon icon="type-italic" />
@@ -33,7 +40,7 @@
                   <b-btn
                     v-b-tooltip.hover
                     title="Подчеркнутый"
-                    :class="{ 'active': isActive.underline() }"
+                    :class="{ active: isActive.underline() }"
                     @click="commands.underline"
                   >
                     <b-icon icon="type-underline" />
@@ -44,7 +51,7 @@
                   <b-btn
                     v-b-tooltip.hover
                     title="Код"
-                    :class="{ 'active': isActive.code() }"
+                    :class="{ active: isActive.code() }"
                     @click="commands.code"
                   >
                     <b-icon icon="code-slash" />
@@ -56,7 +63,7 @@
                   <b-btn
                     v-b-tooltip.hover
                     title="Заголовок"
-                    :class="{ 'active': isActive.heading({ level: 4 }) }"
+                    :class="{ active: isActive.heading({ level: 4 }) }"
                     @click="commands.heading({ level: 4 })"
                   >
                     <b-icon icon="type-h1" />
@@ -64,7 +71,7 @@
                   <b-btn
                     v-b-tooltip.hover
                     title="Подзаголовок"
-                    :class="{ 'active': isActive.heading({ level: 5 }) }"
+                    :class="{ active: isActive.heading({ level: 5 }) }"
                     @click="commands.heading({ level: 5 })"
                   >
                     <b-icon icon="type-h2" />
@@ -75,7 +82,7 @@
                   <b-btn
                     v-b-tooltip.hover
                     title="Маркированный список"
-                    :class="{ 'active': isActive.bullet_list() }"
+                    :class="{ active: isActive.bullet_list() }"
                     @click="commands.bullet_list"
                   >
                     <b-icon icon="list-ul" />
@@ -83,7 +90,7 @@
                   <b-btn
                     v-b-tooltip.hover
                     title="Нумерованный список"
-                    :class="{ 'active': isActive.ordered_list() }"
+                    :class="{ active: isActive.ordered_list() }"
                     @click="commands.ordered_list"
                   >
                     <b-icon icon="list-ol" />
@@ -91,10 +98,18 @@
                 </b-btn-group>
 
                 <b-btn-group size="sm">
-                  <b-btn v-b-tooltip.hover title="Отменить" @click="commands.undo">
+                  <b-btn
+                    v-b-tooltip.hover
+                    title="Отменить"
+                    @click="commands.undo"
+                  >
                     <b-icon icon="arrow-counterclockwise" />
                   </b-btn>
-                  <b-btn v-b-tooltip.hover title="Повторить" @click="commands.redo">
+                  <b-btn
+                    v-b-tooltip.hover
+                    title="Повторить"
+                    @click="commands.redo"
+                  >
                     <b-icon icon="arrow-clockwise" />
                   </b-btn>
                 </b-btn-group>
@@ -134,7 +149,7 @@ export default {
     },
     content: {
       type: Object,
-      default: null,
+      default: null
     }
   },
 

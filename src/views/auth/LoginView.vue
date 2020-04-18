@@ -62,14 +62,17 @@ export default {
   }),
 
   computed: {
-    signed() { return this.$store.state.user.uid },
-    loading() { return this.$store.state.loadingView }
+    signed() {
+      return this.$store.state.user.uid
+    },
+    loading() {
+      return this.$store.state.loadingView
+    }
   },
 
   watch: {
     signed() {
-      if (this.signed)
-        location.replace(this.$route.query.next || '/')
+      if (this.signed) location.replace(this.$route.query.next || '/')
     }
   },
 
@@ -101,7 +104,7 @@ img {
   text-align: center;
   &::before,
   &::after {
-    content: "";
+    content: '';
     flex: 1;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }

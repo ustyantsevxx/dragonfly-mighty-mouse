@@ -3,11 +3,13 @@
     <transition name="btn-fade" mode="out-in">
       <div v-if="!confirm" :key="1">
         <b-btn v-bind="$attrs" @click="confirm = true">
-          <slot>{{text}}</slot>
+          <slot>{{ text }}</slot>
         </b-btn>
       </div>
       <div v-else :key="2">
-        <b-btn v-bind="$attrs" @click="$emit('click')" variant="dark">{{confirmText}}</b-btn>
+        <b-btn v-bind="$attrs" @click="$emit('click')" variant="dark">
+          {{ confirmText }}
+        </b-btn>
       </div>
     </transition>
   </div>
@@ -25,7 +27,7 @@ export default {
       required: false,
       default: 'Уверены?'
     },
-    'text': {
+    text: {
       type: String,
       required: false
     }

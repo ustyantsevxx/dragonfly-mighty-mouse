@@ -8,7 +8,10 @@
     @hide="resetModal('add-group-modal')"
   >
     <b-form-group label="Название группы">
-      <b-form-input :state="inputState($v.newGroupName)" v-model.trim="$v.newGroupName.$model" />
+      <b-form-input
+        :state="inputState($v.newGroupName)"
+        v-model.trim="$v.newGroupName.$model"
+      />
     </b-form-group>
 
     <template #modal-footer>
@@ -19,11 +22,13 @@
         class="mr-auto"
         text="Удалить группу"
       />
-      <b-btn @click="resetModal('add-group-modal')" variant="light">Отмена</b-btn>
+      <b-btn @click="resetModal('add-group-modal')" variant="light">
+        Отмена
+      </b-btn>
       <btn-loader
         @click="group ? editGroup() : addGroup()"
         load="btn-addGroup"
-        :or="group ?'Обновить' : 'Добавить'"
+        :or="group ? 'Обновить' : 'Добавить'"
         :variant="group ? 'warning' : 'success'"
         :disabled="$v.$invalid"
       />
@@ -36,11 +41,7 @@ import { required } from 'vuelidate/lib/validators'
 import BtnLoader from '@/components/BtnLoader'
 import baseMixin from '@/mixins/base'
 import ConfirmBtn from '@/components/ConfirmationButton'
-import {
-  ADD_GROUP,
-  UPDATE_GROUP,
-  DELETE_GROUP
-} from '@/store/actions.type'
+import { ADD_GROUP, UPDATE_GROUP, DELETE_GROUP } from '@/store/actions.type'
 
 export default {
   components: { BtnLoader, ConfirmBtn },
@@ -77,11 +78,11 @@ export default {
       if (this.group) {
         this.newGroupName = this.group.name
       }
-    },
+    }
   },
 
   validations: {
-    newGroupName: { required },
+    newGroupName: { required }
   }
 }
 </script>

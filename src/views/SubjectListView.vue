@@ -19,19 +19,29 @@
                       </li>
                     </div>
                     <div class="add-btn-container">
-                      <b-link v-if="isTeacher" class="ml-2" v-b-modal.modal-subject>Добавить</b-link>
+                      <b-link
+                        v-if="isTeacher"
+                        class="ml-2"
+                        v-b-modal.modal-subject
+                      >
+                        Добавить
+                      </b-link>
                     </div>
                   </div>
                 </b-col>
                 <b-col md="auto" order-md="1">
                   <div class="d-flex">
-                    <b-nav-item to="/subjects" exact-active-class="active">Все курсы</b-nav-item>
+                    <b-nav-item to="/subjects" exact-active-class="active">
+                      Все курсы
+                    </b-nav-item>
                     <b-nav-item
                       v-for="(c, i) in coursesList"
                       :key="i"
                       :to="`?course=${c}`"
                       exact-active-class="active"
-                    >{{ c }}</b-nav-item>
+                    >
+                      {{ c }}
+                    </b-nav-item>
                   </div>
                 </b-col>
               </b-row>
@@ -53,10 +63,14 @@
               <div class="text-center text-muted">Список дисциплин пуст</div>
             </template>
             <template #emptyfiltered>
-              <div class="text-center text-muted">По запросу ничего не найдено</div>
+              <div class="text-center text-muted">
+                По запросу ничего не найдено
+              </div>
             </template>
             <template #cell(name)="data">
-              <text-highlight v-if="filter" :queries="filter">{{ data.item.name }}</text-highlight>
+              <text-highlight v-if="filter" :queries="filter">
+                {{ data.item.name }}
+              </text-highlight>
               <template v-else>{{ data.item.name }}</template>
             </template>
           </b-table>
@@ -94,7 +108,9 @@ export default {
   }),
 
   computed: {
-    subjects() { return this.$store.state.subjects },
+    subjects() {
+      return this.$store.state.subjects
+    },
     subjectsByCourse() {
       if (this.subjects) {
         if (this.$route.query.course) {

@@ -8,7 +8,11 @@
     @hide="resetData"
   >
     <b-form-group label="Название" label-for="name-field">
-      <b-form-input id="name-field" :state="inputState($v.name)" v-model.trim="$v.name.$model" />
+      <b-form-input
+        id="name-field"
+        :state="inputState($v.name)"
+        v-model.trim="$v.name.$model"
+      />
     </b-form-group>
     <b-form-group label="Курс" label-for="course-field">
       <b-form-input
@@ -51,7 +55,7 @@ export default {
   mixins: [
     modalMixin({
       name: null,
-      course: null,
+      course: null
     })
   ],
 

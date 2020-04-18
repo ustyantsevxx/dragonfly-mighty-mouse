@@ -7,7 +7,7 @@ export default state => {
     }),
 
     computed: {
-      inputState: () => val => val.$dirty ? !val.$error : null
+      inputState: () => val => (val.$dirty ? !val.$error : null)
     },
 
     methods: {

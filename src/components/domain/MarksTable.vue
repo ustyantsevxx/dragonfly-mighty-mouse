@@ -16,7 +16,7 @@
       <template #cell(index)="data">{{ data.index + 1 }}</template>
       <template #cell()="data">
         <div class="score-cell" @click="test(data)">
-          <div class="score-value">{{data.value}}</div>
+          <div class="score-value">{{ data.value }}</div>
         </div>
       </template>
     </b-table>
@@ -25,9 +25,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import {
-  MARK_TASK
-} from '@/store/actions.type'
+import { MARK_TASK } from '@/store/actions.type'
 
 export default {
   props: {
@@ -45,27 +43,33 @@ export default {
     }),
 
     tableHeaders() {
-      let tableHeaders = [{
-        label: '',
-        key: 'index'
-      }, {
-        label: 'Фамилия Имя',
-        key: 'name',
-        tdClass: 'font-weight-bold text-nowrap',
-        stickyColumn: true,
-        sortable: true
-      }]
+      let tableHeaders = [
+        {
+          label: '',
+          key: 'index'
+        },
+        {
+          label: 'Фамилия Имя',
+          key: 'name',
+          tdClass: 'font-weight-bold text-nowrap',
+          stickyColumn: true,
+          sortable: true
+        }
+      ]
 
       let labNumbers = [...this.tasks].sort((a, b) => a.number - b.number)
-      labNumbers.forEach(t => tableHeaders.push({
-        label: `Лаб №${t.number}`,
-        key: t.id,
-        name: t.name,
-        score: t.score,
-        sortable: true,
-        thClass: 'hide-sort-icon  text-nowrap' + (t.visible ? '' : ' text-danger'),
-        tdClass: 'hoverable-cell'
-      }))
+      labNumbers.forEach(t =>
+        tableHeaders.push({
+          label: `Лаб №${t.number}`,
+          key: t.id,
+          name: t.name,
+          score: t.score,
+          sortable: true,
+          thClass:
+            'hide-sort-icon  text-nowrap' + (t.visible ? '' : ' text-danger'),
+          tdClass: 'hoverable-cell'
+        })
+      )
 
       tableHeaders.push({
         label: 'Всего',
@@ -134,7 +138,7 @@ export default {
     }
   }
 
-  .table.b-table > thead > tr > [aria-sort="none"] {
+  .table.b-table > thead > tr > [aria-sort='none'] {
     background-size: 0;
 
     &:hover {

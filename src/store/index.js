@@ -27,10 +27,10 @@ export default new Vuex.Store({
 
   mutations: {
     ...vuexfireMutations,
-    setLoading: (s, view) => s.loadingView = view,
-    setToastMsg: (s, msg) => s.toastMsg = msg,
-    unsetLoading: s => s.loadingView = null,
-    unsetToastMsg: s => s.toastMsg = null,
+    setLoading: (s, view) => (s.loadingView = view),
+    setToastMsg: (s, msg) => (s.toastMsg = msg),
+    unsetLoading: s => (s.loadingView = null),
+    unsetToastMsg: s => (s.toastMsg = null)
   },
 
   actions: firestoreBindings

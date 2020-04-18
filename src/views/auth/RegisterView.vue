@@ -7,11 +7,17 @@
             <h2 class="mb-4 text-center">Регистрация</h2>
             <b-form @submit.prevent="signUp">
               <b-form-group label="Имя">
-                <b-form-input :state="inputState($v.name)" v-model.trim="$v.name.$model" />
+                <b-form-input
+                  :state="inputState($v.name)"
+                  v-model.trim="$v.name.$model"
+                />
               </b-form-group>
 
               <b-form-group label="Фамилия">
-                <b-form-input :state="inputState($v.surname)" v-model.trim="$v.surname.$model" />
+                <b-form-input
+                  :state="inputState($v.surname)"
+                  v-model.trim="$v.surname.$model"
+                />
               </b-form-group>
 
               <hr class="mt-4" />
@@ -99,13 +105,14 @@ export default {
   ],
 
   computed: {
-    signed() { return this.$store.state.user.uid }
+    signed() {
+      return this.$store.state.user.uid
+    }
   },
 
   watch: {
     signed() {
-      if (this.signed)
-        location.replace('/')
+      if (this.signed) location.replace('/')
     }
   },
 

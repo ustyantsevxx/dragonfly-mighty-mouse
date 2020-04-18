@@ -12,7 +12,7 @@ import {
   TOGGLE_TASK_VISIBILITY,
   ADD_GROUP,
   UPDATE_GROUP,
-  DELETE_GROUP,
+  DELETE_GROUP
 } from './actions.type'
 
 const state = {
@@ -64,14 +64,17 @@ const taskActions = {
     commit('setLoading', 'btn-addLab')
     dispatch(DELETE_TASK_FILES, task.oldFilesToDelete)
     const newFiles = await dispatch(UPLOAD_TASK_FILES, task.newFilesToUpload)
-    await db.collection('tasks').doc(task.id).update({
-      name: task.name,
-      number: task.number,
-      description: task.description,
-      score: task.score,
-      files: task.files.concat(newFiles),
-      visible: task.visible
-    })
+    await db
+      .collection('tasks')
+      .doc(task.id)
+      .update({
+        name: task.name,
+        number: task.number,
+        description: task.description,
+        score: task.score,
+        files: task.files.concat(newFiles),
+        visible: task.visible
+      })
     commit('unsetLoading')
     state.filesUploadProgress = -1
   },
@@ -98,7 +101,9 @@ const taskActions = {
         state.filesUploadProgress = 0
         filesHere = true
       }
-      let ref = storage.ref(`lab_files/${Math.random().toString(7)}/${file.name}`)
+      let ref = storage.ref(
+        `lab_files/${Math.random().toString(7)}/${file.name}`
+      )
       await ref.put(file)
       let link = await ref.getDownloadURL()
       pinnedFiles.push({
@@ -113,8 +118,7 @@ const taskActions = {
   },
 
   async [DELETE_TASK_FILES](_, paths) {
-    for (let path of paths)
-      await storage.ref(path).delete()
+    for (let path of paths) await storage.ref(path).delete()
   },
 
   [TOGGLE_TASK_VISIBILITY](_, data) {

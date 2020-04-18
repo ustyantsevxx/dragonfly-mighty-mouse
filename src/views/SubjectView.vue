@@ -18,32 +18,38 @@
 
       <b-row>
         <b-col class="badges mt-2">
-          <b-badge variant="info" class="mr-2">{{subj.course}} курс</b-badge>
+          <b-badge variant="info" class="mr-2">{{ subj.course }} курс</b-badge>
           <template v-if="tasks">
             <b-badge
               variant="success"
               class="mr-0"
-              :class="{over: visibleTasksCount !== tasks.length}"
-            >{{ num2str(tasks.length, taskForms) }}</b-badge>
+              :class="{ over: visibleTasksCount !== tasks.length }"
+            >
+              {{ num2str(tasks.length, taskForms) }}
+            </b-badge>
             <b-badge
               variant="danger"
               class="over1"
               v-if="isTeacher && visibleTasksCount != tasks.length"
-            >{{ visibleTasksCount }} доступно</b-badge>
+            >
+              {{ visibleTasksCount }} доступно
+            </b-badge>
           </template>
-          <b-badge
-            variant="dark"
-            class="ml-2"
-            v-if="groups && isTeacher"
-          >{{ num2str(groups.length, ['группа', 'группы' ,'групп']) }}</b-badge>
+          <b-badge variant="dark" class="ml-2" v-if="groups && isTeacher">
+            {{ num2str(groups.length, ['группа', 'группы', 'групп']) }}
+          </b-badge>
         </b-col>
       </b-row>
 
       <hr class="my-4" />
 
       <b-nav fill pills class="mb-4 tabs-nav">
-        <b-nav-item exact-active-class="active link-active" to="tasks">Лабораторные работы</b-nav-item>
-        <b-nav-item exact-active-class="active link-active" to="groups">Группы и баллы</b-nav-item>
+        <b-nav-item exact-active-class="active link-active" to="tasks">
+          Лабораторные работы
+        </b-nav-item>
+        <b-nav-item exact-active-class="active link-active" to="groups">
+          Группы и баллы
+        </b-nav-item>
       </b-nav>
 
       <transition name="global-fade" mode="out-in">
@@ -75,11 +81,7 @@ import { num2str } from '@/assets/functions'
 import PageLoader from '@/components/PageLoader'
 import SubjectModal from '@/components/modals/SubjectModal'
 import { mapState } from 'vuex'
-import {
-  BIND_GROUPS,
-  BIND_MARKS,
-  BIND_TASKS
-} from '@/store/actions.type'
+import { BIND_GROUPS, BIND_MARKS, BIND_TASKS } from '@/store/actions.type'
 
 export default {
   components: { PageLoader, SubjectModal },
@@ -105,7 +107,9 @@ export default {
   },
 
   watch: {
-    subj() { if (this.subj) this.changeTitle() }
+    subj() {
+      if (this.subj) this.changeTitle()
+    }
   },
 
   beforeCreate() {
@@ -132,7 +136,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "bootstrap/scss/bootstrap";
+@import 'bootstrap/scss/bootstrap';
 .header {
   margin-bottom: 0;
   &:hover {

@@ -15,7 +15,9 @@ export default {
   components: { Navbar },
 
   computed: {
-    toastMsg() { return this.$store.state.toastMsg }
+    toastMsg() {
+      return this.$store.state.toastMsg
+    }
   },
 
   watch: {
@@ -47,11 +49,13 @@ export default {
     async translate(text) {
       const API = process.env.VUE_APP_YANDEX_TRANSLATE_API_KEY
       try {
-        const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${API}&text=${text}&lang=en-ru`;
+        const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${API}&text=${text}&lang=en-ru`
         let resp = await fetch(url)
         resp = await resp.json()
         return resp.text.join(' ')
-      } catch { return text }
+      } catch {
+        return text
+      }
     }
   }
 }

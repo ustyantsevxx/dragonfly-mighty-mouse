@@ -1,9 +1,6 @@
 import firebase from 'firebase/app'
 import { db } from '../main'
-import {
-  GET_GROUP_INFO,
-  JOIN_GROUP
-} from './actions.type'
+import { GET_GROUP_INFO, JOIN_GROUP } from './actions.type'
 
 const state = {}
 const mutations = {}
@@ -24,10 +21,14 @@ const actions = {
     }
   },
   async [JOIN_GROUP]({ rootState }, id) {
-    await db.collection('groups').doc(id).update({
-      students: firebase.firestore.FieldValue.arrayUnion(
-        db.collection('users').doc(rootState.user.uid))
-    })
+    await db
+      .collection('groups')
+      .doc(id)
+      .update({
+        students: firebase.firestore.FieldValue.arrayUnion(
+          db.collection('users').doc(rootState.user.uid)
+        )
+      })
   }
 }
 

@@ -6,13 +6,13 @@ Vue.use(Router)
 
 import appRoutes from './routes/appRoutes'
 import authRoutes from './routes/authRoutes'
-import teacherRoutes from './routes/teacherRoutes'
+import sharedRoutes from './routes/sharedRoutes'
 import studentRoutes from './routes/studentRoutes'
 
 const routes = [
   ...appRoutes,
   ...authRoutes,
-  ...teacherRoutes,
+  ...sharedRoutes,
   ...studentRoutes
 ]
 

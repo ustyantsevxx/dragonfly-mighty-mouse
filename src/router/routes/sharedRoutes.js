@@ -1,24 +1,24 @@
 export default [
   {
     path: '/subjects',
-    component: () => import('@/views/teacher/SubjectListView'),
+    component: () => import('@/views/shared/SubjectListView'),
     meta: { requiresAuth: true, title: 'Мои дисциплины' }
   },
   {
     path: '/subjects/:id',
     redirect: '/subjects/:id/tasks',
-    component: () => import('@/views/teacher/SubjectView'),
+    component: () => import('@/views/shared/SubjectView'),
     meta: { requiresAuth: true },
     children: [
       {
         path: 'tasks',
-        component: () => import('@/components/teacher/TaskList'),
+        component: () => import('@/components/shared/TaskList'),
         meta: { requiresAuth: true, dynamicTitle: true }
       },
       {
         path: 'groups',
-        component: () => import('@/components/teacher/GroupList'),
-        meta: { requiresAuth: true, dynamicTitle: true, requiresTeacher: true }
+        component: () => import('@/components/shared/GroupList'),
+        meta: { requiresAuth: true, dynamicTitle: true }
       }
     ]
   }

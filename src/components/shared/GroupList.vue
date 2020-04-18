@@ -53,7 +53,7 @@
 
 <script>
 import { isMobile } from '@/assets/functions'
-import MarksTable from '@/components/teacher/MarksTable'
+import MarksTable from '@/components/shared/MarksTable'
 import GroupModal from '@/components/modals/GroupModal'
 
 export default {

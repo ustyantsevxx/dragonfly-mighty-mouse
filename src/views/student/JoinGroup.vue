@@ -23,18 +23,23 @@
 </template>
 
 <script>
+import {
+  GET_GROUP_INFO,
+  JOIN_GROUP
+} from '@/store/actions.type'
+
 export default {
   data: () => ({
     info: null
   }),
 
   async beforeCreate() {
-    this.info = await this.$store.dispatch('groupInfo', this.$route.params.id)
+    this.info = await this.$store.dispatch(GET_GROUP_INFO, this.$route.params.id)
   },
 
   methods: {
     async join() {
-      await this.$store.dispatch('joinGroup', this.$route.params.id)
+      await this.$store.dispatch(JOIN_GROUP, this.$route.params.id)
       location.assign(`/subjects/${this.info.subject.id}`)
     }
   }

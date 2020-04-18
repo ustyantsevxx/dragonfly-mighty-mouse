@@ -82,6 +82,7 @@
 import { minLength, required, email, sameAs } from 'vuelidate/lib/validators'
 import BtnLoader from '@/components/BtnLoader'
 import baseMixin from '@/mixins/base'
+import { REGISTER } from '@/store/actions.type'
 
 export default {
   components: { BtnLoader },
@@ -110,7 +111,7 @@ export default {
 
   methods: {
     signUp() {
-      this.$store.dispatch('signUp', {
+      this.$store.dispatch(REGISTER, {
         name: this.name,
         surname: this.surname,
         email: this.email,

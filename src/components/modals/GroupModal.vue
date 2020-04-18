@@ -36,6 +36,11 @@ import { required } from 'vuelidate/lib/validators'
 import BtnLoader from '@/components/BtnLoader'
 import baseMixin from '@/mixins/base'
 import ConfirmBtn from '@/components/ConfirmationButton'
+import {
+  ADD_GROUP,
+  UPDATE_GROUP,
+  DELETE_GROUP
+} from '@/store/actions.type'
 
 export default {
   components: { BtnLoader, ConfirmBtn },
@@ -50,14 +55,14 @@ export default {
 
   methods: {
     async addGroup() {
-      this.$store.dispatch('addGroup', {
+      this.$store.dispatch(ADD_GROUP, {
         name: this.newGroupName,
         subjectId: this.$route.params.id
       })
       this.resetModal('add-group-modal')
     },
     async editGroup() {
-      this.$store.dispatch('editGroup', {
+      this.$store.dispatch(UPDATE_GROUP, {
         id: this.group.id,
         name: this.newGroupName
       })
@@ -65,7 +70,7 @@ export default {
     },
     async deleteGroup() {
       this.$parent.openedGroupIndex = 0
-      await this.$store.dispatch('deleteGroup', this.group.id)
+      await this.$store.dispatch(DELETE_GROUP, this.group.id)
       this.resetModal('add-group-modal')
     },
     beforeShow() {

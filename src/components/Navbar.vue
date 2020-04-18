@@ -19,6 +19,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { LOGOUT } from '@/store/actions.type'
 
 export default {
   computed: {
@@ -32,7 +33,7 @@ export default {
     signOut() {
       if (this.$router.currentRoute.path !== '/')
         this.$router.push('/')
-      this.$store.dispatch('signOut')
+      this.$store.dispatch(LOGOUT)
     }
   }
 }

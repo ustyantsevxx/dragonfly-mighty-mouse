@@ -1,5 +1,6 @@
 <template>
   <b-modal
+    centered
     @show="beforeShow"
     v-bind="$attrs"
     :ok-disabled="$v.$invalid"
@@ -36,6 +37,11 @@
 import { required } from 'vuelidate/lib/validators'
 import modalMixin from '@/mixins/base'
 import ConfirmBtn from '@/components/ConfirmationButton'
+import {
+  ADD_SUBJECT,
+  UPDATE_SUBJECT,
+  DELETE_SUBJECT
+} from '@/store/actions.type'
 
 export default {
   components: { ConfirmBtn },
@@ -53,25 +59,30 @@ export default {
     beforeShow() {
       if (this.subject) {
         this.name = this.subject.name
-        this.course = this.subject.course
+        this.course = +this.subject.course
       }
     },
     okAction() {
       this.subject ? this.editSubject() : this.addSubject()
     },
     async addSubject() {
-      await this.$store.dispatch('addSubject', { name: this.name, course: this.course })
+      console.log(1)
+      await this.$store.dispatch(ADD_SUBJECT, {
+        name: this.name,
+        course: this.course
+      })
+      console.log(2)
       this.resetData()
     },
     async editSubject() {
-      await this.$store.dispatch('updateSubject', {
+      await this.$store.dispatch(UPDATE_SUBJECT, {
         name: this.name,
         course: this.course,
         id: this.subject.id
       })
     },
     deleteSubject() {
-      this.$store.dispatch('deleteSubject', this.subject.id)
+      this.$store.dispatch(DELETE_SUBJECT, this.subject.id)
       this.$router.push('/subjects')
     }
   },

@@ -1,5 +1,17 @@
 import firebase from 'firebase/app'
-import { db, auth } from '../../main.js'
+import { db, auth } from '../main.js'
+import {
+  LOGIN,
+  LOGIN_WITH_GOOGLE,
+  LOGOUT,
+  REGISTER,
+  RESTORE_PASSWORD,
+  VERIFY_EMAIL,
+  UPDATE_EMAIL,
+  UPDATE_PASSWORD,
+  UPDATE_PROFILE
+} from './actions.type'
+
 
 const state = {
   uid: null,
@@ -26,7 +38,18 @@ const mutations = {
 }
 
 const actions = {
-  async signUp({ commit }, opt) {
+  async [LOGIN]({ commit }, opt) {
+    commit('setLoading', 'btn__signIn')
+    try {
+      await auth.signInWithEmailAndPassword(opt.email, opt.password)
+      return true
+    } catch (err) {
+      commit('setToastMsg', { error: true, msg: err.message })
+      commit('unsetLoading')
+    }
+  },
+
+  async [REGISTER]({ commit }, opt) {
     commit('setLoading', 'btn__signUp')
     try {
       let creds = await auth.createUserWithEmailAndPassword(opt.email, opt.password)
@@ -41,18 +64,7 @@ const actions = {
     commit('unsetLoading')
   },
 
-  async signIn({ commit }, opt) {
-    commit('setLoading', 'btn__signIn')
-    try {
-      await auth.signInWithEmailAndPassword(opt.email, opt.password)
-      return true
-    } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message })
-      commit('unsetLoading')
-    }
-  },
-
-  async googleSignIn({ commit }) {
+  async [LOGIN_WITH_GOOGLE]({ commit }) {
     commit('setLoading', 'btn-googleSign')
     try {
       let googleProvider = new firebase.auth.GoogleAuthProvider()
@@ -63,12 +75,12 @@ const actions = {
     }
   },
 
-  signOut() {
+  [LOGOUT]() {
     location.reload()
     auth.signOut()
   },
 
-  async recoverPassword({ commit }, opt) {
+  async [RESTORE_PASSWORD]({ commit }, opt) {
     commit('setLoading', 'btn__restorePassword')
     try {
       await auth.sendPasswordResetEmail(opt.email, {
@@ -83,7 +95,7 @@ const actions = {
     }
   },
 
-  async verifyEmail({ commit }) {
+  async [VERIFY_EMAIL]({ commit }) {
     try {
       await auth.currentUser.sendEmailVerification()
       commit('setToastMsg', { msg: 'Ссылка подтверждения отправлена' })
@@ -92,7 +104,7 @@ const actions = {
     }
   },
 
-  async updateData({ commit, state }, data) {
+  async [UPDATE_PROFILE]({ commit, state }, data) {
     commit('setLoading', 'btn__updateData')
     try {
       let userDoc = db.collection('users').doc(state.uid)
@@ -109,7 +121,7 @@ const actions = {
     commit('unsetLoading')
   },
 
-  async updateEmail({ commit, state }, data) {
+  async [UPDATE_EMAIL]({ commit, state }, data) {
     commit('setLoading', 'btn__updateAuthData')
     try {
       let user = await auth.signInWithEmailAndPassword(state.email, data.password)
@@ -125,7 +137,7 @@ const actions = {
     }
   },
 
-  async updatePassword({ commit, state }, passwords) {
+  async [UPDATE_PASSWORD]({ commit, state }, passwords) {
     commit('setLoading', 'btn__updateAuthData')
     try {
       let user = await auth.signInWithEmailAndPassword(state.email, passwords.old)

@@ -30,14 +30,17 @@
             <h2 class="group-name">
               {{group.name}}
               <b-icon
+                v-if="isTeacher"
                 icon="pencil"
                 @click="openModal(true)"
                 class="hover-icon"
                 title="Редактировать"
               />
             </h2>
-            <b-link @click="copyLink">Пригласить студентов</b-link>
-            <input type="hidden" :id="'invite-link-' + openedGroupIndex" />
+            <template v-if="isTeacher">
+              <b-link @click="copyLink">Пригласить студентов</b-link>
+              <input type="hidden" :id="'invite-link-' + openedGroupIndex" />
+            </template>
             <marks-table :group-index="openedGroupIndex" />
           </b-card-body>
           <b-card-text v-else class="text-center text-muted py-4">Список групп пуст.</b-card-text>
@@ -53,7 +56,7 @@
 
 <script>
 import { isMobile } from '@/assets/functions'
-import MarksTable from '@/components/shared/MarksTable'
+import MarksTable from '@/components/domain/MarksTable'
 import GroupModal from '@/components/modals/GroupModal'
 
 export default {
@@ -65,8 +68,11 @@ export default {
   }),
 
   computed: {
+    isTeacher() {
+      return this.$store.state.user.isTeacher
+    },
     groups() {
-      return this.$store.state.teacher.groups
+      return this.$store.state.groups
     },
     group() {
       return this.groups[this.openedGroupIndex]

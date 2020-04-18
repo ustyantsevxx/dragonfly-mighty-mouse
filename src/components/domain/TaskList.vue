@@ -83,6 +83,7 @@ import TaskModal from '@/components/modals/TaskModal'
 import { num2str } from '@/assets/functions'
 import icons from 'file-icons-js'
 import WysiwygEditor from '@/components/WysiwygEditor'
+import { TOGGLE_TASK_VISIBILITY } from '@/store/actions.type'
 
 export default {
   components: { TaskModal, WysiwygEditor },
@@ -94,8 +95,8 @@ export default {
 
   computed: {
     labListSorted() {
-      return this.$store.state.teacher.tasks
-        ? [...this.$store.state.teacher.tasks].sort((a, b) => a.number - b.number)
+      return this.$store.state.tasks
+        ? [...this.$store.state.tasks].sort((a, b) => a.number - b.number)
         : []
     },
     isTeacher() {
@@ -128,7 +129,7 @@ export default {
       })
     },
     toggleTaskVisibility(id, state) {
-      this.$store.dispatch('toggleTaskVisibility', { id, state })
+      this.$store.dispatch(TOGGLE_TASK_VISIBILITY, { id, state })
     },
     getClass: name => icons.getClassWithColor(name),
     downloadFile: link => location.assign(link),

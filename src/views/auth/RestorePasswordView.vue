@@ -29,6 +29,7 @@
 
 <script>
 import BtnLoader from '@/components/BtnLoader'
+import { RESTORE_PASSWORD } from '@/store/actions.type'
 
 export default {
   components: { BtnLoader },
@@ -37,7 +38,7 @@ export default {
   }),
   methods: {
     async restorePassword() {
-      let r = await this.$store.dispatch('recoverPassword', { email: this.email })
+      let r = await this.$store.dispatch(RESTORE_PASSWORD, { email: this.email })
       if (r) this.$router.push('/login')
     }
   }

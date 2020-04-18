@@ -57,6 +57,9 @@ import { required } from 'vuelidate/lib/validators'
 import AuthDataEdit from '../components/AuthDataEdit'
 import BtnLoader from '../components/BtnLoader'
 import baseMixin from '@/mixins/base'
+import {
+  UPDATE_PROFILE,
+} from '@/store/actions.type'
 
 export default {
   components: { AuthDataEdit, BtnLoader },
@@ -94,7 +97,7 @@ export default {
 
   methods: {
     updateData() {
-      this.$store.dispatch('updateData', {
+      this.$store.dispatch(UPDATE_PROFILE, {
         name: this.newName,
         surname: this.newSurname
       })

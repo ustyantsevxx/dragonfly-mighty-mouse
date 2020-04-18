@@ -51,6 +51,7 @@
 
 <script>
 import BtnLoader from '@/components/BtnLoader'
+import { LOGIN, LOGIN_WITH_GOOGLE } from '@/store/actions.type'
 
 export default {
   components: { BtnLoader },
@@ -74,14 +75,14 @@ export default {
 
   methods: {
     async sign() {
-      let signed = await this.$store.dispatch('signIn', {
+      let signed = await this.$store.dispatch(LOGIN, {
         email: this.email,
         password: this.password
       })
       if (!signed) this.password = null
     },
     googleSignIn() {
-      this.$store.dispatch('googleSignIn')
+      this.$store.dispatch(LOGIN_WITH_GOOGLE)
     }
   }
 }

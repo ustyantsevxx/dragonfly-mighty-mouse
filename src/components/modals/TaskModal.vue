@@ -87,6 +87,11 @@ import BtnLoader from '@/components/BtnLoader'
 import ConfirmBtn from '@/components/ConfirmationButton'
 import modalMixin from '@/mixins/base'
 import WysiwygEditor from '@/components/WysiwygEditor'
+import {
+  ADD_TASK,
+  UPDATE_TASK,
+  DELETE_TASK
+} from '@/store/actions.type'
 
 export default {
   components: { BtnLoader, WysiwygEditor, ConfirmBtn },
@@ -153,7 +158,7 @@ export default {
       this.$refs['file-input'].reset()
     },
     async addTask() {
-      await this.$store.dispatch('addTask', {
+      await this.$store.dispatch(ADD_TASK, {
         name: this.name,
         score: this.score,
         number: this.number,
@@ -164,7 +169,7 @@ export default {
       })
     },
     async editTask() {
-      await this.$store.dispatch('editTask', {
+      await this.$store.dispatch(UPDATE_TASK, {
         id: this.task.id,
         name: this.name,
         score: this.score,
@@ -177,7 +182,7 @@ export default {
       })
     },
     async deleteTask() {
-      this.$store.dispatch('deleteTask', this.task.id)
+      this.$store.dispatch(DELETE_TASK, this.task.id)
       this.resetModal('task-modal')
     },
   },

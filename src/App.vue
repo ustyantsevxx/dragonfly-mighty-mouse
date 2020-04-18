@@ -9,6 +9,7 @@
 
 <script>
 import Navbar from './components/Navbar'
+import { BIND_SUBJECTS } from '@/store/actions.type'
 
 export default {
   components: { Navbar },
@@ -24,8 +25,8 @@ export default {
   },
 
   beforeCreate() {
-    if (this.$store.state.teacher.subjects === null && this.$store.state.user.uid)
-      this.$store.dispatch('bindSubjects')
+    if (this.$store.state.subjects === null && this.$store.state.user.uid)
+      this.$store.dispatch(BIND_SUBJECTS)
   },
 
   methods: {
@@ -46,7 +47,8 @@ export default {
     async translate(text) {
       const API = process.env.VUE_APP_YANDEX_TRANSLATE_API_KEY
       try {
-        let resp = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${API}&text=${text}&lang=en-ru`)
+        const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${API}&text=${text}&lang=en-ru`;
+        let resp = await fetch(url)
         resp = await resp.json()
         return resp.text.join(' ')
       } catch { return text }

@@ -79,7 +79,12 @@
 
 <script>
 import { minLength, required, sameAs, email } from 'vuelidate/lib/validators'
-import BtnLoader from '../components/BtnLoader';
+import BtnLoader from '../components/BtnLoader'
+import {
+  UPDATE_EMAIL,
+  UPDATE_PASSWORD,
+  VERIFY_EMAIL
+} from '@/store/actions.type'
 
 export default {
   components: { BtnLoader },
@@ -127,13 +132,13 @@ export default {
     async updateData() {
       let success
       if (this.selectedRadio === 'password') {
-        success = await this.$store.dispatch('updatePassword', {
+        success = await this.$store.dispatch(UPDATE_PASSWORD, {
           old: this.oldPassword,
           new: this.p.newPassword
         })
       }
       else {
-        success = await this.$store.dispatch('updateEmail', {
+        success = await this.$store.dispatch(UPDATE_EMAIL, {
           password: this.oldPassword,
           newEmail: this.newEmail
         })
@@ -142,7 +147,7 @@ export default {
       if (!success) this.oldPassword = null
     },
     verifyEmail() {
-      this.$store.dispatch('verifyEmail')
+      this.$store.dispatch(VERIFY_EMAIL)
     },
     resetData() {
       this.newEmail = this.email

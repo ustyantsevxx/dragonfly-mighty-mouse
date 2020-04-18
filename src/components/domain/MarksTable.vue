@@ -25,6 +25,9 @@
 
 <script>
 import { mapState } from 'vuex'
+import {
+  MARK_TASK
+} from '@/store/actions.type'
 
 export default {
   props: {
@@ -36,9 +39,9 @@ export default {
 
   computed: {
     ...mapState({
-      groups: s => s.teacher.groups,
-      marks: s => s.teacher.marks,
-      tasks: s => s.teacher.tasks
+      groups: s => s.groups,
+      marks: s => s.marks,
+      tasks: s => s.tasks
     }),
 
     tableHeaders() {
@@ -100,7 +103,7 @@ export default {
         subjectId: this.$route.params.id,
         score: data.field.score
       }
-      this.$store.dispatch('markTask', markData)
+      this.$store.dispatch(MARK_TASK, markData)
     }
   }
 }

@@ -94,7 +94,7 @@ export default {
   }),
 
   computed: {
-    subjects() { return this.$store.state.teacher.subjects },
+    subjects() { return this.$store.state.subjects },
     subjectsByCourse() {
       if (this.subjects) {
         if (this.$route.query.course) {

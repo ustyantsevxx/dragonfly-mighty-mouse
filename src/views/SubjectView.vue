@@ -75,6 +75,11 @@ import { num2str } from '@/assets/functions'
 import PageLoader from '@/components/PageLoader'
 import SubjectModal from '@/components/modals/SubjectModal'
 import { mapState } from 'vuex'
+import {
+  BIND_GROUPS,
+  BIND_MARKS,
+  BIND_TASKS
+} from '@/store/actions.type'
 
 export default {
   components: { PageLoader, SubjectModal },
@@ -85,14 +90,14 @@ export default {
 
   computed: {
     subj() {
-      return this.$store.state.teacher.subjects
-        ? this.$store.state.teacher.subjects.find(x => x.id === this.$route.params.id)
+      return this.$store.state.subjects
+        ? this.$store.state.subjects.find(x => x.id === this.$route.params.id)
         : null
     },
     ...mapState({
       isTeacher: s => s.user.isTeacher,
-      tasks: s => s.teacher.tasks,
-      groups: s => s.teacher.groups
+      tasks: s => s.tasks,
+      groups: s => s.groups
     }),
     visibleTasksCount() {
       return this.tasks.filter(x => x.visible).length
@@ -105,9 +110,9 @@ export default {
 
   beforeCreate() {
     let id = this.$route.params.id
-    this.$store.dispatch('bindGroup', id)
-    this.$store.dispatch('bindMarks', id)
-    this.$store.dispatch('bindTasks', id)
+    this.$store.dispatch(BIND_GROUPS, id)
+    this.$store.dispatch(BIND_MARKS, id)
+    this.$store.dispatch(BIND_TASKS, id)
   },
 
   mounted() {

@@ -3,7 +3,7 @@
     <b-container v-if="subj && groups && tasks">
       <b-row>
         <b-col>
-          <h1 class="header">
+          <h1>
             {{ subj.name }}
             <b-icon
               v-if="isTeacher"
@@ -136,7 +136,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import 'bootstrap/scss/bootstrap';
 .header {
   margin-bottom: 0;
   &:hover {
@@ -146,21 +145,15 @@ export default {
   }
 }
 
-@media screen and (max-width: 1080px) {
-  .header {
-    font-size: 1.5rem;
-  }
-}
-
 /deep/ {
   .link-active {
     transition: background-color 0.17s ease-in-out;
-
-    background: $dark !important;
-    color: $white !important;
+    background: var(--dark) !important;
+    color: white !important;
   }
 
   li a {
+    color: black;
     transition: background-color 0.17s ease-in-out;
     border-radius: 0.25rem;
 
@@ -168,8 +161,6 @@ export default {
       color: black;
       background-color: #e9ecef;
     }
-
-    color: black;
   }
 }
 
@@ -178,6 +169,7 @@ export default {
     font-size: 1em;
   }
 }
+
 .over {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;

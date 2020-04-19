@@ -7,30 +7,32 @@
             class="d-flex justify-content-between align-items-center"
           >
             <div>
-              <b-nav v-if="!isMobile()" card-header pills>
-                <b-nav-item
-                  class="hover"
-                  :active="openedGroupIndex === i"
-                  v-for="(group, i) in groups"
-                  :key="i"
-                  @click="openedGroupIndex = i"
-                >
-                  {{ group.name }}
-                </b-nav-item>
-              </b-nav>
-              <b-dd v-else class="m-md-2" variant="primary">
-                <template #button-content>
-                  {{ groups[openedGroupIndex].name }}
-                </template>
-                <b-dd-header>Выберите группу</b-dd-header>
-                <b-dd-item-btn
-                  @click="openedGroupIndex = i"
-                  v-for="(group, i) in groups"
-                  :key="i"
-                >
-                  {{ group.name }}
-                </b-dd-item-btn>
-              </b-dd>
+              <div v-if="groups && groups.length">
+                <b-nav v-if="!isMobile()" card-header pills>
+                  <b-nav-item
+                    class="hover"
+                    :active="openedGroupIndex === i"
+                    v-for="(group, i) in groups"
+                    :key="i"
+                    @click="openedGroupIndex = i"
+                  >
+                    {{ group.name }}
+                  </b-nav-item>
+                </b-nav>
+                <b-dd v-else class="m-md-2" variant="primary">
+                  <template #button-content>
+                    {{ selectedGroup.name }}
+                  </template>
+                  <b-dd-header>Выберите группу</b-dd-header>
+                  <b-dd-item-btn
+                    @click="openedGroupIndex = i"
+                    v-for="(group, i) in groups"
+                    :key="i"
+                  >
+                    {{ group.name }}
+                  </b-dd-item-btn>
+                </b-dd>
+              </div>
             </div>
             <b-link @click.prevent="openModal()">Добавить</b-link>
           </b-card-header>
@@ -52,7 +54,7 @@
             <marks-table :group-index="openedGroupIndex" />
           </b-card-body>
           <b-card-text v-else class="text-center text-muted py-4">
-            Список групп пуст
+            Список групп пуст.
           </b-card-text>
         </b-card>
       </b-col>

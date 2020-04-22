@@ -136,7 +136,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.header {
+h1 {
   margin-bottom: 0;
   &:hover {
     .hover-icon {

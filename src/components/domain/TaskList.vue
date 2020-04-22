@@ -95,8 +95,10 @@
             v-if="isTeacher"
             class="adder text-center py-1 border-0"
           >
-            <b-icon icon="plus" scale="1.6" />
-            <span class="ml-2">Создать</span>
+            <div>
+              <b-icon icon="plus" scale="1.6" />
+              <span class="ml-2">Создать работу</span>
+            </div>
           </b-list-group-item>
         </b-list-group>
       </b-col>
@@ -195,20 +197,37 @@ export default {
   .adder {
     cursor: pointer;
     border-top: none;
+    transition: color 0.3s, background-color 0.3s;
+
+    &:hover {
+      color: var(--primary);
+
+      background-color: #f8f9fa;
+    }
   }
 
   .lab-item {
     padding: 0;
-
     transition: background-color 0.17s;
 
+    &:last-of-type {
+      header {
+        border-bottom: none;
+      }
+    }
+
     header {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.125);
       display: flex;
+      border-bottom: 1px solid #dddddd;
       background-color: #f8f9fa;
+      transition: background-color 0.1s ease-in-out;
       align-items: center;
       padding: 12px 20px;
       cursor: pointer;
+
+      &:hover {
+        background-color: #f8f9fa;
+      }
 
       .description {
         margin-left: 1em;
@@ -237,10 +256,6 @@ export default {
         opacity: 0;
         transition: opacity 0.2s;
       }
-
-      &:hover {
-        background-color: #f8f9fa;
-      }
     }
 
     .collapsed {
@@ -264,20 +279,6 @@ export default {
     }
   }
 
-  .add-item-cont {
-    padding: 0.1em;
-    background-color: #f8f9fa;
-
-    .add-item {
-      justify-content: center;
-      align-items: center;
-
-      .bi {
-        height: 2em;
-        width: 2em;
-      }
-    }
-  }
   .task-description-p {
     white-space: pre-wrap;
   }

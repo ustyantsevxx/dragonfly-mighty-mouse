@@ -58,7 +58,8 @@ export default {
     ...mapState({
       groups: s => s.groups,
       marks: s => s.marks,
-      tasks: s => s.tasks
+      tasks: s => s.tasks,
+      isTeacher: s => s.user.isTeacher
     }),
 
     tableHeaders() {
@@ -87,7 +88,7 @@ export default {
           thClass: `hide-sort-icon text-nowrap ${
             t.visible ? '' : ' text-danger'
           }`,
-          tdClass: 'hoverable-cell'
+          tdClass: this.isTeacher ? 'hoverable-cell' : 'text-center'
         })
       )
 
@@ -123,6 +124,7 @@ export default {
 
   methods: {
     taskClickAction(data) {
+      if (!this.isTeacher) return
       const markData = {
         studentId: data.item.id,
         taskId: data.field.key,
@@ -174,10 +176,6 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-
-        .score-value {
-          transition: all 1s ease-in-out;
-        }
       }
     }
   }

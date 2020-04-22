@@ -54,7 +54,12 @@ const routes = [
       {
         path: 'groups',
         component: () => import('@/components/domain/GroupList'),
-        meta: { requiresAuth: true, dynamicTitle: true }
+        meta: { requiresAuth: true, requiresTeacher: true, dynamicTitle: true }
+      },
+      {
+        path: 'my-group',
+        component: () => import('@/components/domain/GroupList'),
+        meta: { requiresAuth: true, requiresStudent: true, dynamicTitle: true }
       }
     ]
   },

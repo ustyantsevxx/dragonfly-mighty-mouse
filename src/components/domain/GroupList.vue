@@ -4,6 +4,7 @@
       <b-col>
         <b-card no-body class="shadow-sm border-0">
           <b-card-header
+            v-if="isTeacher"
             class="d-flex bg-white justify-content-between align-items-center"
           >
             <div>

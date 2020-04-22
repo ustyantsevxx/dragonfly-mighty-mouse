@@ -2,9 +2,9 @@
   <div>
     <b-row>
       <b-col>
-        <b-card no-body>
+        <b-card no-body class="shadow-sm border-0">
           <b-card-header
-            class="d-flex justify-content-between align-items-center"
+            class="d-flex bg-white justify-content-between align-items-center"
           >
             <div>
               <div v-if="groups && groups.length">

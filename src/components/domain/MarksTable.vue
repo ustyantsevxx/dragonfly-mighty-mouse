@@ -15,7 +15,7 @@
       </template>
       <template #cell(index)="data">{{ data.index + 1 }}</template>
       <template #cell()="data">
-        <div class="score-cell" @click="test(data)">
+        <div class="score-cell" @click="markEmptyTask(data)">
           <div class="score-value">{{ data.value }}</div>
         </div>
       </template>
@@ -65,8 +65,9 @@ export default {
           name: t.name,
           score: t.score,
           sortable: true,
-          thClass:
-            'hide-sort-icon  text-nowrap' + (t.visible ? '' : ' text-danger'),
+          thClass: `hide-sort-icon text-nowrap ${
+            t.visible ? '' : ' text-danger'
+          }`,
           tdClass: 'hoverable-cell'
         })
       )
@@ -99,7 +100,7 @@ export default {
   },
 
   methods: {
-    test(data) {
+    markEmptyTask(data) {
       let markData = {
         studentId: data.item.id,
         taskId: data.field.key,

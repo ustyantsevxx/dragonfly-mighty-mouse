@@ -2,101 +2,103 @@
   <div>
     <b-row>
       <b-col>
-        <b-list-group v-if="labListSorted.length">
-          <b-list-group-item
-            class="lab-item"
-            v-for="(task, i) in labListSorted"
-            :key="i"
-          >
-            <header
-              v-b-toggle="`acc-${i}`"
-              :class="{ hiddenLab: !task.visible }"
+        <b-list-group class="shadow-sm">
+          <template v-if="labListSorted.length">
+            <b-list-group-item
+              class="lab-item border-0"
+              v-for="(task, i) in labListSorted"
+              :key="i"
             >
-              <b class="mr-1">{{ task.number }}.</b>
-              <span class="text-nowrap">{{ task.name }}</span>
-              <span class="description overflow">
-                {{ taskDescriptionMapped(task.description) }}
-              </span>
-              <b-badge variant="primary" pill>
-                {{ form(task.score, wordForms) }}
-              </b-badge>
-              <b-icon
-                v-if="isTeacher"
-                :icon="task.visible ? 'eye-fill' : 'eye-slash-fill'"
-                :variant="task.visible ? 'success' : 'danger'"
-                class="icon-vis ml-2"
-                scale="1.5"
-              />
-              <b-icon icon="arrow-bar-up" class="hider" />
-            </header>
-            <b-collapse :id="`acc-${i}`" accordion="lab-list">
-              <div class="collapse-content">
-                <section>
-                  <h3>
-                    Лабораторная работа №{{ task.number }} &mdash;
-                    <b>{{ task.name }}</b>
-                  </h3>
-                  <p class="mt-3">
-                    <wysiwyg-editor
-                      :editable="false"
-                      :content="task.description"
-                    />
-                  </p>
-                  <b>Награда</b>
-                  <p>{{ form(task.score, wordForms) }}</p>
-                  <template v-if="task.files && task.files.length">
-                    <b>Прикрепленные файлы</b>
-                    <b-card-group columns class="mt-2">
-                      <b-card
-                        v-for="(file, j) in task.files"
-                        @click="downloadFile(file.link)"
-                        :key="j"
-                        class="file"
-                      >
-                        <span
-                          :class="getClass(file.name)"
-                          class="mr-3 ficon"
-                        ></span>
-                        <span>{{ file.name }}</span>
-                      </b-card>
-                    </b-card-group>
-                  </template>
-                </section>
-                <footer
+              <header
+                v-b-toggle="`acc-${i}`"
+                :class="{ hiddenLab: !task.visible }"
+              >
+                <b class="mr-1">{{ task.number }}.</b>
+                <span class="text-nowrap">{{ task.name }}</span>
+                <span class="description overflow">
+                  {{ taskDescriptionMapped(task.description) }}
+                </span>
+                <b-badge variant="primary" pill>
+                  {{ form(task.score, wordForms) }}
+                </b-badge>
+                <b-icon
                   v-if="isTeacher"
-                  class="d-flex justify-content-end align-items-center"
-                >
-                  <b-form-checkbox
-                    class="mr-3"
-                    switch
-                    v-model="task.visible"
-                    @change="toggleTaskVisibility(task.id, $event)"
+                  :icon="task.visible ? 'eye-fill' : 'eye-slash-fill'"
+                  :variant="task.visible ? 'success' : 'danger'"
+                  class="icon-vis ml-2"
+                  scale="1.5"
+                />
+                <b-icon icon="arrow-bar-up" class="hider" />
+              </header>
+              <b-collapse :id="`acc-${i}`" accordion="lab-list">
+                <div class="collapse-content">
+                  <section>
+                    <h3>
+                      Лабораторная работа №{{ task.number }} &mdash;
+                      <b>{{ task.name }}</b>
+                    </h3>
+                    <p class="mt-3">
+                      <wysiwyg-editor
+                        :editable="false"
+                        :content="task.description"
+                      />
+                    </p>
+                    <b>Награда</b>
+                    <p>{{ form(task.score, wordForms) }}</p>
+                    <template v-if="task.files && task.files.length">
+                      <b>Прикрепленные файлы</b>
+                      <b-card-group columns class="mt-2">
+                        <b-card
+                          v-for="(file, j) in task.files"
+                          @click="downloadFile(file.link)"
+                          :key="j"
+                          class="file"
+                        >
+                          <span
+                            :class="getClass(file.name)"
+                            class="mr-3 ficon"
+                          ></span>
+                          <span>{{ file.name }}</span>
+                        </b-card>
+                      </b-card-group>
+                    </template>
+                  </section>
+                  <footer
+                    v-if="isTeacher"
+                    class="d-flex justify-content-end align-items-center"
                   >
-                    <span :class="{ 'text-danger': !task.visible }">
-                      {{ task.visible ? 'Открыта' : 'Закрыта' }}
-                    </span>
-                  </b-form-checkbox>
-                  <b-btn variant="outline-dark" @click="openModal(i)">
-                    Редактировать
-                  </b-btn>
-                </footer>
-              </div>
-            </b-collapse>
+                    <b-form-checkbox
+                      class="mr-3"
+                      switch
+                      v-model="task.visible"
+                      @change="toggleTaskVisibility(task.id, $event)"
+                    >
+                      <span :class="{ 'text-danger': !task.visible }">
+                        {{ task.visible ? 'Открыта' : 'Закрыта' }}
+                      </span>
+                    </b-form-checkbox>
+                    <b-btn variant="outline-dark" @click="openModal(i)">
+                      Редактировать
+                    </b-btn>
+                  </footer>
+                </div>
+              </b-collapse>
+            </b-list-group-item>
+          </template>
+          <template v-else>
+            <b-card-text class="empty-message text-center text-muted py-4 mb-0">
+              Список лабораторных работ пуст.
+            </b-card-text>
+          </template>
+          <b-list-group-item
+            @click="openModal(null)"
+            v-if="isTeacher"
+            class="adder text-center py-1 border-0"
+          >
+            <b-icon icon="plus" scale="1.6" />
+            <span class="ml-2">Создать</span>
           </b-list-group-item>
         </b-list-group>
-        <b-card v-else>
-          <b-card-text class="text-center text-muted py-4">
-            Список лабораторных работ пуст.
-          </b-card-text>
-        </b-card>
-        <b-list-group-item
-          @click="openModal(null)"
-          v-if="isTeacher"
-          class="adder text-center py-1"
-        >
-          <b-icon icon="plus" scale="1.6" />
-          <span class="ml-2">Создать</span>
-        </b-list-group-item>
       </b-col>
     </b-row>
 
@@ -174,6 +176,10 @@ export default {
     white-space: nowrap;
   }
 
+  .empty-message {
+    background: white !important;
+  }
+
   @media screen and (max-width: 1080px) {
     .overflow {
       display: none;
@@ -193,9 +199,11 @@ export default {
 
   .lab-item {
     padding: 0;
+
     transition: background-color 0.17s;
 
     header {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.125);
       display: flex;
       background-color: #f8f9fa;
       align-items: center;

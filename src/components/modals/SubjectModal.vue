@@ -75,12 +75,10 @@ export default {
       this.subject ? this.editSubject() : this.addSubject()
     },
     async addSubject() {
-      console.log(1)
       await this.$store.dispatch(ADD_SUBJECT, {
         name: this.name,
         course: this.course
       })
-      console.log(2)
       this.resetData()
     },
     async editSubject() {

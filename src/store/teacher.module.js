@@ -9,6 +9,7 @@ import {
   UPDATE_TASK,
   DELETE_TASK,
   MARK_TASK,
+  DELETE_MARK,
   TOGGLE_TASK_VISIBILITY,
   ADD_GROUP,
   UPDATE_GROUP,
@@ -91,6 +92,10 @@ const taskActions = {
       subject: db.collection('subjects').doc(markData.subjectId),
       score: markData.score
     })
+  },
+
+  async [DELETE_MARK](_, markId) {
+    await db.collection('marks').doc(markId).delete()
   },
 
   async [UPLOAD_TASK_FILES]({ state }, files) {

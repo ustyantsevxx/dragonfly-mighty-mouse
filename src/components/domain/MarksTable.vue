@@ -4,7 +4,7 @@
       :fields="tableHeaders"
       :items="tableItems"
       sort-by="name"
-      responsive
+      responsive="sm"
       bordered
       v-if="marks && tasks"
       small
@@ -14,18 +14,32 @@
         <div v-b-tooltip.hover="data.field.name">{{ data.label }}</div>
       </template>
       <template #cell(index)="data">{{ data.index + 1 }}</template>
+      <template #cell(name)="data">{{ data.value }}</template>
+
       <template #cell()="data">
-        <div class="score-cell" @click="markEmptyTask(data)">
-          <div class="score-value">{{ data.value }}</div>
+        <div
+          class="score-cell"
+          :id="data.item.id + data.field.key"
+          @click="taskClickAction(data)"
+        >
+          <div class="score-value">{{ data.value.score }}</div>
         </div>
       </template>
+
+      <template #cell(total)="data">{{ data.value }}</template>
     </b-table>
+    <b-popover :target="popoverTarget" ref="popover">
+      <b-button size="sm" variant="danger" @click="deleteMark()">
+        Удалить
+      </b-button>
+    </b-popover>
+    <div class="d-none" id="popover-initial"></div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { MARK_TASK } from '@/store/actions.type'
+import { MARK_TASK, DELETE_MARK } from '@/store/actions.type'
 
 export default {
   props: {
@@ -34,6 +48,11 @@ export default {
       required: true
     }
   },
+
+  data: () => ({
+    popoverTarget: 'popover-initial',
+    selectedMark: null
+  }),
 
   computed: {
     ...mapState({
@@ -83,16 +102,19 @@ export default {
     },
 
     tableItems() {
-      return this.groups[this.groupIndex].students.map(t => {
+      return this.groups[this.groupIndex].students.map(student => {
         let row = {
-          name: `${t.surname} ${t.name}`,
-          id: t.id,
+          name: `${student.surname} ${student.name}`,
+          id: student.id,
           total: 0
         }
-        let studentsMarks = this.marks.filter(m => m.student.id === t.id)
-        studentsMarks.forEach(m => {
-          row[m.task.id] = m.score
-          row.total += m.score
+        let studentsMarks = this.marks.filter(m => m.student.id === student.id)
+        studentsMarks.forEach(mark => {
+          row[mark.task.id] = {
+            id: mark.id,
+            score: mark.score
+          }
+          row.total += mark.score
         })
         return row
       })
@@ -100,15 +122,31 @@ export default {
   },
 
   methods: {
-    markEmptyTask(data) {
-      let markData = {
+    taskClickAction(data) {
+      const markData = {
         studentId: data.item.id,
         taskId: data.field.key,
         groupId: this.groups[this.groupIndex].id,
         subjectId: this.$route.params.id,
         score: data.field.score
       }
-      this.$store.dispatch(MARK_TASK, markData)
+
+      if (data.value) {
+        this.$refs.popover.$emit('close')
+        this.popoverTarget = `${data.item.id}${data.field.key}`
+        this.selectedMark = data.item[data.field.key]
+        this.$nextTick(() => {
+          this.$nextTick(() => {
+            this.$refs.popover.$emit('open')
+          })
+        })
+      } else {
+        this.$store.dispatch(MARK_TASK, markData)
+      }
+    },
+    async deleteMark() {
+      await this.$store.dispatch(DELETE_MARK, this.selectedMark.id)
+      this.$refs.popover.$emit('close')
     }
   }
 }
@@ -118,6 +156,7 @@ export default {
 /deep/ {
   .marks-table {
     width: max-content;
+
     .hoverable-cell {
       cursor: pointer;
       transition: background-color 0.09s ease-in-out;
@@ -135,6 +174,10 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
+
+        .score-value {
+          transition: all 1s ease-in-out;
+        }
       }
     }
   }

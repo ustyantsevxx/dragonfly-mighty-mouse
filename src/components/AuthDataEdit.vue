@@ -59,25 +59,27 @@
           />
         </b-form-group>
       </template>
-      <hr />
 
-      <b-form-group label="Текущий пароль" label-for="old-password-field">
-        <b-form-input
-          id="old-password-field"
-          type="password"
-          :state="inputState($v.oldPassword)"
-          v-model.trim="$v.oldPassword.$model"
+      <template v-if="!isInvalid">
+        <hr />
+        <b-form-group label="Текущий пароль" label-for="old-password-field">
+          <b-form-input
+            id="old-password-field"
+            type="password"
+            :state="inputState($v.oldPassword)"
+            v-model.trim="$v.oldPassword.$model"
+          />
+        </b-form-group>
+
+        <btn-loader
+          variant="dark"
+          block
+          v-if="!$v.oldPassword.$invalid"
+          @click="updateData"
+          load="btn__updateAuthData"
+          or="Обновить"
         />
-      </b-form-group>
-
-      <btn-loader
-        variant="dark"
-        block
-        @click="updateData"
-        v-if="!(isInvalid || $v.oldPassword.$invalid)"
-        load="btn__updateAuthData"
-        or="Обновить"
-      />
+      </template>
     </b-form>
   </b-card>
 </template>

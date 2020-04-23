@@ -3,7 +3,7 @@
     centered
     @show="beforeShow"
     v-bind="$attrs"
-    size="lg"
+    size="xl"
     no-close-on-backdrop
     :title="`${task ? 'Измен' : 'Добав'}ить лабораторную работу`"
     @hide="resetData"

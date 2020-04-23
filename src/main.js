@@ -2,7 +2,18 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import { isMobile } from '@/assets/functions'
+
 Vue.config.productionTip = false
+Vue.prototype.isMobile = isMobile
+
+Vue.directive('mobile-class', {
+  inserted(el, { value }) {
+    if (isMobile()) {
+      el.classList = value
+    }
+  }
+})
 
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 Vue.use(BootstrapVue)

@@ -2,52 +2,14 @@
   <main>
     <b-container>
       <b-row>
-        <b-col md="8">
-          <b-nav tabs class="border-0 course-list-nav">
-            <b-container class="px-0">
-              <b-row no-gutters class="d-flex justify-content-between">
-                <b-col md="auto" order-md="2">
-                  <div class="d-flex add-search">
-                    <div>
-                      <li class="filter" v-if="subjects && subjects.length">
-                        <b-input-group size="sm">
-                          <b-input-group-prepend is-text>
-                            <b-icon icon="search" />
-                          </b-input-group-prepend>
-                          <b-input type="search" v-model.trim="filter" />
-                        </b-input-group>
-                      </li>
-                    </div>
-                    <div class="add-btn-container">
-                      <b-link
-                        v-if="isTeacher"
-                        class="ml-2"
-                        v-b-modal.modal-subject
-                      >
-                        Добавить
-                      </b-link>
-                    </div>
-                  </div>
-                </b-col>
-                <b-col md="auto" order-md="1">
-                  <div class="d-flex">
-                    <b-nav-item to="/subjects" exact-active-class="active">
-                      Все курсы
-                    </b-nav-item>
-                    <b-nav-item
-                      v-for="(c, i) in coursesList"
-                      :key="i"
-                      :to="`?course=${c}`"
-                      exact-active-class="active"
-                    >
-                      {{ c }}
-                    </b-nav-item>
-                  </div>
-                </b-col>
-              </b-row>
-            </b-container>
-          </b-nav>
+        <b-col>
+          <h1 class="m-0" v-mobile-class="'text-center'">Мои дисциплины</h1>
+          <hr />
+        </b-col>
+      </b-row>
 
+      <b-row class="mb-3">
+        <b-col md="8">
           <b-table
             :fields="tableHeaders"
             :items="subjectsByCourse"
@@ -55,8 +17,9 @@
             sort-by="course"
             show-empty
             hover
-            bordered
-            class="bg-white pointer"
+            thead-class="border-bottom"
+            borderless
+            class="bg-white pointer shadow-sm rounded"
             @row-clicked.once="$router.push(`subjects/${$event.id}`)"
           >
             <template #empty>
@@ -74,6 +37,55 @@
               <template v-else>{{ data.item.name }}</template>
             </template>
           </b-table>
+        </b-col>
+
+        <b-col md="4">
+          <b-card
+            class="border-0 shadow-sm mb-3"
+            v-if="subjects && subjects.length > 1"
+          >
+            <div class="mb-2 font-weight-bold">Курс обучения</div>
+            <b-nav pills class="tabs-nav">
+              <b-nav-item
+                to="/subjects"
+                exact-active-class="active link-active"
+              >
+                Все
+              </b-nav-item>
+              <b-nav-item
+                v-for="(c, i) in coursesList"
+                :key="i"
+                :to="`?course=${c}`"
+                exact-active-class="active link-active"
+              >
+                {{ c }}
+              </b-nav-item>
+            </b-nav>
+          </b-card>
+
+          <b-card class="border-0 shadow-sm">
+            <div v-if="subjects && subjects.length">
+              <b-input-group>
+                <b-input-group-prepend is-text>
+                  <b-icon icon="search" />
+                </b-input-group-prepend>
+                <b-input
+                  type="search"
+                  v-model.trim="filter"
+                  placeholder="Поиск по названию"
+                />
+              </b-input-group>
+            </div>
+            <b-btn
+              variant="success"
+              block
+              class="mt-3"
+              v-if="isTeacher"
+              v-b-modal.modal-subject
+            >
+              Добавить дисциплину
+            </b-btn>
+          </b-card>
         </b-col>
       </b-row>
     </b-container>
@@ -142,13 +154,7 @@ export default {
 .filter {
   margin-left: auto;
   align-self: flex-end;
-}
-
-.course-list-nav {
-  align-items: center;
-  li a {
-    color: #212529 !important;
-  }
+  list-style: none;
 }
 
 .add-btn-container {
@@ -156,9 +162,24 @@ export default {
   align-items: center;
 }
 
-/deep/ mark {
-  padding: 0 !important;
-  background: rgb(231, 231, 231) !important;
+/deep/ {
+  .link-active {
+    transition: background-color 0.17s ease-in-out;
+    color: white !important;
+  }
+
+  li a {
+    color: black;
+    transition: background-color 0.17s ease-in-out;
+
+    &:hover {
+      background-color: #e9ecef;
+    }
+  }
+  mark {
+    padding: 0 !important;
+    background: rgb(231, 231, 231) !important;
+  }
 }
 
 @media screen and (max-width: 768px) {

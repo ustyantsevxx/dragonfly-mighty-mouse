@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mb-5">
     <b-row>
       <b-col>
         <b-list-group class="shadow-sm">

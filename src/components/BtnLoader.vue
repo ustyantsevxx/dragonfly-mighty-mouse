@@ -1,15 +1,13 @@
 <template>
   <div>
-    <b-btn
+    <b-button
       v-bind="$attrs"
       @click="$emit('click')"
       :disabled="loadingView === load || $attrs.disabled"
+      :loading="loadingView === load"
     >
-      <b-spinner v-if="loadingView === load" small class="align-middle" />
-      <template v-else>
-        <slot>{{ or }}</slot>
-      </template>
-    </b-btn>
+      <slot>{{ or }}</slot>
+    </b-button>
   </div>
 </template>
 

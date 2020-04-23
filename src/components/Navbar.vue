@@ -1,21 +1,26 @@
 <template>
-  <b-navbar toggleable="sm" type="dark" class="nav shadow-sm" sticky>
-    <b-navbar-brand to="/" exact active-class="c">
-      Dragonfly Mighty Mouse
-    </b-navbar-brand>
-    <b-navbar-toggle target="collapse" />
-    <b-collapse id="collapse" is-nav>
-      <b-navbar-nav>
-        <b-nav-item to="/subjects" exact>Дисциплины</b-nav-item>
-      </b-navbar-nav>
-      <b-navbar-nav class="ml-auto">
-        <b-nav-item v-if="!signed" to="/login">Войти</b-nav-item>
-        <template v-else>
-          <b-nav-item to="/account">{{ name + ' ' + surname }}</b-nav-item>
-          <b-nav-item @click="signOut">Выйти</b-nav-item>
-        </template>
-      </b-navbar-nav>
-    </b-collapse>
+  <b-navbar type="is-dark" sticky class="nav">
+    <template #brand>
+      <b-navbar-item tag="router-link" to="/">
+        Dragonfly Mighty Mouse
+      </b-navbar-item>
+    </template>
+    <template #start>
+      <b-navbar-item tag="router-link" to="/subjects" exact>
+        Дисциплины
+      </b-navbar-item>
+    </template>
+    <template #end>
+      <b-navbar-item v-if="!signed" tag="router-link" to="/login">
+        Войти
+      </b-navbar-item>
+      <template v-else>
+        <b-navbar-item tag="router-link" to="/account">
+          {{ name + ' ' + surname }}
+        </b-navbar-item>
+        <b-navbar-item @click="signOut">Выйти</b-navbar-item>
+      </template>
+    </template>
   </b-navbar>
 </template>
 

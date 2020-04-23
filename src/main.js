@@ -15,10 +15,9 @@ Vue.directive('mobile-class', {
   }
 })
 
-import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
-Vue.use(BootstrapVue)
-Vue.use(BootstrapVueIcons)
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import Buefy from 'buefy'
+import 'buefy/dist/buefy.css'
+Vue.use(Buefy)
 
 import firebase from 'firebase/app'
 import 'firebase/auth'

@@ -1,51 +1,62 @@
 <template>
   <main>
-    <b-container>
-      <b-row align-h="center">
-        <b-col sm="10" md="7" lg="6" xl="5">
-          <b-card class="p-3 shadow-sm border-0">
-            <h2 class="mb-4 text-center">Вход в систему</h2>
-            <b-form @keydown.enter="sign">
-              <b-form-group label="Эл. почта">
-                <b-form-input type="email" required v-model="email" />
-              </b-form-group>
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-half">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-header-title is-centered">
+                <h1 class="title">Вход в систему</h1>
+              </div>
+            </div>
+            <div class="card-content">
+              <b-field label="Эл. почта">
+                <b-input type="email" required v-model="email" />
+              </b-field>
 
-              <b-form-group label="Пароль">
-                <b-form-input type="password" required v-model="password" />
-              </b-form-group>
+              <b-field label="Пароль">
+                <b-input type="password" required v-model="password" />
+              </b-field>
 
               <div class="mt-4">
                 <btn-loader
                   @click="sign"
-                  size="lg"
-                  variant="primary"
-                  block
+                  type="is-primary"
+                  expanded
                   :disabled="!!loading"
                   load="btn__signIn"
                   or="Войти"
                 />
               </div>
-              <div class="mt-2 d-flex justify-content-between">
-                <b-link to="/restore">Забыли пароль?</b-link>
-                <b-link to="/register">Первый раз?</b-link>
+            </div>
+            <div class="card-footer">
+              <div class="card-footer-item">
+                <router-link to="/restore">
+                  Забыли пароль?
+                </router-link>
               </div>
-              <!-- <div class="separator">или</div>
-              <div>
-                <btn-loader
-                  @click="googleSignIn"
-                  variant="light"
-                  block
-                  :disabled="!!loading"
-                  load="btn-googleSign"
-                >
-                  <img src="@/assets/glogo.webp" />
-                </btn-loader>
-              </div>-->
-            </b-form>
-          </b-card>
-        </b-col>
-      </b-row>
-    </b-container>
+              <div class="card-footer-item">
+                <router-link to="/register">
+                  Первый раз?
+                </router-link>
+              </div>
+            </div>
+            <!-- <div class="separator">или</div>
+            <div>
+              <btn-loader
+                @click="googleSignIn"
+                variant="light"
+                block
+                :disabled="!!loading"
+                load="btn-googleSign"
+              >
+                <img src="@/assets/glogo.webp" />
+              </btn-loader>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 </template>
 

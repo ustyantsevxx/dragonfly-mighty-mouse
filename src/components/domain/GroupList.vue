@@ -39,6 +39,7 @@
           </b-card-header>
           <b-card-body v-if="groups && groups.length">
             <h2 class="group-name">
+              <template v-if="!isTeacher">Ведомость группы</template>
               {{ selectedGroup.name }}
               <b-icon
                 v-if="isTeacher"

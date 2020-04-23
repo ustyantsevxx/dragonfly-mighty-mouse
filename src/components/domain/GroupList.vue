@@ -68,7 +68,6 @@
 </template>
 
 <script>
-import { isMobile } from '@/assets/functions'
 import MarksTable from '@/components/domain/MarksTable'
 import GroupModal from '@/components/modals/GroupModal'
 
@@ -109,7 +108,6 @@ export default {
         translate: false
       })
     },
-    isMobile: () => isMobile(),
     openModal(create = false) {
       this.groupToEdit = create ? this.selectedGroup : null
       this.$nextTick(() => {

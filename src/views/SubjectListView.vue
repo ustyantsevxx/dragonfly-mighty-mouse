@@ -79,7 +79,7 @@
             <b-btn
               variant="success"
               block
-              class="mt-3"
+              :class="{ 'mt-3': subjects && subjects.length }"
               v-if="isTeacher"
               v-b-modal.modal-subject
             >

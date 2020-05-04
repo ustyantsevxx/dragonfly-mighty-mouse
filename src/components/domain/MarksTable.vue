@@ -5,10 +5,12 @@
       :items="tableItems"
       sort-by="name"
       responsive="sm"
+      striped
       bordered
       v-if="marks && tasks"
       small
       @sort-changed="closePopover"
+      thead-class="border-bottom"
       class="mt-3 marks-table"
     >
       <template #head()="data">
@@ -31,12 +33,21 @@
           </div>
         </div>
       </template>
-      <template #cell(total)="data">{{ data.value }}</template>
+      <template #cell(total)="data">
+        <div
+          class="chart"
+          :style="{
+            width: widthOfTotalCell(data.value) + '%',
+            background: percentageToColor(widthOfTotalCell(data.value))
+          }"
+        ></div>
+        <div class="value">{{ data.value }}</div>
+      </template>
     </b-table>
 
     <div class="d-none" id="popover-initial"></div>
 
-    <b-popover delay="0" :target="popoverTarget" ref="popover">
+    <b-popover custom-class="" :target="popoverTarget" ref="popover">
       <div>
         <b-spinbutton
           v-model="selectedMarkScore"
@@ -57,6 +68,7 @@
 import { mapState } from 'vuex'
 import { MARK_TASK, UPDATE_MARK, DELETE_MARK } from '@/store/actions.type'
 import { debounce } from 'debounce'
+import { scale } from 'chroma-js'
 
 export default {
   props: {
@@ -70,7 +82,8 @@ export default {
     popoverTarget: 'popover-initial',
     selectedMark: null,
     selectedMarkScore: null,
-    debounceTimer: null
+    debounceTimer: null,
+    fff: 0
   }),
 
   computed: {
@@ -80,6 +93,10 @@ export default {
       tasks: s => s.tasks,
       isTeacher: s => s.user.isTeacher
     }),
+
+    totalScore() {
+      return this.tasks.reduce((t, c) => t + c.score, 0)
+    },
 
     tableHeaders() {
       let tableHeaders = [
@@ -99,22 +116,21 @@ export default {
       let labNumbers = [...this.tasks].sort((a, b) => a.number - b.number)
       labNumbers.forEach(t =>
         tableHeaders.push({
-          label: `Лаб №${t.number}`,
+          label: `Лаб-${t.number}`,
           key: t.id,
           name: t.name,
           score: t.score,
           sortable: true,
-          thClass: `hide-sort-icon text-nowrap ${
-            t.visible ? '' : ' text-danger'
-          }`,
+          thClass: `text-nowrap ${t.visible ? '' : ' text-danger'}`,
           tdClass: this.isTeacher ? 'hoverable-cell' : 'text-center'
         })
       )
 
       tableHeaders.push({
-        label: 'Всего',
+        label: `Всего\u00A0(${this.totalScore})`,
         key: 'total',
-        tdClass: 'font-weight-bold text-center',
+        tdClass: 'chart-cont border-left text-center',
+        thClass: 'border-left',
         sortable: true
       })
 
@@ -157,11 +173,9 @@ export default {
         this.popoverTarget = `${data.item.id}${data.field.key}`
         this.selectedMark = data.item[data.field.key]
         this.selectedMarkScore = data.item[data.field.key].score
-        this.$nextTick(() => {
-          this.$nextTick(() => {
-            this.$refs.popover.$emit('open')
-          })
-        })
+        this.$nextTick(() =>
+          this.$nextTick(() => this.$refs.popover.$emit('open'))
+        )
       } else {
         this.$store.dispatch(MARK_TASK, markData)
       }
@@ -171,7 +185,7 @@ export default {
         id: this.selectedMark.id,
         score: this.selectedMarkScore
       })
-    }, 500),
+    }, 300),
     async deleteMark() {
       await this.$store.dispatch(DELETE_MARK, this.selectedMark.id)
       this.$refs.popover.$emit('close')
@@ -183,6 +197,14 @@ export default {
       if (actual > taskScore) return 'font-weight-bold text-success'
       if (actual < taskScore) return 'font-weight-bold text-danger'
       return ''
+    },
+    widthOfTotalCell(value) {
+      if (value >= this.totalScore) return 100
+      return (value / this.totalScore) * 100
+    },
+    percentageToColor(perc) {
+      if (perc === 100) return 'green'
+      return scale(['#dc3545', '#ffc107', '#28a745'])(perc / 100)
     }
   }
 }
@@ -190,6 +212,26 @@ export default {
 
 <style lang="scss" scoped>
 /deep/ {
+  .chart-cont {
+    position: relative;
+    background: white !important;
+    .chart {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      opacity: 0.3;
+      z-index: 5;
+      transition: width 0.3s;
+    }
+    .value {
+      width: 100%;
+      left: 0;
+      position: absolute;
+      z-index: 10;
+    }
+  }
+
   .marks-table {
     width: max-content;
 
@@ -216,6 +258,7 @@ export default {
 
   .table.b-table > thead > tr > [aria-sort='none'] {
     background-size: 0;
+    font-weight: normal;
 
     &:hover {
       background-size: 0.65em 1em;

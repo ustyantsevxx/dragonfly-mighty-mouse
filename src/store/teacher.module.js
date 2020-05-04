@@ -145,13 +145,15 @@ const groupActions = {
     await db.collection('groups').add({
       name: groupData.name,
       students: [],
-      subject: db.collection('subjects').doc(groupData.subjectId)
+      subject: db.collection('subjects').doc(groupData.subjectId),
+      joinable: true
     })
   },
 
   async [UPDATE_GROUP](_, groupData) {
     await db.collection('groups').doc(groupData.id).update({
-      name: groupData.name
+      name: groupData.name,
+      joinable: groupData.joinable
     })
   },
 

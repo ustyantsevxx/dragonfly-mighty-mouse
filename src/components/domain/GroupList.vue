@@ -49,10 +49,6 @@
                 title="Редактировать"
               />
             </h2>
-            <template v-if="isTeacher">
-              <b-link @click="copyLink">Пригласить студентов</b-link>
-              <input type="hidden" :id="'invite-link-' + openedGroupIndex" />
-            </template>
             <marks-table :group-index="openedGroupIndex" />
           </b-card-body>
           <b-card-text v-else class="text-center text-muted py-4">
@@ -93,22 +89,6 @@ export default {
   },
 
   methods: {
-    copyLink() {
-      let a = document.querySelector('#invite-link-' + this.openedGroupIndex)
-      a.setAttribute('type', 'text')
-      a.value = `${location.origin}/join-group/${
-        this.groups[this.openedGroupIndex].id
-      }`
-      a.select()
-      document.execCommand('copy')
-      a.value = ''
-      a.setAttribute('type', 'hidden')
-      window.getSelection().removeAllRanges()
-      this.$store.commit('setToastMsg', {
-        msg: 'Ссылка приглашения скопирована!',
-        translate: false
-      })
-    },
     openModal(create = false) {
       this.groupToEdit = create ? this.selectedGroup : null
       this.$nextTick(() => {

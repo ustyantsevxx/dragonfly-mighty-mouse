@@ -33,19 +33,13 @@
         </div>
       </template>
       <template #cell(total)="data">
-        <div
-          class="chart"
-          :style="{
-            width: widthOfTotalCell(data.value) + '%',
-            background: percentageToColor(widthOfTotalCell(data.value))
-          }"
-        ></div>
+        <div class="chart" :style="getChartCellStyle(data.value)"></div>
         <div class="value">{{ data.value }}</div>
       </template>
     </b-table>
 
-    <b-check v-model="showOnlyVisible">
-      Показать только открытые
+    <b-check v-model="showAllTasks" v-if="isTeacher">
+      Показать закрытые задания
     </b-check>
 
     <!-- invisible -->
@@ -87,7 +81,7 @@ export default {
     selectedMark: null,
     selectedMarkScore: null,
     debounceTimer: null,
-    showOnlyVisible: true
+    showAllTasks: false
   }),
 
   computed: {
@@ -95,7 +89,7 @@ export default {
       groups: s => s.groups,
       marks: s => s.marks,
       tasks(s) {
-        return !this.showOnlyVisible
+        return this.showAllTasks
           ? s.tasks
           : s.tasks.filter(task => task.visible)
       },
@@ -135,7 +129,7 @@ export default {
       )
 
       tableHeaders.push({
-        label: `Всего\u00A0(${this.totalScore})`,
+        label: `Всего\u00a0(${this.totalScore})`,
         key: 'total',
         tdClass: 'chart-cont border-left text-center',
         thClass: 'border-left',
@@ -158,7 +152,7 @@ export default {
             id: mark.id,
             score: mark.score
           }
-          row.total += mark.score
+          if (mark.task.visible || this.showAllTasks) row.total += mark.score
         })
         return row
       })
@@ -177,7 +171,7 @@ export default {
       }
 
       if (data.value) {
-        this.$refs.popover.$emit('close')
+        this.closePopover()
         this.popoverTarget = `${data.item.id}${data.field.key}`
         this.selectedMark = data.item[data.field.key]
         this.selectedMarkScore = data.item[data.field.key].score
@@ -196,7 +190,7 @@ export default {
     }, 300),
     async deleteMark() {
       await this.$store.dispatch(DELETE_MARK, this.selectedMark.id)
-      this.$refs.popover.$emit('close')
+      this.closePopover()
     },
     closePopover() {
       this.$refs.popover.$emit('close')
@@ -206,13 +200,16 @@ export default {
       if (actual < taskScore) return 'font-weight-bold text-danger'
       return ''
     },
-    widthOfTotalCell(value) {
+    getWidthOfTotalCell(value) {
       if (value >= this.totalScore) return 100
       return (value / this.totalScore) * 100
     },
-    percentageToColor(perc) {
-      if (perc === 100) return 'green'
-      return scale(['#dc3545', '#ffc107', '#28a745'])(perc / 100)
+    getScaleColor: perc => scale(['#dc3545', '#ffc107', '#28a745'])(perc / 100),
+    getChartCellStyle(value) {
+      return {
+        width: this.getWidthOfTotalCell(value) + '%',
+        background: this.getScaleColor(this.getWidthOfTotalCell(value))
+      }
     }
   }
 }

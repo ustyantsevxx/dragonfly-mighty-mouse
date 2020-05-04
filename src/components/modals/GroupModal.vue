@@ -14,6 +14,25 @@
       />
     </b-form-group>
 
+    <b-row align-h="between">
+      <b-col>
+        <b-check
+          v-if="group"
+          switch
+          v-model="newJoinableState"
+          class="text-nowrap"
+        >
+          Открыта для вступления
+        </b-check>
+      </b-col>
+      <b-col cols="12" md="auto">
+        <b-link v-if="newJoinableState" @click="copyLink" class="text-nowrap">
+          Пригласить студентов
+        </b-link>
+        <input type="hidden" id="invite-link" />
+      </b-col>
+    </b-row>
+
     <template #modal-footer>
       <confirm-btn
         v-if="group"
@@ -55,7 +74,8 @@ export default {
 
   mixins: [
     baseMixin({
-      newGroupName: null
+      newGroupName: null,
+      newJoinableState: null
     })
   ],
 
@@ -70,7 +90,8 @@ export default {
     async editGroup() {
       this.$store.dispatch(UPDATE_GROUP, {
         id: this.group.id,
-        name: this.newGroupName
+        name: this.newGroupName,
+        joinable: this.newJoinableState
       })
       this.resetModal('add-group-modal')
     },
@@ -82,7 +103,22 @@ export default {
     beforeShow() {
       if (this.group) {
         this.newGroupName = this.group.name
+        this.newJoinableState = this.group.joinable
       }
+    },
+    copyLink() {
+      let a = document.querySelector('#invite-link')
+      a.setAttribute('type', 'text')
+      a.value = `${location.origin}/join-group/${this.group.id}`
+      a.select()
+      document.execCommand('copy')
+      a.value = ''
+      a.setAttribute('type', 'hidden')
+      window.getSelection().removeAllRanges()
+      this.$store.commit('setToastMsg', {
+        msg: 'Ссылка приглашения скопирована!',
+        translate: false
+      })
     }
   },
 

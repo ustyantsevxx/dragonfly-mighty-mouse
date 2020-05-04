@@ -10,7 +10,6 @@
       v-if="marks && tasks"
       small
       @sort-changed="closePopover"
-      thead-class="border-bottom"
       class="mt-3 marks-table"
     >
       <template #head()="data">
@@ -45,8 +44,12 @@
       </template>
     </b-table>
 
-    <div class="d-none" id="popover-initial"></div>
+    <b-check v-model="showOnlyVisible">
+      Показать только открытые
+    </b-check>
 
+    <!-- invisible -->
+    <div class="d-none" id="popover-initial"></div>
     <b-popover custom-class="" :target="popoverTarget" ref="popover">
       <div>
         <b-spinbutton
@@ -61,6 +64,7 @@
         </b-button>
       </div>
     </b-popover>
+    <!-- /invisible -->
   </div>
 </template>
 
@@ -83,14 +87,18 @@ export default {
     selectedMark: null,
     selectedMarkScore: null,
     debounceTimer: null,
-    fff: 0
+    showOnlyVisible: true
   }),
 
   computed: {
     ...mapState({
       groups: s => s.groups,
       marks: s => s.marks,
-      tasks: s => s.tasks,
+      tasks(s) {
+        return !this.showOnlyVisible
+          ? s.tasks
+          : s.tasks.filter(task => task.visible)
+      },
       isTeacher: s => s.user.isTeacher
     }),
 
@@ -220,7 +228,7 @@ export default {
       top: 0;
       left: 0;
       height: 100%;
-      opacity: 0.3;
+      opacity: 0.2;
       z-index: 5;
       transition: width 0.3s;
     }

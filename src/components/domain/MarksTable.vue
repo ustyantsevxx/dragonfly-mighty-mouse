@@ -8,6 +8,7 @@
       bordered
       v-if="marks && tasks"
       small
+      @sort-changed="closePopover"
       class="mt-3 marks-table"
     >
       <template #head()="data">
@@ -22,24 +23,40 @@
           :id="data.item.id + data.field.key"
           @click="taskClickAction(data)"
         >
-          <div class="score-value">{{ data.value.score }}</div>
+          <div
+            class="score-value"
+            :class="getExtraMarkClass(data.value.score, data.field.score)"
+          >
+            {{ data.value.score }}
+          </div>
         </div>
       </template>
-
       <template #cell(total)="data">{{ data.value }}</template>
     </b-table>
-    <b-popover :target="popoverTarget" ref="popover">
-      <b-button size="sm" variant="danger" @click="deleteMark()">
-        Удалить
-      </b-button>
-    </b-popover>
+
     <div class="d-none" id="popover-initial"></div>
+
+    <b-popover delay="0" :target="popoverTarget" ref="popover">
+      <div>
+        <b-spinbutton
+          v-model="selectedMarkScore"
+          @change="debounce_updateMark"
+          size="sm"
+          min="0"
+          class="mb-2"
+        />
+        <b-button block size="sm" variant="danger" @click="deleteMark()">
+          Удалить
+        </b-button>
+      </div>
+    </b-popover>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { MARK_TASK, DELETE_MARK } from '@/store/actions.type'
+import { MARK_TASK, UPDATE_MARK, DELETE_MARK } from '@/store/actions.type'
+import { debounce } from 'debounce'
 
 export default {
   props: {
@@ -51,7 +68,9 @@ export default {
 
   data: () => ({
     popoverTarget: 'popover-initial',
-    selectedMark: null
+    selectedMark: null,
+    selectedMarkScore: null,
+    debounceTimer: null
   }),
 
   computed: {
@@ -137,6 +156,7 @@ export default {
         this.$refs.popover.$emit('close')
         this.popoverTarget = `${data.item.id}${data.field.key}`
         this.selectedMark = data.item[data.field.key]
+        this.selectedMarkScore = data.item[data.field.key].score
         this.$nextTick(() => {
           this.$nextTick(() => {
             this.$refs.popover.$emit('open')
@@ -146,9 +166,23 @@ export default {
         this.$store.dispatch(MARK_TASK, markData)
       }
     },
+    debounce_updateMark: debounce(function () {
+      this.$store.dispatch(UPDATE_MARK, {
+        id: this.selectedMark.id,
+        score: this.selectedMarkScore
+      })
+    }, 500),
     async deleteMark() {
       await this.$store.dispatch(DELETE_MARK, this.selectedMark.id)
       this.$refs.popover.$emit('close')
+    },
+    closePopover() {
+      this.$refs.popover.$emit('close')
+    },
+    getExtraMarkClass(actual, taskScore) {
+      if (actual > taskScore) return 'font-weight-bold text-success'
+      if (actual < taskScore) return 'font-weight-bold text-danger'
+      return ''
     }
   }
 }

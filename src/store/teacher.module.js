@@ -13,7 +13,8 @@ import {
   TOGGLE_TASK_VISIBILITY,
   ADD_GROUP,
   UPDATE_GROUP,
-  DELETE_GROUP
+  DELETE_GROUP,
+  UPDATE_MARK
 } from './actions.type'
 
 const state = {
@@ -90,6 +91,12 @@ const taskActions = {
       task: db.collection('tasks').doc(markData.taskId),
       group: db.collection('groups').doc(markData.groupId),
       subject: db.collection('subjects').doc(markData.subjectId),
+      score: markData.score
+    })
+  },
+
+  async [UPDATE_MARK](_, markData) {
+    await db.collection('marks').doc(markData.id).update({
       score: markData.score
     })
   },

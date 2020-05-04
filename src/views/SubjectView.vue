@@ -35,7 +35,7 @@
               {{ visibleTasksCount }} доступно
             </b-badge>
           </template>
-          <b-badge variant="dark" class="ml-2" v-if="groups && isTeacher">
+          <b-badge class="ml-2" v-if="groups && isTeacher">
             {{ num2str(groups.length, ['группа', 'группы', 'групп']) }}
           </b-badge>
         </b-col>

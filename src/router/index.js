@@ -7,43 +7,43 @@ Vue.use(Router)
 const routes = [
   {
     path: '/',
-    component: () => import('@/views/MainView'),
+    component: () => import('@/views/Main'),
     meta: { title: 'Dragonfly Mighty Mouse' }
   },
   {
     path: '*',
-    component: () => import('@/views/ErrorView'),
+    component: () => import('@/views/Error'),
     meta: { title: 'Ошибка 404' }
   },
   {
     path: '/login',
-    component: () => import('@/views/auth/LoginView'),
+    component: () => import('@/views/auth/Login'),
     meta: { requiresGuest: true, title: 'Вход' }
   },
   {
     path: '/register',
-    component: () => import('@/views/auth/RegisterView'),
+    component: () => import('@/views/auth/Register'),
     meta: { requiresGuest: true, title: 'Регистрация' }
   },
   {
     path: '/restore',
-    component: () => import('@/views/auth/RestorePasswordView'),
+    component: () => import('@/views/auth/RestorePassword'),
     meta: { requiresGuest: true, title: 'Восстановление пароля' }
   },
   {
     path: '/account',
-    component: () => import('@/views/AccountView'),
+    component: () => import('@/views/Account'),
     meta: { requiresAuth: true, title: 'Мой профиль' }
   },
   {
     path: '/subjects',
-    component: () => import('@/views/SubjectListView'),
+    component: () => import('@/views/SubjectList'),
     meta: { requiresAuth: true, title: 'Мои дисциплины' }
   },
   {
     path: '/subjects/:id',
     redirect: '/subjects/:id/tasks',
-    component: () => import('@/views/SubjectView'),
+    component: () => import('@/views/Subject'),
     meta: { requiresAuth: true },
     children: [
       {

@@ -43,7 +43,7 @@ const actions = {
       await auth.signInWithEmailAndPassword(opt.email, opt.password)
       return true
     } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message })
+      commit('setToastMsg', { error: true, msg: err.message, translate: true })
       commit('unsetLoading')
     }
   },
@@ -61,7 +61,7 @@ const actions = {
         isTeacher: opt.isTeacher
       })
     } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message })
+      commit('setToastMsg', { error: true, msg: err.message, translate: true })
     }
     commit('unsetLoading')
   },
@@ -72,7 +72,7 @@ const actions = {
       let googleProvider = new firebase.auth.GoogleAuthProvider()
       await auth.signInWithPopup(googleProvider)
     } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message })
+      commit('setToastMsg', { error: true, msg: err.message, translate: true })
       commit('unsetLoading')
     }
   },
@@ -92,7 +92,7 @@ const actions = {
       commit('unsetLoading')
       return true
     } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message })
+      commit('setToastMsg', { error: true, msg: err.message, translate: true })
       commit('unsetLoading')
     }
   },
@@ -102,7 +102,7 @@ const actions = {
       await auth.currentUser.sendEmailVerification()
       commit('setToastMsg', { msg: 'Ссылка подтверждения отправлена' })
     } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message })
+      commit('setToastMsg', { error: true, msg: err.message, translate: true })
     }
   },
 
@@ -118,7 +118,7 @@ const actions = {
       commit('setUserData', fetchedData.data())
       commit('setToastMsg', { msg: 'Имя успешно изменено' })
     } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message })
+      commit('setToastMsg', { error: true, msg: err.message, translate: true })
     }
     commit('unsetLoading')
   },
@@ -136,7 +136,7 @@ const actions = {
       commit('setToastMsg', { msg: 'Запрос на смену эл. почты отправлен' })
       return true
     } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message })
+      commit('setToastMsg', { error: true, msg: err.message, translate: true })
     } finally {
       commit('unsetLoading')
     }

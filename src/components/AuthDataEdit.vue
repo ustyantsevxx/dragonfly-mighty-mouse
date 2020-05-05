@@ -1,21 +1,32 @@
 <template>
-  <b-card class="p-3 shadow-sm border-0">
-    <b-form-radio-group
-      @change="resetData"
-      v-model="selectedRadio"
-      buttons
-      :options="options"
-      button-variant="light"
-    />
+  <b-card class="shadow-sm border-0">
+    <template #header>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>Данные для входа</div>
+        <div>
+          <b-form-radio-group
+            @change="resetData"
+            v-model="selectedRadio"
+            buttons
+            size="sm"
+            :options="options"
+            button-variant="light"
+          />
+        </div>
+      </div>
+    </template>
 
-    <b-form class="mt-3">
+    <b-form>
       <b-form-group v-if="selectedRadio === 'email'">
         <template #label>
           <div>
-            <label for="email-field" class="m-0">Эл. почта</label>
-            &nbsp;
-            <b-badge v-if="!emailVerified" variant="light">
-              <b-link @click.prevent="verifyEmail">
+            <label for="email-field" class="m-0 mr-2">Эл. почта</label>
+            <b-badge v-if="!emailVerified" variant="danger">
+              <b-link
+                class="text-white"
+                href="/verify-email"
+                @click.prevent="verifyEmail"
+              >
                 Отправить подтверждение
               </b-link>
             </b-badge>
@@ -59,28 +70,29 @@
           />
         </b-form-group>
       </template>
-
-      <template v-if="!isInvalid">
-        <hr />
-        <b-form-group label="Текущий пароль" label-for="old-password-field">
-          <b-form-input
-            id="old-password-field"
-            type="password"
-            :state="inputState($v.oldPassword)"
-            v-model.trim="$v.oldPassword.$model"
-          />
-        </b-form-group>
-
-        <btn-loader
-          variant="dark"
-          block
-          v-if="!$v.oldPassword.$invalid"
-          @click="updateData"
-          load="btn__updateAuthData"
-          or="Обновить"
-        />
-      </template>
     </b-form>
+
+    <template #footer v-if="!isInvalid">
+      <b-input-group>
+        <b-form-input
+          id="old-password-field"
+          type="password"
+          placeholder="Текущий пароль"
+          :state="inputState($v.oldPassword)"
+          v-model.trim="$v.oldPassword.$model"
+        />
+        <template #append>
+          <btn-loader
+            variant="dark"
+            block
+            :disabled="$v.oldPassword.$invalid"
+            @click="updateData"
+            load="btn__updateAuthData"
+            or="Обновить"
+          />
+        </template>
+      </b-input-group>
+    </template>
   </b-card>
 </template>
 

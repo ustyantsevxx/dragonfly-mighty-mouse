@@ -11,7 +11,7 @@
       </b-row>
       <b-row align-h="center">
         <b-col lg="5" xl="4" class="mb-3">
-          <b-card class="p-3 shadow-sm border-0">
+          <b-card class="shadow-sm border-0" header="Личные данные">
             <b-form>
               <b-form-group label="Имя">
                 <b-form-input
@@ -30,17 +30,16 @@
                   placeholder="Ваша фамилия"
                 />
               </b-form-group>
-
+            </b-form>
+            <template #footer v-if="!(notChanged || $v.$invalid)">
               <btn-loader
                 variant="success"
                 block
-                class="mt-2"
-                v-if="!(notChanged || $v.$invalid)"
                 @click="updateData"
                 load="btn__updateData"
                 or="Сохранить"
               />
-            </b-form>
+            </template>
           </b-card>
         </b-col>
 

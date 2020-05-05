@@ -88,3 +88,9 @@ $white: #ffffff;
     font-weight: bold;
   }
 }
+
+.card-header,
+.card-footer {
+  border: 0;
+  background: darken($light, 2);
+}

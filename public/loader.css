@@ -1,7 +1,4 @@
-#app {
-  background: #f8f9fa !important;
-}
-
+#app,
 html {
   background: #f8f9fa !important;
 }
@@ -11,8 +8,9 @@ html {
   top: 0;
   left: 0;
   width: 100%;
-  height: 56px;
+  height: 61px;
   background-color: #191414ea;
+  border-bottom: 0.3rem solid #ffffff2f;
 }
 
 #loader {
@@ -42,7 +40,7 @@ html {
 }
 
 #loader .loader-container .base:before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -81,7 +79,6 @@ html {
 }
 
 @keyframes cube-loader {
-
   0%,
   10% {
     transform: perspective(136px) rotateX(-180deg);

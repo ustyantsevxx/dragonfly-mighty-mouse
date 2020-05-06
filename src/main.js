@@ -3,17 +3,11 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import { isMobile } from '@/assets/functions'
+import { mobileClass } from '@/assets/directives'
 
 Vue.config.productionTip = false
 Vue.prototype.isMobile = isMobile
-
-Vue.directive('mobile-class', {
-  inserted(el, { value }) {
-    if (isMobile()) {
-      el.classList = value
-    }
-  }
-})
+Vue.directive('mobile-class', mobileClass)
 
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 Vue.use(BootstrapVue)
@@ -33,14 +27,14 @@ import '@/assets/global.scss'
 import './registerServiceWorker'
 
 firebase.initializeApp({
-  apiKey: process.env.VUE_APP__FIREBASE_API,
-  authDomain: 'project-scimitar.firebaseapp.com',
-  databaseURL: 'https://project-scimitar.firebaseio.com',
-  projectId: 'project-scimitar',
-  storageBucket: 'project-scimitar.appspot.com',
-  messagingSenderId: process.env.VUE_APP__FIREBASE_MSI,
-  appId: process.env.VUE_APP__FIREBASE_APPID,
-  measurementId: process.env.VUE_APP__FIREBASE_MESID
+  apiKey: process.env.VUE_APP__FIREBASE_API_KEY,
+  authDomain: process.env.VUE_APP__FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.VUE_APP__FIREBASE_DATABASE_URL,
+  projectId: process.env.VUE_APP__FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VUE_APP__FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP__FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP__FIREBASE_APP_ID,
+  measurementId: process.env.VUE_APP__FIREBASE_MEASUREMENT_ID
 })
 
 export const db = firebase.firestore()
@@ -64,6 +58,6 @@ auth.onAuthStateChanged(async user => {
     app = new Vue({
       router,
       store,
-      render: x => x(App)
+      render: h => h(App)
     }).$mount('#app')
 })

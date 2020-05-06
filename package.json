@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "bootstrap-vue": "^2.13.0",
-    "chroma-js": "^2.1.0",
     "core-js": "^3.6.5",
     "debounce": "^1.2.0",
     "file-icons-js": "github:websemantics/file-icons-js",

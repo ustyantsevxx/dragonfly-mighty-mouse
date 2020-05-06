@@ -66,7 +66,6 @@
 import { mapState } from 'vuex'
 import { MARK_TASK, UPDATE_MARK, DELETE_MARK } from '@/store/actions.type'
 import { debounce } from 'debounce'
-import { scale } from 'chroma-js'
 
 export default {
   props: {
@@ -204,7 +203,10 @@ export default {
       if (value >= this.totalScore) return 100
       return (value / this.totalScore) * 100
     },
-    getScaleColor: perc => scale(['#dc3545', '#ffc107', '#28a745'])(perc / 100),
+    getScaleColor(percentage, maxHue = 120, minHue = 0) {
+      const hue = (percentage / 100) * (maxHue - minHue) + minHue
+      return `hsl(${hue}, 100%, 50%)`
+    },
     getChartCellStyle(value) {
       return {
         width: this.getWidthOfTotalCell(value) + '%',

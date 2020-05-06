@@ -11,6 +11,17 @@
       <b-navbar-nav class="ml-auto">
         <b-nav-item v-if="!signed" to="/login">Войти</b-nav-item>
         <template v-else>
+          <b-nav-item>
+            <b-btn
+              @click="
+                $store.state.user.isTeacher = !$store.state.user.isTeacher
+              "
+              size="sm"
+              variant="dark"
+            >
+              переметнуться
+            </b-btn>
+          </b-nav-item>
           <b-nav-item to="/account">{{ name + ' ' + surname }}</b-nav-item>
           <b-nav-item @click="signOut">Выйти</b-nav-item>
         </template>
@@ -28,7 +39,8 @@ export default {
     ...mapState({
       name: s => s.user.name,
       surname: s => s.user.surname,
-      signed: s => s.user.uid
+      signed: s => s.user.uid,
+      isTeacher: s => s.user.isTeacher
     })
   },
   methods: {

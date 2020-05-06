@@ -5,7 +5,6 @@
       :items="tableItems"
       sort-by="name"
       responsive="sm"
-      striped
       bordered
       v-if="marks && tasks"
       small
@@ -16,7 +15,20 @@
         <div v-b-tooltip.hover="data.field.name">{{ data.label }}</div>
       </template>
       <template #cell(index)="data">{{ data.index + 1 }}</template>
-      <template #cell(name)="data">{{ data.value }}</template>
+      <template #cell(name)="data">
+        <div
+          @click="data.toggleDetails()"
+          class="pointer"
+          title="Развернуть"
+          :class="{ 'text-danger': data.detailsShowing }"
+        >
+          {{ data.value }}
+        </div>
+      </template>
+
+      <template #row-details>
+        hi there
+      </template>
 
       <template #cell()="data">
         <div

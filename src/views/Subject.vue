@@ -4,14 +4,11 @@
       <b-row>
         <b-col>
           <h1>
-            {{ subj.name }}
-            <b-icon
-              v-if="isTeacher"
-              icon="pencil"
-              v-b-modal.modal-subject
-              class="hover-icon"
-              title="Редактировать"
-            />
+            <div v-if="isTeacher" class="pointer" v-b-modal.modal-subject>
+              {{ subj.name }}
+              <b-icon icon="pencil" class="hover-icon" title="Редактировать" />
+            </div>
+            <template v-else>{{ subj.name }}</template>
           </h1>
         </b-col>
       </b-row>

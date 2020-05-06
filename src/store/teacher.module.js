@@ -13,6 +13,7 @@ import {
   TOGGLE_TASK_VISIBILITY,
   ADD_GROUP,
   UPDATE_GROUP,
+  TOGGLE_GROUP_JOINABLE,
   DELETE_GROUP,
   UPDATE_MARK
 } from './actions.type'
@@ -141,19 +142,28 @@ const taskActions = {
 }
 
 const groupActions = {
-  async [ADD_GROUP](_, groupData) {
+  async [ADD_GROUP]({ commit }, groupData) {
+    commit('setLoading', 'btn-addGroup')
     await db.collection('groups').add({
       name: groupData.name,
       students: [],
       subject: db.collection('subjects').doc(groupData.subjectId),
       joinable: true
     })
+    commit('unsetLoading')
   },
 
-  async [UPDATE_GROUP](_, groupData) {
+  async [UPDATE_GROUP]({ commit }, groupData) {
+    commit('setLoading', 'btn-editGroup')
     await db.collection('groups').doc(groupData.id).update({
-      name: groupData.name,
-      joinable: groupData.joinable
+      name: groupData.name
+    })
+    commit('unsetLoading')
+  },
+
+  [TOGGLE_GROUP_JOINABLE](_, data) {
+    db.collection('groups').doc(data.id).update({
+      joinable: data.state
     })
   },
 

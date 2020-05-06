@@ -39,15 +39,18 @@
           </b-card-header>
           <b-card-body v-if="groups && groups.length">
             <h2 class="group-name">
-              <template v-if="!isTeacher">Ведомость группы</template>
-              {{ selectedGroup.name }}
-              <b-icon
-                v-if="isTeacher"
-                icon="pencil"
-                @click="openModal(true)"
-                class="hover-icon"
-                title="Редактировать"
-              />
+              <template v-if="!isTeacher">
+                Ведомость группы {{ selectedGroup.name }}
+              </template>
+              <div v-else class="pointer" @click="openModal(true)">
+                {{ selectedGroup.name }}
+                <b-icon
+                  v-if="isTeacher"
+                  icon="pencil"
+                  class="hover-icon"
+                  title="Редактировать"
+                />
+              </div>
             </h2>
             <marks-table :group-index="openedGroupIndex" />
           </b-card-body>
@@ -59,7 +62,7 @@
     </b-row>
 
     <!-- invisible -->
-    <group-modal :group="groupToEdit" />
+    <group-modal :group-id="groupToEdit" />
     <!-- /invisible -->
   </div>
 </template>
@@ -90,10 +93,8 @@ export default {
 
   methods: {
     openModal(create = false) {
-      this.groupToEdit = create ? this.selectedGroup : null
-      this.$nextTick(() => {
-        this.$bvModal.show('add-group-modal')
-      })
+      this.groupToEdit = create ? this.selectedGroup.id : null
+      this.$nextTick(() => this.$bvModal.show('add-group-modal'))
     }
   }
 }

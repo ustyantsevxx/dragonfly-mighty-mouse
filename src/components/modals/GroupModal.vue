@@ -8,25 +8,36 @@
     @hide="resetModal('add-group-modal')"
   >
     <b-form-group label="Название группы">
-      <b-form-input
-        :state="inputState($v.newGroupName)"
-        v-model.trim="$v.newGroupName.$model"
-      />
+      <b-input-group>
+        <b-input
+          :state="inputState($v.newGroupName)"
+          v-model.trim="$v.newGroupName.$model"
+        />
+        <template #append v-if="group">
+          <btn-loader
+            @click="editGroup()"
+            load="btn-editGroup"
+            or="Обновить"
+            variant="warning"
+            :disabled="newGroupName === group.name || $v.$invalid"
+          />
+        </template>
+      </b-input-group>
     </b-form-group>
 
-    <b-row align-h="between">
+    <b-row v-if="group" align-h="between">
       <b-col>
         <b-check
-          v-if="group"
           switch
-          v-model="newJoinableState"
+          :checked="group.joinable"
+          @change="toggleGroupJoinable($event)"
           class="text-nowrap"
         >
           Открыта для вступления
         </b-check>
       </b-col>
       <b-col cols="12" md="auto">
-        <b-link v-if="newJoinableState" @click="copyLink" class="text-nowrap">
+        <b-link v-if="group.joinable" @click="copyLink" class="text-nowrap">
           Пригласить студентов
         </b-link>
         <input type="hidden" id="invite-link" />
@@ -42,13 +53,14 @@
         text="Удалить группу"
       />
       <b-btn @click="resetModal('add-group-modal')" variant="light">
-        Отмена
+        Закрыть
       </b-btn>
       <btn-loader
-        @click="group ? editGroup() : addGroup()"
+        v-if="!group"
+        @click="addGroup()"
         load="btn-addGroup"
-        :or="group ? 'Обновить' : 'Добавить'"
-        :variant="group ? 'warning' : 'success'"
+        or="Добавить"
+        variant="success"
         :disabled="$v.$invalid"
       />
     </template>
@@ -60,40 +72,62 @@ import { required } from 'vuelidate/lib/validators'
 import BtnLoader from '@/components/BtnLoader'
 import baseMixin from '@/mixins/base'
 import ConfirmBtn from '@/components/ConfirmationButton'
-import { ADD_GROUP, UPDATE_GROUP, DELETE_GROUP } from '@/store/actions.type'
+import {
+  ADD_GROUP,
+  UPDATE_GROUP,
+  TOGGLE_GROUP_JOINABLE,
+  DELETE_GROUP
+} from '@/store/actions.type'
 
 export default {
   components: { BtnLoader, ConfirmBtn },
 
   props: {
-    group: {
-      type: Object,
+    groupId: {
+      type: String,
       default: null
     }
   },
 
   mixins: [
     baseMixin({
-      newGroupName: null,
-      newJoinableState: null
+      newGroupName: null
     })
   ],
 
+  watch: {
+    newGroupName() {
+      if (this.group && this.newGroupName === this.group.name)
+        this.$v.newGroupName.$reset()
+    }
+  },
+
+  computed: {
+    group() {
+      return this.groupId
+        ? this.$store.state.groups.find(g => g.id === this.groupId)
+        : null
+    }
+  },
+
   methods: {
     async addGroup() {
-      this.$store.dispatch(ADD_GROUP, {
+      await this.$store.dispatch(ADD_GROUP, {
         name: this.newGroupName,
         subjectId: this.$route.params.id
       })
       this.resetModal('add-group-modal')
     },
     async editGroup() {
-      this.$store.dispatch(UPDATE_GROUP, {
+      await await this.$store.dispatch(UPDATE_GROUP, {
         id: this.group.id,
-        name: this.newGroupName,
-        joinable: this.newJoinableState
+        name: this.newGroupName
       })
-      this.resetModal('add-group-modal')
+      this.newGroupName = this.group.name
+      this.$v.$reset()
+    },
+    toggleGroupJoinable(state) {
+      this.$store.dispatch(TOGGLE_GROUP_JOINABLE, { id: this.group.id, state })
     },
     async deleteGroup() {
       this.$parent.openedGroupIndex = 0
@@ -103,7 +137,6 @@ export default {
     beforeShow() {
       if (this.group) {
         this.newGroupName = this.group.name
-        this.newJoinableState = this.group.joinable
       }
     },
     copyLink() {

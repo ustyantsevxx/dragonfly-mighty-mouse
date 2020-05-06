@@ -64,15 +64,16 @@
               </b-radio-group>
 
               <div class="mt-4 mb-2">
-                <btn-loader
+                <loading-button
                   size="lg"
                   :disabled="$v.$invalid"
                   type="submit"
                   variant="success"
                   block
-                  load="btn__signUp"
-                  or="Зарегистрироваться"
-                />
+                  :load="loadRegister"
+                >
+                  Зарегистрироваться
+                </loading-button>
               </div>
 
               <b-link to="/login">Уже зарегистрированы?</b-link>
@@ -86,12 +87,12 @@
 
 <script>
 import { minLength, required, email, sameAs } from 'vuelidate/lib/validators'
-import BtnLoader from '@/components/BtnLoader'
+import LoadingButton from '@/components/LoadingButton'
 import baseMixin from '@/mixins/base'
 import { REGISTER } from '@/store/actions.type'
 
 export default {
-  components: { BtnLoader },
+  components: { LoadingButton },
 
   mixins: [
     baseMixin({
@@ -100,7 +101,8 @@ export default {
       email: null,
       password: null,
       confirmPassword: null,
-      isTeacher: false
+      isTeacher: false,
+      loadRegister: false
     })
   ],
 
@@ -117,8 +119,9 @@ export default {
   },
 
   methods: {
-    signUp() {
-      this.$store.dispatch(REGISTER, {
+    async signUp() {
+      this.loadRegister = true
+      await this.$store.dispatch(REGISTER, {
         name: this.name,
         surname: this.surname,
         email: this.email,
@@ -126,6 +129,7 @@ export default {
         confirmPassword: this.confirmPassword,
         isTeacher: this.isTeacher
       })
+      this.loadRegister = false
     }
   },
 

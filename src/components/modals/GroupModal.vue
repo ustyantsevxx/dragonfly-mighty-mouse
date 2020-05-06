@@ -14,13 +14,14 @@
           v-model.trim="$v.newGroupName.$model"
         />
         <template #append v-if="group">
-          <btn-loader
+          <loading-button
             @click="editGroup()"
-            load="btn-editGroup"
-            or="Обновить"
+            :load="loadEdit"
             variant="warning"
             :disabled="newGroupName === group.name || $v.$invalid"
-          />
+          >
+            Обновить
+          </loading-button>
         </template>
       </b-input-group>
     </b-form-group>
@@ -37,7 +38,7 @@
         </b-check>
       </b-col>
       <b-col cols="12" md="auto">
-        <b-link v-if="group.joinable" @click="copyLink" class="text-nowrap">
+        <b-link v-if="group.joinable" @click="copyLink()" class="text-nowrap">
           Пригласить студентов
         </b-link>
         <input type="hidden" id="invite-link" />
@@ -47,7 +48,7 @@
     <template #modal-footer>
       <confirm-btn
         v-if="group"
-        @click="deleteGroup"
+        @click="deleteGroup()"
         variant="outline-danger"
         class="mr-auto"
         text="Удалить группу"
@@ -55,21 +56,22 @@
       <b-btn @click="resetModal('add-group-modal')" variant="light">
         Закрыть
       </b-btn>
-      <btn-loader
+      <loading-button
         v-if="!group"
         @click="addGroup()"
-        load="btn-addGroup"
-        or="Добавить"
+        :load="loadAdd"
         variant="success"
         :disabled="$v.$invalid"
-      />
+      >
+        Добавить
+      </loading-button>
     </template>
   </b-modal>
 </template>
 
 <script>
 import { required } from 'vuelidate/lib/validators'
-import BtnLoader from '@/components/BtnLoader'
+import LoadingButton from '@/components/LoadingButton'
 import baseMixin from '@/mixins/base'
 import ConfirmBtn from '@/components/ConfirmationButton'
 import {
@@ -80,7 +82,7 @@ import {
 } from '@/store/actions.type'
 
 export default {
-  components: { BtnLoader, ConfirmBtn },
+  components: { LoadingButton, ConfirmBtn },
 
   props: {
     groupId: {
@@ -94,6 +96,11 @@ export default {
       newGroupName: null
     })
   ],
+
+  data: () => ({
+    loadAdd: false,
+    loadEdit: false
+  }),
 
   watch: {
     newGroupName() {
@@ -112,19 +119,23 @@ export default {
 
   methods: {
     async addGroup() {
+      this.loadAdd = true
       await this.$store.dispatch(ADD_GROUP, {
         name: this.newGroupName,
         subjectId: this.$route.params.id
       })
       this.resetModal('add-group-modal')
+      this.loadAdd = false
     },
     async editGroup() {
-      await await this.$store.dispatch(UPDATE_GROUP, {
+      this.loadEdit = true
+      await this.$store.dispatch(UPDATE_GROUP, {
         id: this.group.id,
         name: this.newGroupName
       })
       this.newGroupName = this.group.name
       this.$v.$reset()
+      this.loadEdit = false
     },
     toggleGroupJoinable(state) {
       this.$store.dispatch(TOGGLE_GROUP_JOINABLE, { id: this.group.id, state })

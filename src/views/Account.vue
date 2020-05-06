@@ -32,13 +32,14 @@
               </b-form-group>
             </b-form>
             <template #footer v-if="!(notChanged || $v.$invalid)">
-              <btn-loader
+              <loading-button
                 variant="success"
                 block
                 @click="updateData"
-                load="btn__updateData"
-                or="Сохранить"
-              />
+                :load="loadUpdate"
+              >
+                Сохранить
+              </loading-button>
             </template>
           </b-card>
         </b-col>
@@ -54,17 +55,18 @@
 <script>
 import { required } from 'vuelidate/lib/validators'
 import AuthDataEdit from '../components/AuthDataEdit'
-import BtnLoader from '../components/BtnLoader'
+import LoadingButton from '../components/LoadingButton'
 import baseMixin from '@/mixins/base'
 import { UPDATE_PROFILE } from '@/store/actions.type'
 
 export default {
-  components: { AuthDataEdit, BtnLoader },
+  components: { AuthDataEdit, LoadingButton },
 
   mixins: [
     baseMixin({
       newName: null,
-      newSurname: null
+      newSurname: null,
+      loadUpdate: false
     })
   ],
 
@@ -95,12 +97,14 @@ export default {
   },
 
   methods: {
-    updateData() {
-      this.$store.dispatch(UPDATE_PROFILE, {
+    async updateData() {
+      this.loadUpdate = true
+      await this.$store.dispatch(UPDATE_PROFILE, {
         name: this.newName,
         surname: this.newSurname
       })
       this.$v.$reset()
+      this.loadUpdate = false
     }
   },
 

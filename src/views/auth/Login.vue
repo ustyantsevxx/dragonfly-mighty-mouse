@@ -15,15 +15,15 @@
               </b-form-group>
 
               <div class="mt-4">
-                <btn-loader
+                <loading-button
                   @click="sign"
                   size="lg"
                   variant="primary"
                   block
-                  :disabled="!!loading"
-                  load="btn__signIn"
-                  or="Войти"
-                />
+                  :load="loadLogin"
+                >
+                  Войти
+                </loading-button>
               </div>
               <div class="mt-2 d-flex justify-content-between">
                 <b-link to="/restore">Забыли пароль?</b-link>
@@ -31,15 +31,15 @@
               </div>
               <!-- <div class="separator">или</div>
               <div>
-                <btn-loader
+                <loading-button
                   @click="googleSignIn"
                   variant="light"
                   block
                   :disabled="!!loading"
-                  load="btn-googleSign"
+                  :load="loadGoogleLogin"
                 >
                   <img src="@/assets/glogo.webp" />
-                </btn-loader>
+                </loading-button>
               </div>-->
             </b-form>
           </b-card>
@@ -50,23 +50,22 @@
 </template>
 
 <script>
-import BtnLoader from '@/components/BtnLoader'
+import LoadingButton from '@/components/LoadingButton'
 import { LOGIN, LOGIN_WITH_GOOGLE } from '@/store/actions.type'
 
 export default {
-  components: { BtnLoader },
+  components: { LoadingButton },
 
   data: () => ({
     email: null,
-    password: null
+    password: null,
+    loadLogin: false,
+    loadGoogleLogin: false
   }),
 
   computed: {
     signed() {
       return this.$store.state.user.uid
-    },
-    loading() {
-      return this.$store.state.loadingView
     }
   },
 
@@ -78,14 +77,18 @@ export default {
 
   methods: {
     async sign() {
+      this.loadLogin = true
       let signed = await this.$store.dispatch(LOGIN, {
         email: this.email,
         password: this.password
       })
       if (!signed) this.password = null
+      this.loadLogin = false
     },
-    googleSignIn() {
-      this.$store.dispatch(LOGIN_WITH_GOOGLE)
+    async googleSignIn() {
+      this.loadGoogleLogin = true
+      await this.$store.dispatch(LOGIN_WITH_GOOGLE)
+      this.loadGoogleLogin = false
     }
   }
 }

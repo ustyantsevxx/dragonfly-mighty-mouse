@@ -85,27 +85,28 @@
         />
       </template>
       <b-btn @click="resetModal('task-modal')" variant="light">Отмена</b-btn>
-      <btn-loader
+      <loading-button
         @click="okAction"
-        load="btn-addLab"
-        :or="task ? 'Обновить' : 'Добавить'"
+        :load="loadButton"
         :variant="task ? 'warning' : 'success'"
         :disabled="$v.$invalid"
-      />
+      >
+        {{ task ? 'Обновить' : 'Добавить' }}
+      </loading-button>
     </template>
   </b-modal>
 </template>
 
 <script>
 import { required } from 'vuelidate/lib/validators'
-import BtnLoader from '@/components/BtnLoader'
+import LoadingButton from '@/components/LoadingButton'
 import ConfirmBtn from '@/components/ConfirmationButton'
 import modalMixin from '@/mixins/base'
 import WysiwygEditor from '@/components/WysiwygEditor'
 import { ADD_TASK, UPDATE_TASK, DELETE_TASK } from '@/store/actions.type'
 
 export default {
-  components: { BtnLoader, WysiwygEditor, ConfirmBtn },
+  components: { LoadingButton, WysiwygEditor, ConfirmBtn },
 
   props: {
     task: {
@@ -122,7 +123,8 @@ export default {
       score: null,
       files: [],
       newFilesToUpload: [],
-      oldFilesToDelete: []
+      oldFilesToDelete: [],
+      loadButton: false
     })
   ],
 
@@ -138,10 +140,12 @@ export default {
 
   methods: {
     async okAction() {
+      this.loadButton = true
       this.task ? await this.editTask() : await this.addTask()
       this.resetModal('task-modal')
       this.newFilesToUpload = []
       this.oldFilesToDelete = []
+      this.loadButton = false
     },
     fileAction(file) {
       if (this.task) {

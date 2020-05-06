@@ -10,14 +10,15 @@
                 <b-form-input type="email" required v-model="email" />
               </b-form-group>
               <div class="mt-4">
-                <btn-loader
+                <loading-button
                   size="lg"
                   type="submit"
                   variant="info"
                   block
-                  load="btn__restorePassword"
-                  or="Отправить ссылку"
-                />
+                  :load="loadRestore"
+                >
+                  Отправить ссылку
+                </loading-button>
               </div>
             </b-form>
           </b-card>
@@ -28,19 +29,22 @@
 </template>
 
 <script>
-import BtnLoader from '@/components/BtnLoader'
+import LoadingButton from '@/components/LoadingButton'
 import { RESTORE_PASSWORD } from '@/store/actions.type'
 
 export default {
-  components: { BtnLoader },
+  components: { LoadingButton },
   data: () => ({
-    email: null
+    email: null,
+    loadRestore: false
   }),
   methods: {
     async restorePassword() {
+      this.loadRestore = true
       let r = await this.$store.dispatch(RESTORE_PASSWORD, {
         email: this.email
       })
+      this.loadRestore = false
       if (r) this.$router.push('/login')
     }
   }

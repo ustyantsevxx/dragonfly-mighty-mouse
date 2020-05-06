@@ -38,18 +38,15 @@ const mutations = {
 
 const actions = {
   async [LOGIN]({ commit }, opt) {
-    commit('setLoading', 'btn__signIn')
     try {
       await auth.signInWithEmailAndPassword(opt.email, opt.password)
       return true
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message, translate: true })
-      commit('unsetLoading')
     }
   },
 
   async [REGISTER]({ commit }, opt) {
-    commit('setLoading', 'btn__signUp')
     try {
       let creds = await auth.createUserWithEmailAndPassword(
         opt.email,
@@ -63,17 +60,14 @@ const actions = {
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message, translate: true })
     }
-    commit('unsetLoading')
   },
 
   async [LOGIN_WITH_GOOGLE]({ commit }) {
-    commit('setLoading', 'btn-googleSign')
     try {
       let googleProvider = new firebase.auth.GoogleAuthProvider()
       await auth.signInWithPopup(googleProvider)
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message, translate: true })
-      commit('unsetLoading')
     }
   },
 
@@ -83,17 +77,14 @@ const actions = {
   },
 
   async [RESTORE_PASSWORD]({ commit }, opt) {
-    commit('setLoading', 'btn__restorePassword')
     try {
       await auth.sendPasswordResetEmail(opt.email, {
         url: 'https://project-scimitar.web.app/login'
       })
       commit('setToastMsg', { msg: 'Ссылка востановления отправлена' })
-      commit('unsetLoading')
       return true
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message, translate: true })
-      commit('unsetLoading')
     }
   },
 
@@ -107,7 +98,6 @@ const actions = {
   },
 
   async [UPDATE_PROFILE]({ commit, state }, data) {
-    commit('setLoading', 'btn__updateData')
     try {
       let userDoc = db.collection('users').doc(state.uid)
       await userDoc.update({
@@ -120,11 +110,9 @@ const actions = {
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message, translate: true })
     }
-    commit('unsetLoading')
   },
 
   async [UPDATE_EMAIL]({ commit, state }, data) {
-    commit('setLoading', 'btn__updateAuthData')
     try {
       let user = await auth.signInWithEmailAndPassword(
         state.email,
@@ -137,13 +125,10 @@ const actions = {
       return true
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message, translate: true })
-    } finally {
-      commit('unsetLoading')
     }
   },
 
   async [UPDATE_PASSWORD]({ commit, state }, passwords) {
-    commit('setLoading', 'btn__updateAuthData')
     try {
       let user = await auth.signInWithEmailAndPassword(
         state.email,
@@ -155,8 +140,6 @@ const actions = {
       return true
     } catch (err) {
       commit('setToastMsg', { error: true, msg: err.message })
-    } finally {
-      commit('unsetLoading')
     }
   }
 }

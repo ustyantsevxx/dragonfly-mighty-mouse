@@ -82,14 +82,15 @@
           v-model.trim="$v.oldPassword.$model"
         />
         <template #append>
-          <btn-loader
+          <loading-button
             variant="dark"
             block
             :disabled="$v.oldPassword.$invalid"
             @click="updateData"
-            load="btn__updateAuthData"
-            or="Обновить"
-          />
+            :load="loadUpdate"
+          >
+            Обновить
+          </loading-button>
         </template>
       </b-input-group>
     </template>
@@ -98,7 +99,7 @@
 
 <script>
 import { minLength, required, sameAs, email } from 'vuelidate/lib/validators'
-import BtnLoader from '../components/BtnLoader'
+import LoadingButton from '../components/LoadingButton'
 import {
   UPDATE_EMAIL,
   UPDATE_PASSWORD,
@@ -106,7 +107,7 @@ import {
 } from '@/store/actions.type'
 
 export default {
-  components: { BtnLoader },
+  components: { LoadingButton },
 
   data: () => ({
     newEmail: null,
@@ -115,17 +116,17 @@ export default {
       confirmPassword: null
     },
     oldPassword: null,
-    emailJustChanged: false,
     selectedRadio: 'email',
     options: [
       { text: 'Эл. почта', value: 'email', selected: true },
       { text: 'Пароль', value: 'password' }
-    ]
+    ],
+    loadUpdate: false
   }),
 
   computed: {
     emailVerified() {
-      return this.$store.state.user.emailVerified || this.emailJustChanged
+      return this.$store.state.user.emailVerified
     },
     email() {
       return this.$store.state.user.email
@@ -150,28 +151,35 @@ export default {
 
   methods: {
     async updateData() {
-      let success
-      if (this.selectedRadio === 'password') {
-        success = await this.$store.dispatch(UPDATE_PASSWORD, {
-          old: this.oldPassword,
-          new: this.p.newPassword
-        })
-      } else {
-        success = await this.$store.dispatch(UPDATE_EMAIL, {
-          password: this.oldPassword,
-          newEmail: this.newEmail
-        })
-        if (success) this.emailJustChanged = true
-      }
+      this.loadUpdate = true
+      const success =
+        this.selectedRadio === 'password'
+          ? await this.updatePassword()
+          : await this.updateEmail()
       if (!success) this.oldPassword = null
+      else this.resetData()
+      this.loadUpdate = false
     },
     verifyEmail() {
       this.$store.dispatch(VERIFY_EMAIL)
+    },
+    updateEmail() {
+      return this.$store.dispatch(UPDATE_EMAIL, {
+        password: this.oldPassword,
+        newEmail: this.newEmail
+      })
+    },
+    updatePassword() {
+      return this.$store.dispatch(UPDATE_PASSWORD, {
+        old: this.oldPassword,
+        new: this.p.newPassword
+      })
     },
     resetData() {
       this.newEmail = this.email
       this.p.newPassword = null
       this.p.confirmPassword = null
+      this.oldPassword = null
       this.$v.$reset()
     }
   },

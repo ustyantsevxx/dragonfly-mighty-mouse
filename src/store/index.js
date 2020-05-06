@@ -16,7 +16,6 @@ export default new Vuex.Store({
   },
 
   state: {
-    loadingView: null,
     toastMsg: null,
     // next props will be binded by 'firestoreBindings' actions
     subjects: null,
@@ -27,9 +26,7 @@ export default new Vuex.Store({
 
   mutations: {
     ...vuexfireMutations,
-    setLoading: (s, view) => (s.loadingView = view),
     setToastMsg: (s, msg) => (s.toastMsg = msg),
-    unsetLoading: s => (s.loadingView = null),
     unsetToastMsg: s => (s.toastMsg = null)
   },
 

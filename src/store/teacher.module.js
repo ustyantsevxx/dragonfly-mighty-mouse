@@ -48,7 +48,6 @@ const subjectActions = {
 
 const taskActions = {
   async [ADD_TASK]({ commit, dispatch, state }, newTask) {
-    commit('setLoading', 'btn-addLab')
     const pinnedFiles = await dispatch(UPLOAD_TASK_FILES, newTask.files)
     await db.collection('tasks').add({
       name: newTask.name,
@@ -60,11 +59,9 @@ const taskActions = {
       subjectId: newTask.subjectId
     })
     state.filesUploadProgress = -1
-    commit('unsetLoading')
   },
 
   async [UPDATE_TASK]({ state, commit, dispatch }, task) {
-    commit('setLoading', 'btn-addLab')
     dispatch(DELETE_TASK_FILES, task.oldFilesToDelete)
     const newFiles = await dispatch(UPLOAD_TASK_FILES, task.newFilesToUpload)
     await db
@@ -78,7 +75,6 @@ const taskActions = {
         files: task.files.concat(newFiles),
         visible: task.visible
       })
-    commit('unsetLoading')
     state.filesUploadProgress = -1
   },
 
@@ -143,22 +139,18 @@ const taskActions = {
 
 const groupActions = {
   async [ADD_GROUP]({ commit }, groupData) {
-    commit('setLoading', 'btn-addGroup')
     await db.collection('groups').add({
       name: groupData.name,
       students: [],
       subject: db.collection('subjects').doc(groupData.subjectId),
       joinable: true
     })
-    commit('unsetLoading')
   },
 
   async [UPDATE_GROUP]({ commit }, groupData) {
-    commit('setLoading', 'btn-editGroup')
     await db.collection('groups').doc(groupData.id).update({
       name: groupData.name
     })
-    commit('unsetLoading')
   },
 
   [TOGGLE_GROUP_JOINABLE](_, data) {

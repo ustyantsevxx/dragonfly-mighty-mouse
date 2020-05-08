@@ -3,10 +3,10 @@
     <b-container v-if="subj && groups && tasks">
       <b-row>
         <b-col>
-          <h1>
-            <div v-if="isTeacher" class="pointer" v-b-modal.modal-subject>
-              {{ subj.name }}
-              <b-icon icon="pencil" class="hover-icon" title="Редактировать" />
+          <h1 title="Редактировать дисциплину">
+            <div v-if="isTeacher" class="pointer" @click="openSubjectModal()">
+              <span class="text-nowrap mr-1">{{ subj.name }}</span>
+              <b-icon icon="pencil" class="hover-icon" />
             </div>
             <template v-else>{{ subj.name }}</template>
           </h1>
@@ -14,27 +14,32 @@
       </b-row>
 
       <b-row>
-        <b-col class="badges mt-2">
-          <b-badge variant="info" class="mr-2">{{ subj.course }} курс</b-badge>
-          <template v-if="tasks">
-            <b-badge
-              variant="success"
-              class="mr-0"
-              :class="{ over: visibleTasksCount !== tasks.length }"
-            >
-              {{ num2str(tasks.length, taskForms) }}
+        <b-col class="badges mt-2 d-flex flex-wrap">
+          <div>
+            <b-badge variant="info">{{ subj.course }} курс</b-badge>
+          </div>
+          <div class="text-nowrap">
+            <template v-if="tasks">
+              <b-badge
+                variant="success"
+                :class="{ over: visibleTasksCount !== tasks.length }"
+              >
+                {{ num2str(tasks.length, taskForms) }}
+              </b-badge>
+              <b-badge
+                variant="danger"
+                class="over1"
+                v-if="isTeacher && visibleTasksCount != tasks.length"
+              >
+                {{ visibleTasksCount }} доступно
+              </b-badge>
+            </template>
+          </div>
+          <div>
+            <b-badge class="" v-if="groups && isTeacher">
+              {{ num2str(groups.length, ['группа', 'группы', 'групп']) }}
             </b-badge>
-            <b-badge
-              variant="danger"
-              class="over1"
-              v-if="isTeacher && visibleTasksCount != tasks.length"
-            >
-              {{ visibleTasksCount }} доступно
-            </b-badge>
-          </template>
-          <b-badge class="ml-2" v-if="groups && isTeacher">
-            {{ num2str(groups.length, ['группа', 'группы', 'групп']) }}
-          </b-badge>
+          </div>
         </b-col>
       </b-row>
 
@@ -69,7 +74,7 @@
       :subject="subj"
       ok-variant="info"
       cancel-variant="light"
-      title="Редактирование дисциплины"
+      title="Изменение дисциплины"
       ok-title="Обновить"
       cancel-title="Отмена"
     />
@@ -131,6 +136,9 @@ export default {
         document.title = `Лабораторные | ${this.subj.name}`
       else if (this.$route.path.includes('groups'))
         document.title = `Группы и баллы | ${this.subj.name}`
+    },
+    openSubjectModal() {
+      this.$bvModal.show('modal-subject')
     }
   }
 }
@@ -138,6 +146,7 @@ export default {
 
 <style lang="scss" scoped>
 h1 {
+  width: max-content;
   margin-bottom: 0;
   &:hover {
     .hover-icon {
@@ -166,8 +175,9 @@ h1 {
 }
 
 .badges {
+  gap: 0.5rem;
   span {
-    font-size: 1em;
+    font-size: 1rem;
   }
 }
 

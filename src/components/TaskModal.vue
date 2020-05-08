@@ -5,7 +5,7 @@
     v-bind="$attrs"
     size="xl"
     no-close-on-backdrop
-    :title="`${task ? 'Измен' : 'Добав'}ить лабораторную работу`"
+    :title="`${task ? 'Измен' : 'Добавл'}ение лабораторной работы`"
     @hide="resetData"
   >
     <b-form-group label="Номер работы">
@@ -84,11 +84,11 @@
           text="Удалить лабораторную"
         />
       </template>
-      <b-btn @click="resetModal('task-modal')" variant="light">Отмена</b-btn>
+      <b-btn @click="resetModal('task-modal')" variant="light">Закрыть</b-btn>
       <loading-button
         @click="okAction"
         :load="loadButton"
-        :variant="task ? 'warning' : 'success'"
+        :variant="task ? 'info' : 'success'"
         :disabled="$v.$invalid"
       >
         {{ task ? 'Обновить' : 'Добавить' }}

@@ -17,7 +17,7 @@
           <loading-button
             @click="editGroup()"
             :load="loadEdit"
-            variant="warning"
+            variant="info"
             :disabled="newGroupName === group.name || $v.$invalid"
           >
             Обновить

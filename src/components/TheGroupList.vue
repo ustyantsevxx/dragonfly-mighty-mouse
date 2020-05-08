@@ -42,14 +42,14 @@
               <template v-if="!isTeacher">
                 Ведомость группы {{ selectedGroup.name }}
               </template>
-              <div v-else class="pointer" @click="openModal(true)">
+              <div
+                v-else
+                class="pointer"
+                @click="openModal(true)"
+                title="Редактировать группу"
+              >
                 {{ selectedGroup.name }}
-                <b-icon
-                  v-if="isTeacher"
-                  icon="pencil"
-                  class="hover-icon"
-                  title="Редактировать"
-                />
+                <b-icon v-if="isTeacher" icon="pencil" class="hover-icon" />
               </div>
             </h2>
             <marks-table :group-index="openedGroupIndex" />
@@ -114,6 +114,7 @@ export default {
 }
 
 .group-name {
+  width: max-content;
   margin-bottom: 0;
   &:hover {
     .hover-icon {

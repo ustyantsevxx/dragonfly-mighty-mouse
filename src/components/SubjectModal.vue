@@ -25,14 +25,25 @@
       />
     </b-form-group>
 
-    <template v-if="subject">
+    <template #modal-footer>
       <confirm-button
-        block
-        variant="danger"
+        v-if="subject"
+        @click="deleteSubject()"
+        variant="outline-danger"
+        class="mr-auto"
         text="Удалить дисциплину"
-        confirm-text="Действие необратимо. Продолжить?"
-        @click="deleteSubject"
       />
+      <b-btn @click="resetModal('modal-subject')" variant="light">
+        Закрыть
+      </b-btn>
+      <loading-button
+        @click="okAction()"
+        :load="loadButton"
+        :variant="subject ? 'info' : 'success'"
+        :disabled="$v.$invalid"
+      >
+        {{ subject ? 'Обновить' : 'Добавить' }}
+      </loading-button>
     </template>
   </b-modal>
 </template>
@@ -41,6 +52,7 @@
 import { required } from 'vuelidate/lib/validators'
 import modalMixin from '@/mixins/modal'
 import ConfirmButton from '@/components/ConfirmationButton'
+import LoadingButton from '@/components/LoadingButton'
 import {
   ADD_SUBJECT,
   UPDATE_SUBJECT,
@@ -48,7 +60,7 @@ import {
 } from '@/store/actions.type'
 
 export default {
-  components: { ConfirmButton },
+  components: { ConfirmButton, LoadingButton },
 
   props: {
     subject: {
@@ -60,7 +72,8 @@ export default {
   mixins: [
     modalMixin({
       name: null,
-      course: null
+      course: null,
+      loadButton: false
     })
   ],
 
@@ -71,15 +84,17 @@ export default {
         this.course = +this.subject.course
       }
     },
-    okAction() {
-      this.subject ? this.editSubject() : this.addSubject()
+    async okAction() {
+      this.loadButton = true
+      this.subject ? await this.editSubject() : await this.addSubject()
+      this.resetModal('modal-subject')
+      this.loadButton = false
     },
     async addSubject() {
       await this.$store.dispatch(ADD_SUBJECT, {
         name: this.name,
         course: this.course
       })
-      this.resetData()
     },
     async editSubject() {
       await this.$store.dispatch(UPDATE_SUBJECT, {

@@ -1,5 +1,13 @@
 <template>
-  <div>
+  <div v-if="students.length">
+    <b-check
+      v-model="showAllTasks"
+      class="mt-3"
+      v-if="isTeacher && !allTasksVisible"
+    >
+      Показать закрытые задания
+    </b-check>
+
     <b-table
       :fields="tableHeaders"
       :items="tableItems"
@@ -26,8 +34,10 @@
         </div>
       </template>
 
-      <template #row-details>
-        hi there
+      <template #row-details="data">
+        <b-btn size="sm" variant="danger" @click="deleteStudent(data)">
+          Удалить студента
+        </b-btn>
       </template>
 
       <template #cell()="data">
@@ -50,10 +60,6 @@
       </template>
     </b-table>
 
-    <b-check v-model="showAllTasks" v-if="isTeacher">
-      Показать закрытые задания
-    </b-check>
-
     <!-- invisible -->
     <div class="d-none" id="popover-initial"></div>
     <b-popover custom-class="" :target="popoverTarget" ref="popover">
@@ -72,11 +78,22 @@
     </b-popover>
     <!-- /invisible -->
   </div>
+  <b-alert v-else show variant="info" class="m-0 mt-3">
+    <b-link @click.prevent="$parent.openModal(true)" class="alert-link">
+      Пригласите студентов в группу по ссылке или добавьте временные записи
+      вручную.
+    </b-link>
+  </b-alert>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { MARK_TASK, UPDATE_MARK, DELETE_MARK } from '@/store/actions.type'
+import {
+  MARK_TASK,
+  UPDATE_MARK,
+  DELETE_MARK,
+  DELETE_STUDENT_FROM_GROUP
+} from '@/store/actions.type'
 import { debounce } from 'debounce'
 
 export default {
@@ -104,11 +121,16 @@ export default {
           ? s.tasks
           : s.tasks.filter(task => task.visible)
       },
+      allTasksVisible: s => s.tasks.every(t => t.visible),
       isTeacher: s => s.user.isTeacher
     }),
 
     totalScore() {
       return this.tasks.reduce((t, c) => t + c.score, 0)
+    },
+
+    students() {
+      return this.groups[this.groupIndex].students
     },
 
     tableHeaders() {
@@ -151,11 +173,12 @@ export default {
     },
 
     tableItems() {
-      return this.groups[this.groupIndex].students.map(student => {
+      return this.students.map(student => {
         let row = {
           name: `${student.surname} ${student.name}`,
           id: student.id,
-          total: 0
+          total: 0,
+          marks: []
         }
         let studentsMarks = this.marks.filter(m => m.student.id === student.id)
         studentsMarks.forEach(mark => {
@@ -163,6 +186,7 @@ export default {
             id: mark.id,
             score: mark.score
           }
+          row.marks.push(mark.id)
           if (mark.task.visible || this.showAllTasks) row.total += mark.score
         })
         return row
@@ -171,6 +195,14 @@ export default {
   },
 
   methods: {
+    deleteStudent(data) {
+      this.$store.dispatch(DELETE_STUDENT_FROM_GROUP, {
+        studentId: data.item.id,
+        marksToDelete: data.item.marks,
+        groupId: this.groups[this.groupIndex].id
+      })
+    },
+
     taskClickAction(data) {
       if (!this.isTeacher) return
       const markData = {

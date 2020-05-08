@@ -1,3 +1,4 @@
+import firebase from 'firebase/app'
 import { db, storage } from '../main'
 import {
   DELETE_TASK_FILES,
@@ -15,7 +16,8 @@ import {
   UPDATE_GROUP,
   TOGGLE_GROUP_JOINABLE,
   DELETE_GROUP,
-  UPDATE_MARK
+  UPDATE_MARK,
+  DELETE_STUDENT_FROM_GROUP
 } from './actions.type'
 
 const state = {
@@ -161,6 +163,18 @@ const groupActions = {
 
   async [DELETE_GROUP](_, id) {
     await db.collection('groups').doc(id).delete()
+  },
+
+  async [DELETE_STUDENT_FROM_GROUP]({ dispatch }, options) {
+    await db
+      .collection('groups')
+      .doc(options.groupId)
+      .update({
+        students: firebase.firestore.FieldValue.arrayRemove(
+          db.collection('users').doc(options.studentId)
+        )
+      })
+    options.marksToDelete.forEach(id => dispatch(DELETE_MARK, id))
   }
 }
 

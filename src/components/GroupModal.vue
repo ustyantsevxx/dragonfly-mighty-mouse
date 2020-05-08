@@ -2,7 +2,7 @@
   <b-modal
     centered
     @show="beforeShow"
-    :title="`${group ? 'Измен' : 'Добав'}ить группу`"
+    :title="`${group ? 'Измен' : 'Добавл'}ение группы`"
     id="add-group-modal"
     ref="add-group-modal"
     @hide="resetModal('add-group-modal')"

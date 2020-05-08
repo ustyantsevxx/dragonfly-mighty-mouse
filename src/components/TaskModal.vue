@@ -24,7 +24,7 @@
       />
     </b-form-group>
 
-    <b-form-group label="Постановка задачи (необязательно)">
+    <b-form-group label="Постановка задачи">
       <wysiwyg-editor @input="description = $event" :content="description" />
     </b-form-group>
 

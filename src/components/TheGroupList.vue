@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mb-5">
     <b-row>
       <b-col>
         <b-card no-body class="shadow-sm border-0">

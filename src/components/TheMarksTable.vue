@@ -14,6 +14,7 @@
       sort-by="name"
       responsive="sm"
       bordered
+      striped
       v-if="marks && tasks"
       small
       @sort-changed="closePopover"
@@ -136,11 +137,12 @@ export default {
     tableHeaders() {
       let tableHeaders = [
         {
-          label: '',
-          key: 'index'
+          label: '#',
+          key: 'index',
+          thClass: 'font-weight-normal'
         },
         {
-          label: 'Фамилия Имя',
+          label: 'Студент',
           key: 'name',
           tdClass: 'font-weight-bold text-nowrap',
           stickyColumn: true,
@@ -156,7 +158,9 @@ export default {
           name: t.name,
           score: t.score,
           sortable: true,
-          thClass: `text-nowrap ${t.visible ? '' : ' text-danger'}`,
+          thClass: `text-nowrap  align-middle  ${
+            t.visible ? '' : ' text-danger'
+          }`,
           tdClass: this.isTeacher ? 'hoverable-cell' : 'text-center'
         })
       )
@@ -164,8 +168,8 @@ export default {
       tableHeaders.push({
         label: `Всего\u00a0(${this.totalScore})`,
         key: 'total',
-        tdClass: 'chart-cont border-left text-center',
-        thClass: 'border-left',
+        tdClass: 'chart-cont border-left  text-center',
+        thClass: 'border-left align-middle',
         sortable: true
       })
 
@@ -175,7 +179,9 @@ export default {
     tableItems() {
       return this.students.map(student => {
         let row = {
-          name: `${student.surname} ${student.name}`,
+          name: `${student.surname} ${
+            !this.isMobile() ? student.name : student.name[0] + '.'
+          }`,
           id: student.id,
           total: 0,
           marks: []
@@ -285,6 +291,7 @@ export default {
 
   .marks-table {
     width: max-content;
+    margin-bottom: 0;
 
     .hoverable-cell {
       cursor: pointer;

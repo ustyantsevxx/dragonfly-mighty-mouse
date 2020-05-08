@@ -15,10 +15,10 @@
 
       <b-row>
         <b-col class="badges mt-2 d-flex flex-wrap">
-          <div>
+          <div class="mr-2 mb-2">
             <b-badge variant="info">{{ subj.course }} курс</b-badge>
           </div>
-          <div class="text-nowrap">
+          <div class="text-nowrap mr-2 mb-2">
             <template v-if="tasks">
               <b-badge
                 variant="success"
@@ -175,7 +175,6 @@ h1 {
 }
 
 .badges {
-  gap: 0.5rem;
   span {
     font-size: 1rem;
   }

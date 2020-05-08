@@ -23,6 +23,9 @@
         :state="inputState($v.course)"
         v-model.number.trim="$v.course.$model"
       />
+      <b-form-invalid-feedback v-if="!$v.course.between">
+        Курс должен быть от 1 до 10.
+      </b-form-invalid-feedback>
     </b-form-group>
 
     <template #modal-footer>
@@ -49,7 +52,7 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
+import { required, between } from 'vuelidate/lib/validators'
 import modalMixin from '@/mixins/modal'
 import ConfirmButton from '@/components/ConfirmationButton'
 import LoadingButton from '@/components/LoadingButton'
@@ -111,7 +114,7 @@ export default {
 
   validations: {
     name: { required },
-    course: { required }
+    course: { required, between: between(1, 10) }
   }
 }
 </script>

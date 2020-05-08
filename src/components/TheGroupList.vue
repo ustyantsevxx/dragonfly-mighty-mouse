@@ -84,7 +84,9 @@ export default {
       return this.$store.state.user.isTeacher
     },
     groups() {
-      return this.$store.state.groups
+      return [...this.$store.state.groups].sort((a, b) =>
+        a.name.replace(' ', '').localeCompare(b.name.replace(' ', ''))
+      )
     },
     selectedGroup() {
       return this.groups[this.openedGroupIndex]

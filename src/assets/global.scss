@@ -50,7 +50,9 @@ $white: #ffffff;
 }
 
 .modal-backdrop {
-  background-color: white;
+  backdrop-filter: blur(2px);
+  opacity: 1;
+  background-color: transparent;
 }
 
 .hover-icon {
@@ -76,6 +78,10 @@ $white: #ffffff;
 
 .pointer {
   cursor: pointer !important;
+}
+
+.disabled {
+  cursor: not-allowed !important;
 }
 
 .btn {

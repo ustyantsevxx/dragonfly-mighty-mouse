@@ -54,16 +54,16 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators'
-import AuthDataEdit from '../components/AuthDataEdit'
-import LoadingButton from '../components/LoadingButton'
-import baseMixin from '@/mixins/base'
+import AuthDataEdit from '@/components/TheAuthDataEdit'
+import LoadingButton from '@/components/LoadingButton'
+import modalMixin from '@/mixins/modal'
 import { UPDATE_PROFILE } from '@/store/actions.type'
 
 export default {
   components: { AuthDataEdit, LoadingButton },
 
   mixins: [
-    baseMixin({
+    modalMixin({
       newName: null,
       newSurname: null,
       loadUpdate: false

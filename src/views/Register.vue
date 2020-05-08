@@ -88,14 +88,14 @@
 <script>
 import { minLength, required, email, sameAs } from 'vuelidate/lib/validators'
 import LoadingButton from '@/components/LoadingButton'
-import baseMixin from '@/mixins/base'
+import modalMixin from '@/mixins/modal'
 import { REGISTER } from '@/store/actions.type'
 
 export default {
   components: { LoadingButton },
 
   mixins: [
-    baseMixin({
+    modalMixin({
       name: null,
       surname: null,
       email: null,

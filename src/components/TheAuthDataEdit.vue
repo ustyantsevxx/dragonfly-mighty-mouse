@@ -99,7 +99,7 @@
 
 <script>
 import { minLength, required, sameAs, email } from 'vuelidate/lib/validators'
-import LoadingButton from '../components/LoadingButton'
+import LoadingButton from '@/components/LoadingButton'
 import {
   UPDATE_EMAIL,
   UPDATE_PASSWORD,

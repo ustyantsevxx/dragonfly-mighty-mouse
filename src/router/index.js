@@ -17,17 +17,17 @@ const routes = [
   },
   {
     path: '/login',
-    component: () => import('@/views/auth/Login'),
+    component: () => import('@/views/Login'),
     meta: { requiresGuest: true, title: 'Вход' }
   },
   {
     path: '/register',
-    component: () => import('@/views/auth/Register'),
+    component: () => import('@/views/Register'),
     meta: { requiresGuest: true, title: 'Регистрация' }
   },
   {
     path: '/restore',
-    component: () => import('@/views/auth/RestorePassword'),
+    component: () => import('@/views/RestorePassword'),
     meta: { requiresGuest: true, title: 'Восстановление пароля' }
   },
   {
@@ -48,24 +48,24 @@ const routes = [
     children: [
       {
         path: 'tasks',
-        component: () => import('@/components/domain/TaskList'),
+        component: () => import('@/components/TheTaskList'),
         meta: { requiresAuth: true, dynamicTitle: true }
       },
       {
         path: 'groups',
-        component: () => import('@/components/domain/GroupList'),
+        component: () => import('@/components/TheGroupList'),
         meta: { requiresAuth: true, requiresTeacher: true, dynamicTitle: true }
       },
       {
         path: 'my-group',
-        component: () => import('@/components/domain/GroupList'),
+        component: () => import('@/components/TheGroupList'),
         meta: { requiresAuth: true, requiresStudent: true, dynamicTitle: true }
       }
     ]
   },
   {
     path: '/join-group/:id',
-    component: () => import('@/views/student/JoinGroup'),
+    component: () => import('@/views/JoinGroup'),
     meta: {
       requiresAuth: true,
       requiresStudent: true,

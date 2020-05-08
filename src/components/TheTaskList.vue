@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import TaskModal from '@/components/modals/TaskModal'
+import TaskModal from '@/components/TaskModal'
 import { num2str } from '@/assets/functions'
 import icons from 'file-icons-js'
 import WysiwygEditor from '@/components/WysiwygEditor'

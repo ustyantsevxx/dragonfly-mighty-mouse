@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import SubjectModal from '@/components/modals/SubjectModal'
+import SubjectModal from '@/components/SubjectModal'
 import TextHighlight from 'vue-text-highlight'
 
 export default {

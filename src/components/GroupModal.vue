@@ -46,7 +46,7 @@
     </b-row>
 
     <template #modal-footer>
-      <confirm-btn
+      <confirm-button
         v-if="group"
         @click="deleteGroup()"
         variant="outline-danger"
@@ -72,8 +72,8 @@
 <script>
 import { required } from 'vuelidate/lib/validators'
 import LoadingButton from '@/components/LoadingButton'
-import baseMixin from '@/mixins/base'
-import ConfirmBtn from '@/components/ConfirmationButton'
+import modalMixin from '@/mixins/modal'
+import ConfirmButton from '@/components/ConfirmationButton'
 import {
   ADD_GROUP,
   UPDATE_GROUP,
@@ -82,7 +82,7 @@ import {
 } from '@/store/actions.type'
 
 export default {
-  components: { LoadingButton, ConfirmBtn },
+  components: { LoadingButton, ConfirmButton },
 
   props: {
     groupId: {
@@ -92,7 +92,7 @@ export default {
   },
 
   mixins: [
-    baseMixin({
+    modalMixin({
       newGroupName: null
     })
   ],

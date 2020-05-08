@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import Navbar from './components/Navbar'
+import Navbar from './components/TheNavbar'
 import { BIND_SUBJECTS } from '@/store/actions.type'
 
 export default {

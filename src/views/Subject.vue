@@ -80,7 +80,7 @@
 <script>
 import { num2str } from '@/assets/functions'
 import PageLoader from '@/components/PageLoader'
-import SubjectModal from '@/components/modals/SubjectModal'
+import SubjectModal from '@/components/SubjectModal'
 import { mapState } from 'vuex'
 import { BIND_GROUPS, BIND_MARKS, BIND_TASKS } from '@/store/actions.type'
 

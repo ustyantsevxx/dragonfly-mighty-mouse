@@ -77,7 +77,7 @@
 
     <template #modal-footer>
       <template v-if="task">
-        <confirm-btn
+        <confirm-button
           @click="deleteTask"
           variant="outline-danger"
           class="mr-auto"
@@ -100,13 +100,13 @@
 <script>
 import { required } from 'vuelidate/lib/validators'
 import LoadingButton from '@/components/LoadingButton'
-import ConfirmBtn from '@/components/ConfirmationButton'
-import modalMixin from '@/mixins/base'
+import ConfirmButton from '@/components/ConfirmationButton'
+import modalMixin from '@/mixins/modal'
 import WysiwygEditor from '@/components/WysiwygEditor'
 import { ADD_TASK, UPDATE_TASK, DELETE_TASK } from '@/store/actions.type'
 
 export default {
-  components: { LoadingButton, WysiwygEditor, ConfirmBtn },
+  components: { LoadingButton, WysiwygEditor, ConfirmButton },
 
   props: {
     task: {

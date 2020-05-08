@@ -68,8 +68,8 @@
 </template>
 
 <script>
-import MarksTable from '@/components/domain/MarksTable'
-import GroupModal from '@/components/modals/GroupModal'
+import MarksTable from '@/components/TheMarksTable'
+import GroupModal from '@/components/GroupModal'
 
 export default {
   components: { GroupModal, MarksTable },

@@ -26,7 +26,7 @@
     </b-form-group>
 
     <template v-if="subject">
-      <confirm-btn
+      <confirm-button
         block
         variant="danger"
         text="Удалить дисциплину"
@@ -39,8 +39,8 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators'
-import modalMixin from '@/mixins/base'
-import ConfirmBtn from '@/components/ConfirmationButton'
+import modalMixin from '@/mixins/modal'
+import ConfirmButton from '@/components/ConfirmationButton'
 import {
   ADD_SUBJECT,
   UPDATE_SUBJECT,
@@ -48,7 +48,7 @@ import {
 } from '@/store/actions.type'
 
 export default {
-  components: { ConfirmBtn },
+  components: { ConfirmButton },
 
   props: {
     subject: {

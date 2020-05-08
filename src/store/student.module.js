@@ -20,7 +20,7 @@ const actions = {
       joinable: group.joinable,
       teacherName: teacher.name + ' ' + teacher.surname,
       subject,
-      alreadyPresented: group.students.indexOf(rootState.user.uid > -1)
+      alreadyPresented: group.students.indexOf(rootState.user.uid) > -1
     }
   },
   async [JOIN_GROUP]({ rootState }, id) {

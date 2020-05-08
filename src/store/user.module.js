@@ -26,14 +26,14 @@ const getters = {}
 
 const mutations = {
   setAuthData(state, user) {
-    state.uid = user ? user.uid : null
-    state.email = user ? user.email : null
-    state.emailVerified = user ? user.emailVerified : null
+    state.uid = user?.uid
+    state.email = user?.email
+    state.emailVerified = user?.emailVerified
   },
   setUserData(state, user) {
-    state.name = user ? user.name : null
-    state.surname = user ? user.surname : null
-    state.isTeacher = user ? user.isTeacher : null
+    state.name = user?.name
+    state.surname = user?.surname
+    state.isTeacher = user?.isTeacher
   }
 }
 

@@ -1,3 +1,4 @@
+import store from './index'
 import firebase from 'firebase/app'
 import { db, auth } from '../main.js'
 import {
@@ -36,39 +37,45 @@ const mutations = {
   }
 }
 
+const tryDoOrToastError = async fn => {
+  try {
+    await fn()
+    return true
+  } catch (e) {
+    store.commit('setToastMsg', {
+      error: true,
+      msg: e.message,
+      translate: true
+    })
+  }
+}
+
 const actions = {
-  async [LOGIN]({ commit }, opt) {
-    try {
+  [LOGIN](_, opt) {
+    return tryDoOrToastError(async () => {
       await auth.signInWithEmailAndPassword(opt.email, opt.password)
-      return true
-    } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message, translate: true })
-    }
+    })
   },
 
-  async [REGISTER]({ commit }, opt) {
-    try {
+  async [REGISTER](_, opt) {
+    return tryDoOrToastError(async () => {
       let creds = await auth.createUserWithEmailAndPassword(
         opt.email,
         opt.password
       )
-      db.collection('users').doc(creds.user.uid).set({
+      await db.collection('users').doc(creds.user.uid).set({
         name: opt.name,
         surname: opt.surname,
         isTeacher: opt.isTeacher
       })
-    } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message, translate: true })
-    }
+    })
   },
 
-  async [LOGIN_WITH_GOOGLE]({ commit }) {
-    try {
+  async [LOGIN_WITH_GOOGLE]() {
+    return tryDoOrToastError(async () => {
       let googleProvider = new firebase.auth.GoogleAuthProvider()
       await auth.signInWithPopup(googleProvider)
-    } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message, translate: true })
-    }
+    })
   },
 
   [LOGOUT]() {
@@ -76,29 +83,24 @@ const actions = {
     auth.signOut()
   },
 
-  async [RESTORE_PASSWORD]({ commit }, opt) {
-    try {
+  [RESTORE_PASSWORD]({ commit }, opt) {
+    return tryDoOrToastError(async () => {
       await auth.sendPasswordResetEmail(opt.email, {
         url: 'https://project-scimitar.web.app/login'
       })
       commit('setToastMsg', { msg: 'Ссылка востановления отправлена' })
-      return true
-    } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message, translate: true })
-    }
+    })
   },
 
-  async [VERIFY_EMAIL]({ commit }) {
-    try {
+  [VERIFY_EMAIL]({ commit }) {
+    return tryDoOrToastError(async () => {
       await auth.currentUser.sendEmailVerification()
       commit('setToastMsg', { msg: 'Ссылка подтверждения отправлена' })
-    } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message, translate: true })
-    }
+    })
   },
 
-  async [UPDATE_PROFILE]({ commit, state }, data) {
-    try {
+  [UPDATE_PROFILE]({ commit, state }, data) {
+    return tryDoOrToastError(async () => {
       let userDoc = db.collection('users').doc(state.uid)
       await userDoc.update({
         name: data.name,
@@ -107,13 +109,11 @@ const actions = {
       let fetchedData = await userDoc.get()
       commit('setUserData', fetchedData.data())
       commit('setToastMsg', { msg: 'Имя успешно изменено' })
-    } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message, translate: true })
-    }
+    })
   },
 
-  async [UPDATE_EMAIL]({ commit, state }, data) {
-    try {
+  [UPDATE_EMAIL]({ commit, state }, data) {
+    return tryDoOrToastError(async () => {
       let user = await auth.signInWithEmailAndPassword(
         state.email,
         data.password
@@ -122,14 +122,11 @@ const actions = {
       await auth.currentUser.sendEmailVerification()
       commit('setAuthData', user.user)
       commit('setToastMsg', { msg: 'Запрос на смену эл. почты отправлен' })
-      return true
-    } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message, translate: true })
-    }
+    })
   },
 
-  async [UPDATE_PASSWORD]({ commit, state }, passwords) {
-    try {
+  [UPDATE_PASSWORD]({ commit, state }, passwords) {
+    return tryDoOrToastError(async () => {
       let user = await auth.signInWithEmailAndPassword(
         state.email,
         passwords.old
@@ -137,10 +134,7 @@ const actions = {
       await auth.currentUser.updatePassword(passwords.new)
       commit('setAuthData', user.user)
       commit('setToastMsg', { msg: 'Пароль успешно изменен' })
-      return true
-    } catch (err) {
-      commit('setToastMsg', { error: true, msg: err.message })
-    }
+    })
   }
 }
 

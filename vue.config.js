@@ -9,5 +9,16 @@ module.exports = {
       orientation: 'portrait',
       background_color: '#fff'
     }
+  },
+  css: {
+    loaderOptions: {
+      sass: {
+        prependData: `
+          @import "bootstrap/scss/_functions";
+          @import "bootstrap/scss/_variables";
+          @import "bootstrap/scss/_mixins";
+        `
+      }
+    }
   }
 }

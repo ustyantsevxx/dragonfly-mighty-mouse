@@ -148,6 +148,7 @@ export default {
 h1 {
   width: max-content;
   margin-bottom: 0;
+
   &:hover {
     .hover-icon {
       opacity: 0.1;

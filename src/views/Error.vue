@@ -5,6 +5,15 @@
 </template>
 
 <style lang="scss" scoped>
+@media only screen and (max-width: var(--breakpoint-sm)) {
+  main {
+    #msg {
+      font-size: 4vw;
+      white-space: nowrap;
+    }
+  }
+}
+
 main {
   width: 100%;
   height: 100%;
@@ -20,15 +29,6 @@ main {
     white-space: nowrap;
     transform: translate(-50%, -50%);
     font-size: 3vw;
-  }
-}
-
-@media only screen and (max-width: 576px) {
-  main {
-    #msg {
-      font-size: 4vw;
-      white-space: nowrap;
-    }
   }
 }
 </style>

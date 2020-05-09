@@ -146,6 +146,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: var(--breakpoint-md)) {
+  .add-search {
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+}
+
 .empty-msg {
   text-align: center;
   font-size: 2em;
@@ -176,16 +183,10 @@ export default {
       background-color: #e9ecef;
     }
   }
+
   mark {
     padding: 0 !important;
     background: rgb(231, 231, 231) !important;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .add-search {
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
   }
 }
 </style>

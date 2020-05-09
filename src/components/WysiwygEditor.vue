@@ -185,10 +185,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: var(--breakpoint-md)) {
+  .second-icon-row {
+    margin-top: 0.25rem;
+  }
+}
+
 /deep/ {
   .ProseMirror {
     outline: none !important;
   }
+
   .ProseMirror-focused {
     outline: none !important;
   }
@@ -203,12 +210,6 @@ export default {
     color: #212529;
     background-color: #e0e0e0;
     border-color: #e0e0e0;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .second-icon-row {
-    margin-top: 0.25rem;
   }
 }
 </style>

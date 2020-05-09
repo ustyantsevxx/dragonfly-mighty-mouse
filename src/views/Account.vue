@@ -116,7 +116,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 1080px) {
+@media screen and (max-width: var(--breakpoint-lg)) {
   .header {
     font-size: 1.5rem;
   }

@@ -106,6 +106,7 @@ export default {
 .active {
   transition: background-color 0.25s ease-in-out;
 }
+
 .hover {
   transition: background-color 0.15s ease-in-out;
   border-radius: 0.25rem;
@@ -118,6 +119,7 @@ export default {
 .group-name {
   width: max-content;
   margin-bottom: 0;
+
   &:hover {
     .hover-icon {
       opacity: 0.1;

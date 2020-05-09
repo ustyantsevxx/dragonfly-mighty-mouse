@@ -171,6 +171,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$light: var(--light);
+
 /deep/ {
   .overflow {
     text-overflow: ellipsis;
@@ -189,7 +191,7 @@ export default {
   }
 
   .content {
-    background-color: #f8f9fa;
+    background-color: $light;
     padding: 1rem;
     border-radius: 0 !important;
   }
@@ -201,8 +203,7 @@ export default {
 
     &:hover {
       color: var(--primary);
-
-      background-color: #f8f9fa;
+      background-color: $light;
     }
   }
 
@@ -219,14 +220,14 @@ export default {
     header {
       display: flex;
       border-bottom: 1px solid #dddddd;
-      background-color: #f8f9fa;
+      background-color: $light;
       transition: background-color 0.1s ease-in-out;
       align-items: center;
       padding: 12px 20px;
       cursor: pointer;
 
       &:hover {
-        background-color: #f8f9fa;
+        background-color: $light;
       }
 
       .description {
@@ -290,13 +291,16 @@ export default {
   .file {
     cursor: pointer;
     background: transparent !important;
+
     &:hover {
-      background-color: #f8f9fa !important;
+      background-color: $light !important;
     }
+
     .card-body {
       padding: 0.5em 1em !important;
       display: flex;
       align-items: center;
+
       .ficon::before {
         font-size: 2em !important;
       }

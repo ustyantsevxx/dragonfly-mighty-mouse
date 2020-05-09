@@ -269,12 +269,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: var(--breakpoint-md)) {
-  .marks-table {
-    width: 100%;
-  }
-}
-
 /deep/ {
   .chart-cont {
     position: relative;
@@ -330,6 +324,12 @@ export default {
     &:hover {
       background-size: 0.65em 1em;
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .marks-table {
+    width: 100%;
   }
 }
 </style>

@@ -173,20 +173,13 @@ export default {
     transition: background-color 0.17s ease-in-out;
 
     &:hover {
-      background-color: #e9ecef;
+      background-color: darken($light, 3);
     }
   }
 
   mark {
     padding: 0 !important;
-    background: rgb(231, 231, 231) !important;
-  }
-}
-
-@media screen and (max-width: var(--breakpoint-md)) {
-  .add-search {
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
+    background: darken($light, 10) !important;
   }
 }
 </style>

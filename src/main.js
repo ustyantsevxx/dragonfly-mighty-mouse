@@ -12,6 +12,7 @@ Vue.directive('mobile-class', mobileClass)
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
+import 'bootstrap/scss/bootstrap.scss'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import firebase from 'firebase/app'

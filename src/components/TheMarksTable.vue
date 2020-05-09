@@ -303,7 +303,7 @@ export default {
       padding: 0;
 
       &:hover {
-        background-color: #e9ecef !important;
+        background-color: $light !important;
       }
 
       .score-cell {
@@ -327,7 +327,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 768px) {
+@include media-breakpoint-down(sm) {
   .marks-table {
     width: 100%;
   }

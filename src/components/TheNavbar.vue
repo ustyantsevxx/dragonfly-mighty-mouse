@@ -60,6 +60,6 @@ export default {
 
 .router-link-active {
   cursor: default;
-  color: rgba(255, 255, 255, 0.75) !important;
+  color: darken($light, 15) !important;
 }
 </style>

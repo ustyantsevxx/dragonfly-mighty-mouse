@@ -19,16 +19,6 @@ main {
     margin: 0;
     white-space: nowrap;
     transform: translate(-50%, -50%);
-    font-size: 3vw;
-  }
-}
-
-@media only screen and (max-width: var(--breakpoint-sm)) {
-  main {
-    #msg {
-      font-size: 4vw;
-      white-space: nowrap;
-    }
   }
 }
 </style>

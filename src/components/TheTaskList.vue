@@ -171,8 +171,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$light: var(--light);
-
 /deep/ {
   .overflow {
     text-overflow: ellipsis;
@@ -184,7 +182,7 @@ $light: var(--light);
     background: white !important;
   }
 
-  @media screen and (max-width: 1080px) {
+  @include media-breakpoint-down(sm) {
     .overflow {
       display: none;
     }
@@ -219,7 +217,7 @@ $light: var(--light);
 
     header {
       display: flex;
-      border-bottom: 1px solid #dddddd;
+      border-bottom: 1px solid darken($light, 8);
       background-color: $light;
       transition: background-color 0.1s ease-in-out;
       align-items: center;
@@ -232,7 +230,7 @@ $light: var(--light);
 
       .description {
         margin-left: 1em;
-        color: #6c757d9d !important;
+        color: transparentize($secondary, 0.3) !important;
       }
 
       .badge {
@@ -242,7 +240,7 @@ $light: var(--light);
       .hider {
         display: block;
         font-size: 1.4rem;
-        color: #6c757d9d;
+        color: transparentize($secondary, 0.3);
         position: absolute;
         z-index: 0;
         left: 50%;
@@ -285,7 +283,7 @@ $light: var(--light);
   }
 
   .hiddenLab {
-    background-color: #eeeeee !important;
+    background-color: darken($light, 3) !important;
   }
 
   .file {

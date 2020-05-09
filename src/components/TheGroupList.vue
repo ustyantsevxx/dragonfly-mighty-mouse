@@ -112,7 +112,7 @@ export default {
   border-radius: 0.25rem;
 
   &:hover {
-    background-color: #e9ecef;
+    background-color: $light;
   }
 }
 

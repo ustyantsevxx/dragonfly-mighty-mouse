@@ -1,5 +1,5 @@
 import firebase from 'firebase/app'
-import { db } from '../main'
+import { db } from '@/main'
 import { firestoreAction } from 'vuexfire'
 import {
   BIND_SUBJECTS,

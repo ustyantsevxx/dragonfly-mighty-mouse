@@ -1,5 +1,5 @@
 import firebase from 'firebase/app'
-import { db } from '../main'
+import { db } from '@/main'
 import { GET_GROUP_INFO, JOIN_GROUP } from './actions.type'
 
 const state = {}

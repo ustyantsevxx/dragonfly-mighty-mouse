@@ -1,5 +1,5 @@
 import firebase from 'firebase/app'
-import { db, storage } from '../main'
+import { db, storage } from '@/main'
 import {
   DELETE_TASK_FILES,
   UPLOAD_TASK_FILES,

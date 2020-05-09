@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
-import { auth } from '../main'
+import { auth } from '@/main'
 Vue.use(Router)
 
 const routes = [

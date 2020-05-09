@@ -1,6 +1,6 @@
 import store from './index'
 import firebase from 'firebase/app'
-import { db, auth } from '../main.js'
+import { db, auth } from '@/main.js'
 import {
   LOGIN,
   LOGIN_WITH_GOOGLE,

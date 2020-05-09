@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
+import App from '@/App.vue'
+import router from '@/router'
+import store from '@/store'
 import { isMobile } from '@/assets/functions'
 import { mobileClass } from '@/assets/directives'
 
@@ -24,7 +24,7 @@ Vue.use(Vuelidate)
 
 import 'file-icons-js/css/style.css'
 import '@/assets/global.scss'
-import './registerServiceWorker'
+import '@/registerServiceWorker'
 
 firebase.initializeApp({
   apiKey: process.env.VUE_APP__FIREBASE_API_KEY,

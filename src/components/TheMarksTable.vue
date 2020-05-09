@@ -178,10 +178,11 @@ export default {
 
     tableItems() {
       return this.students.map(student => {
+        let name = student.surname + ' '
+        if (!this.isMobile() && student) name += student.name
+        else if (student.name) name += student.name[0] + '.'
         let row = {
-          name: `${student.surname} ${
-            !this.isMobile() ? student.name : student.name[0] + '.'
-          }`,
+          name,
           id: student.id,
           total: 0,
           marks: []

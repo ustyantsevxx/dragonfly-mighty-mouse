@@ -285,7 +285,7 @@ export default {
   }
 
   .hiddenLab {
-    background-color: darken($light, 3) !important;
+    background-color: darken($light, 2%) !important;
   }
 
   .file {

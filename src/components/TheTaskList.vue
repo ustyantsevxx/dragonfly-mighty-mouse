@@ -145,7 +145,7 @@ export default {
               iter(item)
             })
           }
-          result += temp
+          result += temp + ' '
         }
         iter(descr)
         return result
@@ -200,7 +200,7 @@ export default {
     transition: color 0.3s, background-color 0.3s;
 
     &:hover {
-      color: var(--primary);
+      color: $primary;
       background-color: $light;
     }
   }
@@ -218,15 +218,11 @@ export default {
     header {
       display: flex;
       border-bottom: 1px solid darken($light, 8);
-      background-color: $light;
+      background-color: darken($light, 5);
       transition: background-color 0.1s ease-in-out;
       align-items: center;
       padding: 12px 20px;
       cursor: pointer;
-
-      &:hover {
-        background-color: $light;
-      }
 
       .description {
         margin-left: 1em;
@@ -240,7 +236,7 @@ export default {
       .hider {
         display: block;
         font-size: 1.4rem;
-        color: transparentize($secondary, 0.3);
+        color: $secondary;
         position: absolute;
         z-index: 0;
         left: 50%;
@@ -252,13 +248,18 @@ export default {
       .description,
       .badge,
       .icon-vis {
-        opacity: 0;
+        opacity: 0.1;
         transition: opacity 0.2s;
       }
     }
 
     .collapsed {
       background-color: inherit;
+      opacity: 1;
+
+      &:hover {
+        background-color: $light;
+      }
 
       b,
       span,
@@ -275,6 +276,7 @@ export default {
 
     .collapse-content {
       padding: 12px 20px;
+      border-bottom: 1px solid darken($light, 8);
     }
   }
 

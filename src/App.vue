@@ -47,9 +47,10 @@ export default {
       this.$store.commit('unsetToastMsg')
     },
     async translate(text) {
-      const API = process.env.VUE_APP__YANDEX_TRANSLATE_API_KEY
       try {
-        const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${API}&text=${text}&lang=en-ru`
+        const url =
+          'https://translate.yandex.net/api/v1.5/tr.json/translate?lang=en-ru' +
+          `&key=${process.env.VUE_APP__YANDEX_TRANSLATE_API_KEY}&text=${text}`
         let resp = await fetch(url)
         resp = await resp.json()
         return resp.text.join(' ')

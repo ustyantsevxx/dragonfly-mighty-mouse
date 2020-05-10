@@ -5,14 +5,16 @@
     @click="$emit('click')"
     :disabled="load"
   >
-    <b-overlay
-      :show="load"
-      no-wrap
-      class="disabled"
-      spinner-small
-      spinner-variant="dark"
-    />
-    <slot />
+    <b-overlay class="disabled" opacity="0" :show="load" no-wrap>
+      <template #overlay>
+        <b-spinner
+          class="mt-1 spinner-spinner"
+          :variant="$attrs.variant || 'light'"
+          :small="!$attrs.size"
+        />
+      </template>
+    </b-overlay>
+    <div class="slot-content" :class="{ transparent: load }"><slot /></div>
   </b-btn>
 </template>
 
@@ -31,5 +33,17 @@ export default {
 <style lang="scss" scoped>
 button {
   transition: opacity 0.5s;
+}
+
+.slot-content {
+  transition: opacity 0.1s;
+}
+
+.spinner-spinner {
+  filter: invert(100%) saturate(0) brightness(200%);
+}
+
+.transparent {
+  opacity: 0;
 }
 </style>

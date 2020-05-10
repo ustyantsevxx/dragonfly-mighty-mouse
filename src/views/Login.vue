@@ -83,7 +83,6 @@ export default {
         password: this.password
       })
       if (!signed) this.password = null
-      this.loadLogin = false
     },
     async googleSignIn() {
       this.loadGoogleLogin = true

@@ -8,8 +8,8 @@
     <b-overlay class="g__disabled" opacity="0" :show="load" no-wrap>
       <template #overlay>
         <b-spinner
-          class="mt-1 app__spinner"
-          :variant="$attrs.variant || 'light'"
+          class="mt-1"
+          :class="`app__spinner_${$attrs.variant || 'light'}`"
           :small="!$attrs.size"
         />
       </template>
@@ -41,8 +41,11 @@ export default {
   transition: opacity 0.1s;
 }
 
-.app__spinner {
-  filter: invert(100%) saturate(0) brightness(200%);
+@each $color, $value in $theme-colors {
+  .app__spinner_#{$color} {
+    border-color: color-yiq($value);
+    border-right-color: transparent;
+  }
 }
 
 .app__transparent {

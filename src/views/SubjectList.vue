@@ -9,7 +9,7 @@
       </b-row>
 
       <b-row class="mb-3">
-        <b-col md="8">
+        <b-col sm="12" md="7" lg="8">
           <b-table
             :fields="tableHeaders"
             :items="subjectsByCourse"
@@ -43,7 +43,7 @@
           </b-table>
         </b-col>
 
-        <b-col md="4">
+        <b-col sm="12" md="5" lg="4">
           <b-card
             class="border-0 shadow-sm mb-3"
             v-if="subjects && subjects.length > 1"

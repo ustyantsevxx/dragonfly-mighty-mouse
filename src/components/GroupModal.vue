@@ -26,44 +26,46 @@
       </b-input-group>
     </b-form-group>
 
-    <div class="font-weight-bold mb-2">Управление студентами</div>
-    <b-row v-if="group" align-h="between">
-      <b-col>
-        <b-check
-          switch
-          :checked="group.joinable"
-          @change="toggleGroupJoinable($event)"
-          class="text-nowrap"
-        >
-          Открыта для вступления
-        </b-check>
-      </b-col>
-      <b-col cols="12" md="auto">
-        <b-link v-if="group.joinable" @click="copyLink()" class="text-nowrap">
-          Пригласить студентов
-        </b-link>
-        <input type="hidden" id="invite-link" />
-      </b-col>
-    </b-row>
+    <template v-if="group">
+      <div class="font-weight-bold mb-2">Управление студентами</div>
+      <b-row align-h="between">
+        <b-col>
+          <b-check
+            switch
+            :checked="group.joinable"
+            @change="toggleGroupJoinable($event)"
+            class="text-nowrap"
+          >
+            Открыта для вступления
+          </b-check>
+        </b-col>
+        <b-col cols="12" md="auto">
+          <b-link v-if="group.joinable" @click="copyLink()" class="text-nowrap">
+            Пригласить студентов
+          </b-link>
+          <input type="hidden" id="invite-link" />
+        </b-col>
+      </b-row>
 
-    <b-row class="mt-3">
-      <b-col>
-        <b-button-group class="w-100">
-          <b-btn variant="success" block>
-            <b-icon icon="plus"></b-icon>
-            Добавить вручную
-          </b-btn>
-          <b-btn id="info-button" variant="outline-success">
-            ?
-            <b-popover triggers="hover" target="info-button">
-              Добавление 'фиктивной' записи студента, который не
-              зарегистрировался на сайте. Позднее возможно объединить запись с
-              реальным аккаунтом студента.
-            </b-popover>
-          </b-btn>
-        </b-button-group>
-      </b-col>
-    </b-row>
+      <b-row class="mt-3">
+        <b-col>
+          <b-button-group class="w-100">
+            <b-btn variant="success" block>
+              <b-icon icon="plus"></b-icon>
+              Добавить вручную
+            </b-btn>
+            <b-btn id="info-button" variant="outline-success">
+              ?
+              <b-popover triggers="hover" target="info-button">
+                Добавление 'фиктивной' записи студента, который не
+                зарегистрировался на сайте. Позднее возможно объединить запись с
+                реальным аккаунтом студента.
+              </b-popover>
+            </b-btn>
+          </b-button-group>
+        </b-col>
+      </b-row>
+    </template>
 
     <template #modal-footer>
       <confirm-button

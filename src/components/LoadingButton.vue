@@ -1,9 +1,9 @@
 <template>
   <b-btn
+    :disabled="load || $attrs.disabled"
     v-bind="$attrs"
     class="position-relative app__btn"
     @click="$emit('click')"
-    :disabled="load"
   >
     <b-overlay class="g__disabled" opacity="0" :show="load" no-wrap>
       <template #overlay>

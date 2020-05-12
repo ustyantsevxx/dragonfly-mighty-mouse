@@ -78,7 +78,6 @@ export default {
   methods: {
     async sign() {
       this.loadLogin = true
-      await new Promise(r => setTimeout(() => r(), 1000000000))
       let signed = await this.$store.dispatch(LOGIN, {
         email: this.email,
         password: this.password

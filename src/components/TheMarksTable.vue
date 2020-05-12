@@ -28,9 +28,8 @@
       <template #cell(name)="data">
         <div
           @click="isTeacher && data.toggleDetails()"
-          class="g__pointer"
           title="Развернуть"
-          :class="{ 'text-danger': data.detailsShowing }"
+          :class="{ 'text-danger': data.detailsShowing, g__pointer: isTeacher }"
         >
           {{ data.value }}
         </div>

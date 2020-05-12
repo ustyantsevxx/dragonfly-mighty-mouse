@@ -69,7 +69,10 @@
             </b-nav>
           </b-card>
 
-          <b-card class="border-0 shadow-sm">
+          <b-card
+            v-if="isTeacher || (subjects && subjects.length)"
+            class="border-0 shadow-sm"
+          >
             <div v-if="subjects && subjects.length">
               <b-input-group>
                 <b-input-group-prepend is-text>

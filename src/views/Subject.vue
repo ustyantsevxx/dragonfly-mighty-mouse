@@ -1,6 +1,11 @@
 <template>
   <main>
     <b-container v-if="subj && groups && tasks">
+      <b-link class="text-decoration-none d-block mb-2" to="/subjects">
+        <b-icon icon="arrow-left"></b-icon>
+        Назад к списку
+      </b-link>
+
       <b-row>
         <b-col>
           <h1 class="app__subject_name" title="Редактировать дисциплину">

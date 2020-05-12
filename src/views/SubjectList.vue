@@ -19,7 +19,7 @@
             hover
             thead-class="border-bottom"
             borderless
-            class="bg-white pointer shadow-sm rounded"
+            class="g__pointer bg-white shadow-sm rounded"
             @row-clicked.once="$router.push(`subjects/${$event.id}`)"
           >
             <template #empty>
@@ -31,7 +31,11 @@
               </div>
             </template>
             <template #cell(name)="data">
-              <text-highlight v-if="filter" :queries="filter">
+              <text-highlight
+                highlight-class="bg-info text-white"
+                v-if="filter"
+                :queries="filter"
+              >
                 {{ data.item.name }}
               </text-highlight>
               <template v-else>{{ data.item.name }}</template>
@@ -45,10 +49,11 @@
             v-if="subjects && subjects.length > 1"
           >
             <div class="mb-2 font-weight-bold">Курс обучения</div>
-            <b-nav pills class="tabs-nav">
+            <b-nav pills>
               <b-nav-item
                 to="/subjects"
-                exact-active-class="active link-active"
+                link-classes="app__link"
+                exact-active-class="app__link_active"
               >
                 Все
               </b-nav-item>
@@ -56,7 +61,8 @@
                 v-for="(c, i) in coursesList"
                 :key="i"
                 :to="`?course=${c}`"
-                exact-active-class="active link-active"
+                link-classes="app__link"
+                exact-active-class="app__link_active"
               >
                 {{ c }}
               </b-nav-item>
@@ -146,40 +152,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.empty-msg {
-  text-align: center;
-  font-size: 2em;
+.app__link_active {
+  background: $dark !important;
+  transition: background-color 0.17s ease-in-out;
+  color: white !important;
 }
 
-.filter {
-  margin-left: auto;
-  align-self: flex-end;
-  list-style: none;
-}
+.app__link {
+  color: black;
+  transition: background-color 0.17s ease-in-out;
 
-.add-btn-container {
-  display: flex;
-  align-items: center;
-}
-
-/deep/ {
-  .link-active {
-    transition: background-color 0.17s ease-in-out;
-    color: white !important;
-  }
-
-  li a {
-    color: black;
-    transition: background-color 0.17s ease-in-out;
-
-    &:hover {
-      background-color: darken($light, 3);
-    }
-  }
-
-  mark {
-    padding: 0 !important;
-    background: darken($light, 10) !important;
+  &:hover {
+    background-color: darken($light, 3);
   }
 }
 </style>

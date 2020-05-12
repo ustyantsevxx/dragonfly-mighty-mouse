@@ -29,7 +29,7 @@
                 <b-link to="/restore">Забыли пароль?</b-link>
                 <b-link to="/register">Первый раз?</b-link>
               </div>
-              <!-- <div class="separator">или</div>
+              <!-- <div class="app__separator">или</div>
               <div>
                 <loading-button
                   @click="googleSignIn"
@@ -38,7 +38,7 @@
                   :disabled="!!loading"
                   :load="loadGoogleLogin"
                 >
-                  <img src="@/assets/glogo.webp" />
+                  <img class="app__google_img" src="@/assets/glogo.webp" />
                 </loading-button>
               </div>-->
             </b-form>
@@ -94,11 +94,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-img {
+.app__google_img {
   height: 1.5em;
 }
 
-.separator {
+.app__separator {
   margin-bottom: 4px;
   display: flex;
   color: rgba(0, 0, 0, 0.2);

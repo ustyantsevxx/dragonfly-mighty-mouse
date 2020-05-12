@@ -11,8 +11,9 @@
               <div v-if="groups && groups.length">
                 <b-nav v-if="!isMobile()" card-header pills>
                   <b-nav-item
-                    class="hover"
+                    class="app__hover"
                     :active="openedGroupIndex === i"
+                    active-class="app__selected_group"
                     v-for="(group, i) in groups"
                     :key="i"
                     @click="openedGroupIndex = i"
@@ -38,18 +39,18 @@
             <b-link @click.prevent="openModal()">Добавить</b-link>
           </b-card-header>
           <b-card-body v-if="groups && groups.length">
-            <h2 class="group-name">
+            <h2 class="app__group_name">
               <template v-if="!isTeacher">
                 Ведомость группы {{ selectedGroup.name }}
               </template>
               <div
                 v-else
-                class="pointer"
+                class="g__pointer"
                 @click="openModal(true)"
                 title="Редактировать группу"
               >
                 {{ selectedGroup.name }}
-                <b-icon v-if="isTeacher" icon="pencil" class="hover-icon" />
+                <b-icon v-if="isTeacher" icon="pencil" class="g__hover_icon" />
               </div>
             </h2>
             <marks-table :group-index="openedGroupIndex" />
@@ -103,11 +104,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.active {
+.app__selected_group {
   transition: background-color 0.25s ease-in-out;
 }
 
-.hover {
+.app__hover {
   transition: background-color 0.15s ease-in-out;
   border-radius: 0.25rem;
 
@@ -116,12 +117,12 @@ export default {
   }
 }
 
-.group-name {
+.app__group_name {
   width: max-content;
   margin-bottom: 0;
 
   &:hover {
-    .hover-icon {
+    .g__hover_icon {
       opacity: 0.1;
     }
   }

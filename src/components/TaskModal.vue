@@ -46,7 +46,7 @@
         :key="i"
         class="d-flex align-items-center bg-light"
       >
-        <span class="overflow">{{ f.name }}</span>
+        <span class="g__text_overflow">{{ f.name }}</span>
         <span class="text-nowrap mx-2 text-muted">
           {{ Math.round(f.size / 1024) }} КБ
         </span>
@@ -62,7 +62,7 @@
       no-drop
       @input="addFile"
       browse-text="Обзор"
-      class="overflow"
+      class="g__text_overflow"
       placeholder="Выберите файлы для прикрепления"
     />
     <template v-if="uploadProgress > -1">

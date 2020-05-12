@@ -1,5 +1,5 @@
 <template>
-  <div class="cont" v-if="active">
+  <div class="app__container" v-if="active">
     <b-spinner />
   </div>
 </template>
@@ -16,7 +16,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.cont {
+.app__container {
   z-index: 1000;
   width: 100%;
   text-align: center;

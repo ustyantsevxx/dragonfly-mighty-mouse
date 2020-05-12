@@ -5,33 +5,36 @@
         <b-list-group class="shadow-sm">
           <template v-if="labListSorted.length">
             <b-list-group-item
-              class="lab-item border-0"
+              class="app__task_item border-0"
               v-for="(task, i) in labListSorted"
               :key="i"
             >
               <header
                 v-b-toggle="`acc-${i}`"
-                :class="{ hiddenLab: !task.visible }"
+                class="app__task_header"
+                :class="{ app__hidden_task: !task.visible }"
               >
-                <b class="mr-1">{{ task.number }}.</b>
-                <span class="text-nowrap">{{ task.name }}</span>
-                <span class="description overflow">
+                <b class="app__task_number mr-1">{{ task.number }}.</b>
+                <span class="app__task_name text-nowrap">{{ task.name }}</span>
+                <span
+                  class="app__task_description g__text_overflow d-none d-md-block"
+                >
                   {{ taskDescriptionMapped(task.description) }}
                 </span>
-                <b-badge variant="primary" pill>
+                <b-badge class="app__score_badge" variant="primary" pill>
                   {{ form(task.score, wordForms) }}
                 </b-badge>
                 <b-icon
                   v-if="isTeacher"
                   :icon="task.visible ? 'eye-fill' : 'eye-slash-fill'"
                   :variant="task.visible ? 'success' : 'danger'"
-                  class="icon-vis ml-2"
+                  class="app__visibility_icon ml-2"
                   scale="1.5"
                 />
-                <b-icon icon="arrow-bar-up" class="hider" />
+                <b-icon icon="arrow-bar-up" class="app__collapse_icon" />
               </header>
-              <b-collapse :id="`acc-${i}`" accordion="lab-list">
-                <div class="collapse-content">
+              <b-collapse :id="`acc-${i}`" accordion="tasks">
+                <div class="app__collapse_content">
                   <section>
                     <h3>
                       Лабораторная работа №{{ task.number }} &mdash;
@@ -52,11 +55,11 @@
                           v-for="(file, j) in task.files"
                           @click="downloadFile(file.link)"
                           :key="j"
-                          class="file"
+                          class="app__file"
                         >
                           <span
                             :class="getClass(file.name)"
-                            class="mr-3 ficon"
+                            class="app__file_icon mr-3"
                           ></span>
                           <span>{{ file.name }}</span>
                         </b-card>
@@ -86,14 +89,16 @@
             </b-list-group-item>
           </template>
           <template v-else>
-            <b-card-text class="empty-message text-center text-muted py-4 mb-0">
+            <b-card-text
+              class="app__empty_msg text-center text-muted py-4 mb-0"
+            >
               Список лабораторных работ пуст.
             </b-card-text>
           </template>
           <b-list-group-item
             @click="openModal(null)"
             v-if="isTeacher"
-            class="adder text-center py-1 border-0"
+            class="app__add_task_icon text-center py-1 border-0"
           >
             <div>
               <b-icon icon="plus" scale="1.6" />
@@ -172,29 +177,11 @@ export default {
 
 <style lang="scss" scoped>
 /deep/ {
-  .overflow {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .empty-message {
+  .app__empty_msg {
     background: white !important;
   }
 
-  @include media-breakpoint-down(sm) {
-    .overflow {
-      display: none;
-    }
-  }
-
-  .content {
-    background-color: $light;
-    padding: 1rem;
-    border-radius: 0 !important;
-  }
-
-  .adder {
+  .app__add_task_icon {
     cursor: pointer;
     border-top: none;
     transition: color 0.3s, background-color 0.3s;
@@ -205,17 +192,21 @@ export default {
     }
   }
 
-  .lab-item {
+  .app__hidden_task {
+    background-color: darken($light, 2%) !important;
+  }
+
+  .app__task_item {
     padding: 0;
     transition: background-color 0.17s;
 
     &:last-of-type {
-      header {
+      .app__task_header {
         border-bottom: none;
       }
     }
 
-    header {
+    .app__task_header {
       display: flex;
       border-bottom: 1px solid darken($light, 8);
       background-color: darken($light, 5);
@@ -224,16 +215,16 @@ export default {
       padding: 12px 20px;
       cursor: pointer;
 
-      .description {
+      .app__task_description {
         margin-left: 1em;
         color: transparentize($secondary, 0.3) !important;
       }
 
-      .badge {
+      .app__score_badge {
         margin-left: auto;
       }
 
-      .hider {
+      .app__collapse_icon {
         display: block;
         font-size: 1.4rem;
         color: $secondary;
@@ -243,11 +234,11 @@ export default {
         transform: translateX(-50%);
       }
 
-      b,
-      span,
-      .description,
-      .badge,
-      .icon-vis {
+      .app__task_number,
+      .app__task_name,
+      .app__task_description,
+      .app__score_badge,
+      .app__visibility_icon {
         opacity: 0.1;
         transition: opacity 0.2s;
       }
@@ -261,34 +252,26 @@ export default {
         background-color: $light;
       }
 
-      b,
-      span,
-      .description,
-      .badge,
-      .icon-vis {
+      .app__task_number,
+      .app__task_name,
+      .app__task_description,
+      .app__score_badge,
+      .app__visibility_icon {
         opacity: 1;
       }
 
-      .hider {
+      .app__collapse_icon {
         display: none;
       }
     }
 
-    .collapse-content {
+    .app__collapse_content {
       padding: 12px 20px;
       border-bottom: 1px solid darken($light, 8);
     }
   }
 
-  .task-description-p {
-    white-space: pre-wrap;
-  }
-
-  .hiddenLab {
-    background-color: darken($light, 2%) !important;
-  }
-
-  .file {
+  .app__file {
     cursor: pointer;
     background: transparent !important;
 
@@ -300,10 +283,10 @@ export default {
       padding: 0.5em 1em !important;
       display: flex;
       align-items: center;
+    }
 
-      .ficon::before {
-        font-size: 2em !important;
-      }
+    .app__file_icon::before {
+      font-size: 2em !important;
     }
   }
 }

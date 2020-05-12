@@ -5,7 +5,7 @@
       :editor="editor"
       v-slot="{ commands, isActive }"
     >
-      <div class="menubar">
+      <div class="app__menubar">
         <b-btn-toolbar>
           <b-container fluid class="px-0">
             <b-row no-gutters>
@@ -38,7 +38,7 @@
       </div>
     </editor-menu-bar>
 
-    <editor-content class="content border rounded" :editor="editor" />
+    <editor-content class="app__content border rounded" :editor="editor" />
   </div>
 </template>
 
@@ -190,11 +190,11 @@ export default {
   }
 }
 
-.content {
+.app__content {
   padding: 1rem 1rem 0;
 }
 
-.menubar {
+.app__menubar {
   button {
     color: #212529;
     background-color: #e0e0e0;

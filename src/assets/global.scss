@@ -15,20 +15,7 @@
   height: 100vh;
 }
 
-.modal-content {
-  border: none;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-}
-
-.hover-icon {
-  transition: opacity 0.3s;
-  opacity: 0;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.4 !important;
-  }
-}
+// --- vue
 
 .global-fade-enter-active,
 .global-fade-leave-active {
@@ -41,12 +28,11 @@
   transform: translateY(3px);
 }
 
-.pointer {
-  cursor: pointer !important;
-}
+// --- bootstrap mods
 
-.disabled {
-  cursor: not-allowed !important;
+.modal-content {
+  border: none;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
 }
 
 .btn {
@@ -58,4 +44,30 @@
   legend {
     font-weight: bold;
   }
+}
+
+// --- global styles
+
+.g__pointer {
+  cursor: pointer !important;
+}
+
+.g__disabled {
+  cursor: not-allowed !important;
+}
+
+.g__hover_icon {
+  transition: opacity 0.3s;
+  opacity: 0;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.4 !important;
+  }
+}
+
+.g__text_overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }

@@ -3,10 +3,14 @@
     <b-container v-if="subj && groups && tasks">
       <b-row>
         <b-col>
-          <h1 title="Редактировать дисциплину">
-            <div v-if="isTeacher" class="pointer" @click="openSubjectModal()">
+          <h1 class="app__subject_name" title="Редактировать дисциплину">
+            <div
+              v-if="isTeacher"
+              class="g__pointer"
+              @click="openSubjectModal()"
+            >
               <span class="text-nowrap mr-1">{{ subj.name }}</span>
-              <b-icon icon="pencil" class="hover-icon" />
+              <b-icon icon="pencil" class="g__hover_icon" />
             </div>
             <template v-else>{{ subj.name }}</template>
           </h1>
@@ -14,21 +18,26 @@
       </b-row>
 
       <b-row>
-        <b-col class="badges mt-2 d-flex flex-wrap">
+        <b-col class="app__badges mt-2 d-flex flex-wrap">
           <div class="mr-2 mb-2">
-            <b-badge variant="info">{{ subj.course }} курс</b-badge>
+            <b-badge class="app__badge" variant="info">
+              {{ subj.course }} курс
+            </b-badge>
           </div>
           <div class="text-nowrap mr-2 mb-2">
             <template v-if="tasks">
               <b-badge
                 variant="success"
-                :class="{ over: visibleTasksCount !== tasks.length }"
+                class="app__badge"
+                :class="{
+                  app__task_count_right_part: visibleTasksCount !== tasks.length
+                }"
               >
                 {{ num2str(tasks.length, taskForms) }}
               </b-badge>
               <b-badge
                 variant="danger"
-                class="over1"
+                class="app__badge app__task_count_left_part"
                 v-if="isTeacher && visibleTasksCount != tasks.length"
               >
                 {{ visibleTasksCount }} доступно
@@ -36,21 +45,26 @@
             </template>
           </div>
           <div>
-            <b-badge class="" v-if="groups && isTeacher">
+            <b-badge class="app__badge" v-if="groups && isTeacher">
               {{ num2str(groups.length, ['группа', 'группы', 'групп']) }}
             </b-badge>
           </div>
         </b-col>
       </b-row>
 
-      <hr class="my-4" />
+      <hr class="mb-4" />
 
-      <b-nav fill pills class="mb-4 tabs-nav">
-        <b-nav-item exact-active-class="active link-active" to="tasks">
+      <b-nav fill pills class="mb-4">
+        <b-nav-item
+          link-classes="app__link"
+          exact-active-class="app__link_active"
+          to="tasks"
+        >
           Лабораторные работы
         </b-nav-item>
         <b-nav-item
-          exact-active-class="active link-active"
+          link-classes="app__link"
+          exact-active-class="app__link_active"
           :to="isTeacher ? 'groups' : 'my-group'"
         >
           <template v-if="isTeacher">Группы и баллы</template>
@@ -145,48 +159,46 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h1 {
+.app__subject_name {
   width: max-content;
   margin-bottom: 0;
 
   &:hover {
-    .hover-icon {
+    .g__hover_icon {
       opacity: 0.1;
     }
   }
 }
 
-/deep/ {
-  .link-active {
-    transition: background-color 0.17s ease-in-out;
-    background: var(--dark) !important;
-    color: white !important;
-  }
+.app__link_active {
+  transition: background-color 0.17s ease-in-out;
+  background: $dark !important;
+  color: white !important;
+}
 
-  li a {
+.app__link {
+  color: black;
+  transition: background-color 0.17s ease-in-out;
+  border-radius: 0.25rem;
+
+  &:hover {
     color: black;
-    transition: background-color 0.17s ease-in-out;
-    border-radius: 0.25rem;
-
-    &:hover {
-      color: black;
-      background-color: #e9ecef;
-    }
+    background-color: darken($light, 3);
   }
 }
 
-.badges {
-  span {
+.app__badges {
+  .app__badge {
     font-size: 1rem;
   }
 }
 
-.over {
+.app__task_count_right_part {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
 
-.over1 {
+.app__task_count_left_part {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }

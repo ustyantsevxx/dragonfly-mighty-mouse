@@ -17,17 +17,18 @@
       striped
       v-if="marks && tasks"
       small
+      thead-tr-class="text-reset"
       @sort-changed="closePopover"
-      class="mt-3 marks-table"
+      class="app__marks_table mt-3"
     >
       <template #head()="data">
-        <div v-b-tooltip.hover="data.field.name">{{ data.label }}</div>
+        <div :title="data.field.name">{{ data.label }}</div>
       </template>
       <template #cell(index)="data">{{ data.index + 1 }}</template>
       <template #cell(name)="data">
         <div
-          @click="data.toggleDetails()"
-          class="pointer"
+          @click="isTeacher && data.toggleDetails()"
+          class="g__pointer"
           title="Развернуть"
           :class="{ 'text-danger': data.detailsShowing }"
         >
@@ -43,21 +44,18 @@
 
       <template #cell()="data">
         <div
-          class="score-cell"
+          class="app__score_cell"
           :id="data.item.id + data.field.key"
           @click="taskClickAction(data)"
         >
-          <div
-            class="score-value"
-            :class="getExtraMarkClass(data.value.score, data.field.score)"
-          >
+          <div :class="getExtraMarkClass(data.value.score, data.field.score)">
             {{ data.value.score }}
           </div>
         </div>
       </template>
       <template #cell(total)="data">
-        <div class="chart" :style="getChartCellStyle(data.value)"></div>
-        <div class="value">{{ data.value }}</div>
+        <div class="app__chart" :style="getChartCellStyle(data.value)"></div>
+        <div class="app__chart_value">{{ data.value }}</div>
       </template>
     </b-table>
 
@@ -138,8 +136,7 @@ export default {
       let tableHeaders = [
         {
           label: '#',
-          key: 'index',
-          thClass: 'font-weight-normal'
+          key: 'index'
         },
         {
           label: 'Студент',
@@ -158,17 +155,17 @@ export default {
           name: t.name,
           score: t.score,
           sortable: true,
-          thClass: `text-nowrap  align-middle  ${
+          thClass: `text-nowrap align-middle  ${
             t.visible ? '' : ' text-danger'
           }`,
-          tdClass: this.isTeacher ? 'hoverable-cell' : 'text-center'
+          tdClass: this.isTeacher ? 'app__hoverable_cell' : 'text-center'
         })
       )
 
       tableHeaders.push({
         label: `Всего\u00a0(${this.totalScore})`,
         key: 'total',
-        tdClass: 'chart-cont border-left  text-center',
+        tdClass: 'app__chart_container border-left text-center',
         thClass: 'border-left align-middle',
         sortable: true
       })
@@ -270,11 +267,11 @@ export default {
 
 <style lang="scss" scoped>
 /deep/ {
-  .chart-cont {
+  .app__chart_container {
     position: relative;
     background: white !important;
 
-    .chart {
+    .app__chart {
       position: absolute;
       top: 0;
       left: 0;
@@ -284,7 +281,7 @@ export default {
       transition: width 0.3s;
     }
 
-    .value {
+    .app__chart_value {
       width: 100%;
       left: 0;
       position: absolute;
@@ -292,11 +289,11 @@ export default {
     }
   }
 
-  .marks-table {
+  .app__marks_table {
     width: max-content;
     margin-bottom: 0;
 
-    .hoverable-cell {
+    .app__hoverable_cell {
       cursor: pointer;
       transition: background-color 0.09s ease-in-out;
       position: relative;
@@ -306,7 +303,7 @@ export default {
         background-color: $light !important;
       }
 
-      .score-cell {
+      .app__score_cell {
         width: 100%;
         height: 100%;
         position: absolute;
@@ -319,7 +316,6 @@ export default {
 
   .table.b-table > thead > tr > [aria-sort='none'] {
     background-size: 0;
-    font-weight: normal;
 
     &:hover {
       background-size: 0.65em 1em;
@@ -328,7 +324,7 @@ export default {
 }
 
 @include media-breakpoint-down(sm) {
-  .marks-table {
+  .app__marks_table {
     width: 100%;
   }
 }

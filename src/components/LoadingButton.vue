@@ -1,20 +1,22 @@
 <template>
   <b-btn
     v-bind="$attrs"
-    class="position-relative"
+    class="position-relative app__btn"
     @click="$emit('click')"
     :disabled="load"
   >
-    <b-overlay class="disabled" opacity="0" :show="load" no-wrap>
+    <b-overlay class="g__disabled" opacity="0" :show="load" no-wrap>
       <template #overlay>
         <b-spinner
-          class="mt-1 spinner-spinner"
+          class="mt-1 app__spinner"
           :variant="$attrs.variant || 'light'"
           :small="!$attrs.size"
         />
       </template>
     </b-overlay>
-    <div class="slot-content" :class="{ transparent: load }"><slot /></div>
+    <div class="app__slot_content" :class="{ app__transparent: load }">
+      <slot />
+    </div>
   </b-btn>
 </template>
 
@@ -31,19 +33,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-button {
+.app__btn {
   transition: opacity 0.5s;
 }
 
-.slot-content {
+.app__slot_content {
   transition: opacity 0.1s;
 }
 
-.spinner-spinner {
+.app__spinner {
   filter: invert(100%) saturate(0) brightness(200%);
 }
 
-.transparent {
+.app__transparent {
   opacity: 0;
 }
 </style>

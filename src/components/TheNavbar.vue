@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="sm" type="dark" class="nav shadow-sm" sticky>
+  <b-navbar toggleable="sm" type="dark" class="app__navbar shadow-sm" sticky>
     <b-navbar-brand to="/" exact active-class="c">
       Dragonfly
     </b-navbar-brand>
@@ -53,7 +53,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.nav {
+.app__navbar {
   background-color: #191414ea;
   border-bottom: 0.3rem solid #ffffff2f;
 }

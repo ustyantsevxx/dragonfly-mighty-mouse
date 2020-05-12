@@ -2,7 +2,7 @@
   <b-card class="shadow-sm border-0">
     <template #header>
       <div class="d-flex justify-content-between align-items-center">
-        <div>Данные для входа</div>
+        <div class="font-weight-bold">Данные для входа</div>
         <div>
           <b-form-radio-group
             @change="resetData"

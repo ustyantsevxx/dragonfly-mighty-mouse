@@ -11,7 +11,10 @@
       </b-row>
       <b-row align-h="center">
         <b-col lg="5" xl="4" class="mb-3">
-          <b-card class="shadow-sm border-0" header="Личные данные">
+          <b-card class="shadow-sm border-0">
+            <template #header>
+              <div class="text-center font-weight-bold">Личные данные</div>
+            </template>
             <b-form>
               <b-form-group label="Имя">
                 <b-form-input

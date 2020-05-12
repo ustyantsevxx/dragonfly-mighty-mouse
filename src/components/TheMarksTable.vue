@@ -97,8 +97,8 @@ import { debounce } from 'debounce'
 
 export default {
   props: {
-    groupIndex: {
-      type: Number,
+    groupId: {
+      type: String,
       required: true
     }
   },
@@ -113,7 +113,9 @@ export default {
 
   computed: {
     ...mapState({
-      groups: s => s.groups,
+      group(s) {
+        return s.groups.find(g => g.id === this.groupId)
+      },
       marks: s => s.marks,
       tasks(s) {
         return this.showAllTasks
@@ -129,7 +131,7 @@ export default {
     },
 
     students() {
-      return this.groups[this.groupIndex].students
+      return this.group.students
     },
 
     tableHeaders() {
@@ -203,7 +205,7 @@ export default {
       this.$store.dispatch(DELETE_STUDENT_FROM_GROUP, {
         studentId: data.item.id,
         marksToDelete: data.item.marks,
-        groupId: this.groups[this.groupIndex].id
+        groupId: this.groupId
       })
     },
 
@@ -212,7 +214,7 @@ export default {
       const markData = {
         studentId: data.item.id,
         taskId: data.field.key,
-        groupId: this.groups[this.groupIndex].id,
+        groupId: this.groupId,
         subjectId: this.$route.params.id,
         score: data.field.score
       }

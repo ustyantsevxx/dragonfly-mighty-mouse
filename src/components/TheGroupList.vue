@@ -9,14 +9,18 @@
           >
             <div>
               <div v-if="groups && groups.length">
-                <b-nav v-if="!isMobile()" card-header pills>
+                <b-nav
+                  v-if="groups.length < 7 && !isMobile()"
+                  card-header
+                  pills
+                >
                   <b-nav-item
                     class="app__hover"
-                    :active="openedGroupIndex === i"
+                    :active="selectedGroupId === group.id"
                     active-class="app__selected_group"
                     v-for="(group, i) in groups"
                     :key="i"
-                    @click="openedGroupIndex = i"
+                    @click="selectedGroupId = group.id"
                   >
                     {{ group.name }}
                   </b-nav-item>
@@ -27,7 +31,7 @@
                   </template>
                   <b-dd-header>Выберите группу</b-dd-header>
                   <b-dd-item-btn
-                    @click="openedGroupIndex = i"
+                    @click="selectedGroupId = group.id"
                     v-for="(group, i) in groups"
                     :key="i"
                   >
@@ -38,7 +42,8 @@
             </div>
             <b-link @click.prevent="openModal()">Добавить</b-link>
           </b-card-header>
-          <b-card-body v-if="groups && groups.length">
+
+          <b-card-body v-if="groups && groups.length && selectedGroupId">
             <h2 class="app__group_name">
               <template v-if="!isTeacher">
                 Ведомость группы {{ selectedGroup.name }}
@@ -53,9 +58,13 @@
                 <b-icon v-if="isTeacher" icon="pencil" class="g__hover_icon" />
               </div>
             </h2>
-            <marks-table :group-index="openedGroupIndex" />
+            <marks-table :group-id="selectedGroup.id" />
           </b-card-body>
-          <b-card-text v-else class="text-center text-muted py-4">
+
+          <b-card-text
+            v-else-if="!groups.length"
+            class="text-center text-muted py-4"
+          >
             Список групп пуст.
           </b-card-text>
         </b-card>
@@ -77,7 +86,7 @@ export default {
 
   data: () => ({
     groupToEdit: null,
-    openedGroupIndex: 0
+    selectedGroupId: null
   }),
 
   computed: {
@@ -90,7 +99,14 @@ export default {
       )
     },
     selectedGroup() {
-      return this.groups[this.openedGroupIndex]
+      return this.groups.find(g => g.id === this.selectedGroupId)
+    }
+  },
+
+  watch: {
+    groups: {
+      handler: 'selectFirst',
+      immediate: true
     }
   },
 
@@ -98,6 +114,10 @@ export default {
     openModal(create = false) {
       this.groupToEdit = create ? this.selectedGroup.id : null
       this.$nextTick(() => this.$bvModal.show('add-group-modal'))
+    },
+    selectFirst(force) {
+      if (force === true || (!this.selectedGroupId && this.groups.length))
+        this.selectedGroupId = this.groups[0].id
     }
   }
 }

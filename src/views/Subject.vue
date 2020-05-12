@@ -127,8 +127,11 @@ export default {
   },
 
   watch: {
-    subj() {
-      if (this.subj) this.changeTitle()
+    subj: {
+      handler() {
+        if (this.subj) this.changeTitle()
+      },
+      immediate: true
     }
   },
 
@@ -137,10 +140,6 @@ export default {
     this.$store.dispatch(BIND_GROUPS, id)
     this.$store.dispatch(BIND_MARKS, id)
     this.$store.dispatch(BIND_TASKS, id)
-  },
-
-  mounted() {
-    if (this.subj) this.changeTitle()
   },
 
   methods: {

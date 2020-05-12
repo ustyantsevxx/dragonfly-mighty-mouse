@@ -140,10 +140,11 @@ export default {
   methods: {
     async addGroup() {
       this.loadAdd = true
-      await this.$store.dispatch(ADD_GROUP, {
+      const newId = await this.$store.dispatch(ADD_GROUP, {
         name: this.newGroupName,
         subjectId: this.$route.params.id
       })
+      this.$parent.selectedGroupId = newId
       this.resetModal('add-group-modal')
       this.loadAdd = false
     },
@@ -161,9 +162,9 @@ export default {
       this.$store.dispatch(TOGGLE_GROUP_JOINABLE, { id: this.group.id, state })
     },
     async deleteGroup() {
-      this.$parent.openedGroupIndex = 0
-      await this.$store.dispatch(DELETE_GROUP, this.group.id)
+      this.$parent.selectFirst(true)
       this.resetModal('add-group-modal')
+      this.$store.dispatch(DELETE_GROUP, this.group.id)
     },
     beforeShow() {
       if (this.group) {

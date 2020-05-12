@@ -49,7 +49,7 @@ const subjectActions = {
 }
 
 const taskActions = {
-  async [ADD_TASK]({ commit, dispatch, state }, newTask) {
+  async [ADD_TASK]({ dispatch, state }, newTask) {
     const pinnedFiles = await dispatch(UPLOAD_TASK_FILES, newTask.files)
     await db.collection('tasks').add({
       name: newTask.name,
@@ -63,7 +63,7 @@ const taskActions = {
     state.filesUploadProgress = -1
   },
 
-  async [UPDATE_TASK]({ state, commit, dispatch }, task) {
+  async [UPDATE_TASK]({ state, dispatch }, task) {
     dispatch(DELETE_TASK_FILES, task.oldFilesToDelete)
     const newFiles = await dispatch(UPLOAD_TASK_FILES, task.newFilesToUpload)
     await db
@@ -140,16 +140,17 @@ const taskActions = {
 }
 
 const groupActions = {
-  async [ADD_GROUP]({ commit }, groupData) {
-    await db.collection('groups').add({
+  async [ADD_GROUP](_, groupData) {
+    const group = await db.collection('groups').add({
       name: groupData.name,
       students: [],
       subject: db.collection('subjects').doc(groupData.subjectId),
       joinable: true
     })
+    return group.id
   },
 
-  async [UPDATE_GROUP]({ commit }, groupData) {
+  async [UPDATE_GROUP](_, groupData) {
     await db.collection('groups').doc(groupData.id).update({
       name: groupData.name
     })

@@ -47,14 +47,38 @@
         </b-col>
       </b-row>
 
+      <b-collapse
+        id="fake-student-collapse"
+        @input="resetStudentData()"
+        v-model="studentCollapse"
+      >
+        <hr />
+        <b-input
+          :state="inputState($v.newFakeStudentName)"
+          v-model.trim="$v.newFakeStudentName.$model"
+          placeholder="Имя "
+          class="mb-2"
+        />
+        <b-input
+          :state="inputState($v.newFakeStudentSurname)"
+          v-model.trim="$v.newFakeStudentSurname.$model"
+          placeholder="Фамилия"
+        />
+      </b-collapse>
+
       <b-row class="mt-3">
         <b-col>
-          <b-button-group class="w-100">
-            <b-btn variant="success" block>
-              <b-icon icon="plus"></b-icon>
-              Добавить вручную
+          <b-button-group v-if="!studentCollapse || $v.$invalid" class="w-100">
+            <b-btn
+              v-if="!studentCollapse || $v.$invalid"
+              variant="info"
+              block
+              v-b-toggle.fake-student-collapse
+            >
+              <b-icon v-if="!studentCollapse" icon="plus" />
+              {{ !studentCollapse ? 'Добавить вручную' : 'Отменить' }}
             </b-btn>
-            <b-btn id="info-button" variant="outline-success">
+            <b-btn id="info-button" variant="outline-info">
               ?
               <b-popover triggers="hover" target="info-button">
                 Добавление 'фиктивной' записи студента, который не
@@ -63,6 +87,9 @@
               </b-popover>
             </b-btn>
           </b-button-group>
+          <b-btn v-else @click="addFakeStudent()" variant="success" block>
+            Добавить
+          </b-btn>
         </b-col>
       </b-row>
     </template>
@@ -100,7 +127,8 @@ import {
   ADD_GROUP,
   UPDATE_GROUP,
   TOGGLE_GROUP_JOINABLE,
-  DELETE_GROUP
+  DELETE_GROUP,
+  ADD_FAKE_STUDENT_TO_GROUP
 } from '@/store/actions.type'
 
 export default {
@@ -115,13 +143,17 @@ export default {
 
   mixins: [
     modalMixin({
-      newGroupName: null
+      newGroupName: null,
+      newFakeStudentName: null,
+      newFakeStudentSurname: null
     })
   ],
 
   data: () => ({
     loadAdd: false,
-    loadEdit: false
+    loadEdit: false,
+    loadFakeStudentAdd: false,
+    studentCollapse: false
   }),
 
   watch: {
@@ -140,6 +172,12 @@ export default {
   },
 
   methods: {
+    resetStudentData() {
+      this.newFakeStudentName = null
+      this.newFakeStudentSurname = null
+      this.$v.newFakeStudentName.$reset()
+      this.$v.newFakeStudentSurname.$reset()
+    },
     async addGroup() {
       this.loadAdd = true
       const newId = await this.$store.dispatch(ADD_GROUP, {
@@ -173,6 +211,13 @@ export default {
         this.newGroupName = this.group.name
       }
     },
+    async addFakeStudent() {
+      await this.$store.dispatch(ADD_FAKE_STUDENT_TO_GROUP, {
+        name: this.newFakeStudentName,
+        surname: this.newFakeStudentSurname,
+        groupId: this.groupId
+      })
+    },
     copyLink() {
       let a = document.querySelector('#invite-link')
       a.setAttribute('type', 'text')
@@ -190,7 +235,9 @@ export default {
   },
 
   validations: {
-    newGroupName: { required }
+    newGroupName: { required },
+    newFakeStudentName: { required },
+    newFakeStudentSurname: { required }
   }
 }
 </script>

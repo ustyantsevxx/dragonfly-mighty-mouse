@@ -17,7 +17,8 @@ import {
   TOGGLE_GROUP_JOINABLE,
   DELETE_GROUP,
   UPDATE_MARK,
-  DELETE_STUDENT_FROM_GROUP
+  DELETE_STUDENT_FROM_GROUP,
+  ADD_FAKE_STUDENT_TO_GROUP
 } from './actions.type'
 
 const state = {
@@ -86,7 +87,9 @@ const taskActions = {
 
   async [MARK_TASK](_, markData) {
     db.collection('marks').add({
-      student: db.collection('users').doc(markData.studentId),
+      student: db
+        .collection(markData.fake ? 'fake-students' : 'users')
+        .doc(markData.studentId),
       task: db.collection('tasks').doc(markData.taskId),
       group: db.collection('groups').doc(markData.groupId),
       subject: db.collection('subjects').doc(markData.subjectId),
@@ -172,10 +175,27 @@ const groupActions = {
       .doc(options.groupId)
       .update({
         students: firebase.firestore.FieldValue.arrayRemove(
-          db.collection('users').doc(options.studentId)
+          db
+            .collection(options.fake ? 'fake-students' : 'users')
+            .doc(options.studentId)
         )
       })
     options.marksToDelete.forEach(id => dispatch(DELETE_MARK, id))
+    if (options.fake)
+      await db.collection('fake-students').doc(options.studentId).delete()
+  },
+  async [ADD_FAKE_STUDENT_TO_GROUP](_, options) {
+    let newFakeStudent = await db.collection('fake-students').add({
+      name: options.name,
+      surname: options.surname,
+      fake: true
+    })
+    await db
+      .collection('groups')
+      .doc(options.groupId)
+      .update({
+        students: firebase.firestore.FieldValue.arrayUnion(newFakeStudent)
+      })
   }
 }
 

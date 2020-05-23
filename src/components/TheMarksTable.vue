@@ -181,6 +181,7 @@ export default {
         else if (student.name) name += student.name[0] + '.'
         let row = {
           name,
+          fake: student.fake,
           id: student.id,
           total: 0,
           marks: []
@@ -204,7 +205,8 @@ export default {
       this.$store.dispatch(DELETE_STUDENT_FROM_GROUP, {
         studentId: data.item.id,
         marksToDelete: data.item.marks,
-        groupId: this.groupId
+        groupId: this.groupId,
+        fake: data.item.fake
       })
     },
 
@@ -215,7 +217,8 @@ export default {
         taskId: data.field.key,
         groupId: this.groupId,
         subjectId: this.$route.params.id,
-        score: data.field.score
+        score: data.field.score,
+        fake: data.item.fake
       }
 
       if (data.value) {

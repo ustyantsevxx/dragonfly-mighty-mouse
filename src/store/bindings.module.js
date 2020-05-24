@@ -86,15 +86,17 @@ export default {
     }
   ),
 
-  [BIND_MARKS]: firestoreAction(
-    ({ rootState, bindFirestoreRef }, subjectId) => {
-      if (rootState.marks) return
-      return bindFirestoreRef(
-        'marks',
-        db
-          .collection('marks')
-          .where('subject', '==', db.collection('subjects').doc(subjectId))
-      )
-    }
-  )
+  [BIND_MARKS]: firestoreAction(({ rootState, bindFirestoreRef }, options) => {
+    if (rootState.marks && !options.force) return
+    return bindFirestoreRef(
+      'marks',
+      db
+        .collection('marks')
+        .where(
+          'subject',
+          '==',
+          db.collection('subjects').doc(options.subjectId)
+        )
+    )
+  })
 }

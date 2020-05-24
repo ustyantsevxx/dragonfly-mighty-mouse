@@ -54,15 +54,15 @@
       >
         <hr />
         <b-input
-          :state="inputState($v.newFakeStudentName)"
-          v-model.trim="$v.newFakeStudentName.$model"
-          placeholder="Имя "
-          class="mb-2"
-        />
-        <b-input
           :state="inputState($v.newFakeStudentSurname)"
           v-model.trim="$v.newFakeStudentSurname.$model"
           placeholder="Фамилия"
+          class="mb-2"
+        />
+        <b-input
+          :state="inputState($v.newFakeStudentName)"
+          v-model.trim="$v.newFakeStudentName.$model"
+          placeholder="Имя "
         />
       </b-collapse>
 

@@ -6,6 +6,13 @@
     centered
     title="Изменение записи студента"
   >
+    <b-form-group label="Фамилия">
+      <b-input
+        :state="inputState($v.newSurname)"
+        v-model.trim="$v.newSurname.$model"
+      />
+    </b-form-group>
+
     <b-form-group label="Имя">
       <b-input
         :state="inputState($v.newName)"
@@ -13,12 +20,48 @@
       />
     </b-form-group>
 
-    <b-form-group label="Фамилия">
-      <b-input
-        :state="inputState($v.newSurname)"
-        v-model.trim="$v.newSurname.$model"
-      />
-    </b-form-group>
+    <hr class="m-0" />
+
+    <b-collapse v-model="collapsed" id="students-collapse">
+      <b-list-group class="mt-3">
+        <b-list-group-item
+          v-for="(stud, i) in $parent.students.filter(x => !x.fake)"
+          :key="i"
+          @click="checkStudent(stud)"
+          class="p-2 app__student"
+          :class="{
+            'bg-light font-weight-bold text-success':
+              checkedStudent && checkedStudent.id === stud.id
+          }"
+        >
+          <div>{{ `${stud.surname} ${stud.name}` }}</div>
+          <div
+            v-if="checkedStudent && checkedStudent.id === stud.id"
+            class="text-success mr-2"
+          >
+            <b-icon icon="check" scale="1.5" />
+          </div>
+        </b-list-group-item>
+      </b-list-group>
+    </b-collapse>
+
+    <b-btn-group class="w-100 mt-3">
+      <b-btn variant="info" block @click="buttonAction()">
+        <span v-if="checkedStudent">
+          Объединить с
+          {{ `${checkedStudent.surname} ${checkedStudent.name}` }}
+        </span>
+        <span v-else-if="!checkedStudent && collapsed">Выберите студента</span>
+        <span v-else>Объединить запись</span>
+      </b-btn>
+      <b-btn id="info-button" variant="outline-info">
+        ?
+        <b-popover triggers="hover" target="info-button">
+          Перенести все отметки с данной записи на реального студента и удалить
+          фиктивную запись.
+        </b-popover>
+      </b-btn>
+    </b-btn-group>
 
     <template #modal-footer>
       <confirm-button
@@ -49,7 +92,8 @@ import modalMixin from '@/mixins/modal'
 import ConfirmButton from '@/components/ConfirmationButton'
 import {
   DELETE_STUDENT_FROM_GROUP,
-  UPDATE_FAKE_STUDENT
+  UPDATE_FAKE_STUDENT,
+  UNION_FAKE_STUDENT_WITH_REAL
 } from '@/store/actions.type'
 
 export default {
@@ -73,7 +117,9 @@ export default {
   mixins: [
     modalMixin({
       newName: null,
-      newSurname: null
+      newSurname: null,
+      checkedStudent: null,
+      collapsed: false
     })
   ],
 
@@ -113,6 +159,23 @@ export default {
         groupId: this.groupId,
         fake: this.studentData.fake
       })
+    },
+
+    checkStudent(stud) {
+      this.checkedStudent = stud
+    },
+
+    async buttonAction() {
+      if (!this.checkedStudent) this.collapsed = !this.collapsed
+      else {
+        await this.$store.dispatch(UNION_FAKE_STUDENT_WITH_REAL, {
+          realId: this.checkedStudent.id,
+          fakeId: this.studentId,
+          groupId: this.groupId,
+          subjectId: this.$route.params.id
+        })
+        this.resetModal('fake-student-modal')
+      }
     }
   },
 
@@ -122,3 +185,18 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.app__student {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.17s ease-in-out;
+  background-color: white;
+
+  &:hover {
+    background-color: darken($light, 2);
+  }
+}
+</style>

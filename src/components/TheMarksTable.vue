@@ -374,6 +374,10 @@ export default {
     }
   }
 
+  :focus {
+    outline: none !important;
+  }
+
   .table.b-table > thead > tr > [aria-sort='none'] {
     background-size: 0;
 

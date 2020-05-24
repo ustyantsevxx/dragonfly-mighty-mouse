@@ -145,7 +145,7 @@ export default {
   beforeCreate() {
     let id = this.$route.params.id
     this.$store.dispatch(BIND_GROUPS, id)
-    this.$store.dispatch(BIND_MARKS, id)
+    this.$store.dispatch(BIND_MARKS, { subjectId: id })
     this.$store.dispatch(BIND_TASKS, id)
   },
 

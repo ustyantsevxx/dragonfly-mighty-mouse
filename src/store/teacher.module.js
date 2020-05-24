@@ -19,7 +19,9 @@ import {
   UPDATE_MARK,
   DELETE_STUDENT_FROM_GROUP,
   ADD_FAKE_STUDENT_TO_GROUP,
-  UPDATE_FAKE_STUDENT
+  UPDATE_FAKE_STUDENT,
+  UNION_FAKE_STUDENT_WITH_REAL,
+  BIND_MARKS
 } from './actions.type'
 
 const state = {
@@ -199,10 +201,38 @@ const groupActions = {
         students: firebase.firestore.FieldValue.arrayUnion(newFakeStudent)
       })
   },
+
   async [UPDATE_FAKE_STUDENT](_, options) {
     await db.collection('fake-students').doc(options.id).update({
       name: options.name,
       surname: options.surname
+    })
+  },
+
+  async [UNION_FAKE_STUDENT_WITH_REAL]({ rootState, dispatch }, options) {
+    const fakeStudentsMarks = await rootState.marks
+      .filter(mark => mark.student.id === options.fakeId)
+      .map(m => m.id)
+
+    const realMarks = await rootState.marks
+      .filter(mark => mark.student.id === options.realId)
+      .map(m => m.id)
+
+    for (const mark of fakeStudentsMarks) {
+      db.collection('marks')
+        .doc(mark)
+        .update({
+          student: db.collection('users').doc(options.realId)
+        })
+    }
+
+    dispatch(BIND_MARKS, { subjectId: options.subjectId, force: true })
+
+    await dispatch(DELETE_STUDENT_FROM_GROUP, {
+      studentId: options.fakeId,
+      marksToDelete: realMarks,
+      groupId: options.groupId,
+      fake: true
     })
   }
 }

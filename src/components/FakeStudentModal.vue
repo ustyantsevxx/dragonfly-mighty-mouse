@@ -61,6 +61,10 @@ export default {
     groupId: {
       type: String,
       default: null
+    },
+    studentData: {
+      type: Object,
+      default: null
     }
   },
 
@@ -99,6 +103,16 @@ export default {
       })
       this.resetModal('fake-student-modal')
       this.loadUpdate = false
+    },
+
+    deleteStudent() {
+      this.resetModal('fake-student-modal')
+      this.$store.dispatch(DELETE_STUDENT_FROM_GROUP, {
+        studentId: this.studentId,
+        marksToDelete: this.studentData.marks,
+        groupId: this.groupId,
+        fake: this.studentData.fake
+      })
     }
   },
 

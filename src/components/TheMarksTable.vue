@@ -56,7 +56,7 @@
           </div>
           <b-btn
             v-if="data.item.fake"
-            @click="openModal(data.item.id)"
+            @click="openModal(data.item)"
             class="mr-2"
             variant="dark"
             size="sm"
@@ -114,6 +114,7 @@
       id="fake-student-modal"
       :student-id="idToEdit"
       :group-id="groupId"
+      :student-data="studentData"
     />
     <!-- /invisible -->
   </div>
@@ -154,7 +155,8 @@ export default {
     selectedMarkScore: null,
     debounceTimer: null,
     showAllTasks: false,
-    idToEdit: null
+    idToEdit: null,
+    studentData: null
   }),
 
   computed: {
@@ -250,8 +252,9 @@ export default {
   },
 
   methods: {
-    openModal(id) {
-      this.idToEdit = id
+    openModal(data) {
+      this.idToEdit = data.id
+      this.studentData = data
       this.$nextTick(() => this.$bvModal.show('fake-student-modal'))
     },
     deleteStudent(data) {

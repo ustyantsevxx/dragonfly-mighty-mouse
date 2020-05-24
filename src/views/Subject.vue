@@ -8,9 +8,10 @@
 
       <b-row>
         <b-col>
-          <h1 class="app__subject_name" title="Редактировать дисциплину">
+          <h1 class="app__subject_name">
             <div
               v-if="isTeacher"
+              title="Редактировать дисциплину"
               class="g__pointer"
               @click="openSubjectModal()"
             >

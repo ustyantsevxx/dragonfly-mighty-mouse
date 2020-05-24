@@ -217,6 +217,7 @@ export default {
         surname: this.newFakeStudentSurname,
         groupId: this.groupId
       })
+      this.resetStudentData()
     },
     copyLink() {
       let a = document.querySelector('#invite-link')

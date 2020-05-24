@@ -43,6 +43,7 @@ export default {
 
   [BIND_GROUPS]: firestoreAction(
     ({ bindFirestoreRef, rootState }, subjectId) => {
+      if (rootState.groups) return
       if (rootState.user.isTeacher)
         return bindFirestoreRef(
           'groups',
@@ -67,6 +68,7 @@ export default {
 
   [BIND_TASKS]: firestoreAction(
     ({ bindFirestoreRef, rootState }, subjectId) => {
+      if (rootState.tasks) return
       if (rootState.user.isTeacher)
         return bindFirestoreRef(
           'tasks',
@@ -84,12 +86,15 @@ export default {
     }
   ),
 
-  [BIND_MARKS]: firestoreAction(({ bindFirestoreRef }, subjectId) => {
-    return bindFirestoreRef(
-      'marks',
-      db
-        .collection('marks')
-        .where('subject', '==', db.collection('subjects').doc(subjectId))
-    )
-  })
+  [BIND_MARKS]: firestoreAction(
+    ({ rootState, bindFirestoreRef }, subjectId) => {
+      if (rootState.marks) return
+      return bindFirestoreRef(
+        'marks',
+        db
+          .collection('marks')
+          .where('subject', '==', db.collection('subjects').doc(subjectId))
+      )
+    }
+  )
 }

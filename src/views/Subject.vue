@@ -200,15 +200,13 @@ export default {
   }
 }
 
-@include media-breakpoint-up(sm) {
-  .app__border_radius_right_0 {
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-  }
+.app__border_radius_right_0 {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
 
-  .app__border_radius_left_0 {
-    border-top-left-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
-  }
+.app__border_radius_left_0 {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
 </style>

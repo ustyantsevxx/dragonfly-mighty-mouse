@@ -18,7 +18,8 @@ import {
   DELETE_GROUP,
   UPDATE_MARK,
   DELETE_STUDENT_FROM_GROUP,
-  ADD_FAKE_STUDENT_TO_GROUP
+  ADD_FAKE_STUDENT_TO_GROUP,
+  UPDATE_FAKE_STUDENT
 } from './actions.type'
 
 const state = {
@@ -184,6 +185,7 @@ const groupActions = {
     if (options.fake)
       await db.collection('fake-students').doc(options.studentId).delete()
   },
+
   async [ADD_FAKE_STUDENT_TO_GROUP](_, options) {
     let newFakeStudent = await db.collection('fake-students').add({
       name: options.name,
@@ -196,6 +198,12 @@ const groupActions = {
       .update({
         students: firebase.firestore.FieldValue.arrayUnion(newFakeStudent)
       })
+  },
+  async [UPDATE_FAKE_STUDENT](_, options) {
+    await db.collection('fake-students').doc(options.id).update({
+      name: options.name,
+      surname: options.surname
+    })
   }
 }
 

@@ -1,25 +1,25 @@
 <template>
   <div v-if="students.length">
     <b-check
+      v-if="isTeacher && !allTasksVisible"
       v-model="showAllTasks"
       class="mt-3"
-      v-if="isTeacher && !allTasksVisible"
     >
       Показать закрытые задания
     </b-check>
 
     <b-table
+      v-if="marks && tasks"
+      @sort-changed="closePopover"
+      class="app__marks_table mt-3"
       :fields="tableHeaders"
       :items="tableItems"
       sort-by="name"
       responsive="sm"
       bordered
-      v-if="marks && tasks"
       small
       details-td-class="p-0"
       thead-tr-class="text-reset"
-      @sort-changed="closePopover"
-      class="app__marks_table mt-3"
     >
       <template #head()="data">
         <div :title="data.field.name">{{ data.label }}</div>
@@ -49,19 +49,25 @@
 
       <template #row-details="data">
         <div class="p-3 bg-light">
-          <div class="mb-2" v-if="data.item.email">
+          <div v-if="data.item.email" class="mb-2">
             <b-link :href="`mailto:${data.item.email}`">
               {{ data.item.email }}
             </b-link>
           </div>
-          <b-btn variant="dark" size="sm" class="mr-2" v-if="data.item.fake">
+          <b-btn
+            v-if="data.item.fake"
+            @click="openModal(data.item.id)"
+            class="mr-2"
+            variant="dark"
+            size="sm"
+          >
             Редактировать запись
           </b-btn>
           <confirm-button
             v-else
+            @click="deleteStudent(data)"
             size="sm"
             variant="danger"
-            @click="deleteStudent(data)"
             confirm-text="Действие необратимо. Продолжить?"
           >
             Удалить студента
@@ -71,9 +77,9 @@
 
       <template #cell()="data">
         <div
-          class="app__score_cell"
-          :id="data.item.id + data.field.key"
           @click="taskClickAction(data)"
+          :id="data.item.id + data.field.key"
+          class="app__score_cell"
         >
           <div :class="getExtraMarkClass(data.value.score, data.field.score)">
             {{ data.value.score }}
@@ -94,18 +100,25 @@
         <b-spinbutton
           v-model="selectedMarkScore"
           @change="debounce_updateMark"
+          class="mb-2"
           size="sm"
           min="0"
-          class="mb-2"
         />
-        <b-button block size="sm" variant="danger" @click="deleteMark()">
+        <b-button @click="deleteMark()" block size="sm" variant="danger">
           Удалить
         </b-button>
       </div>
     </b-popover>
+
+    <fake-student-modal
+      id="fake-student-modal"
+      :student-id="idToEdit"
+      :group-id="groupId"
+    />
     <!-- /invisible -->
   </div>
-  <b-alert v-else show variant="info" class="m-0 mt-3">
+
+  <b-alert v-else class="m-0 mt-3" show variant="info">
     <b-link @click.prevent="$parent.openModal(true)" class="alert-link">
       Пригласите студентов в группу по ссылке или добавьте временные записи
       вручную.
@@ -122,6 +135,7 @@ import {
   DELETE_STUDENT_FROM_GROUP
 } from '@/store/actions.type'
 import ConfirmButton from '@/components/ConfirmationButton'
+import FakeStudentModal from '@/components/FakeStudentModal'
 import { debounce } from 'debounce'
 
 export default {
@@ -131,14 +145,16 @@ export default {
       required: true
     }
   },
-  components: { ConfirmButton },
+
+  components: { ConfirmButton, FakeStudentModal },
 
   data: () => ({
     popoverTarget: 'popover-initial',
     selectedMark: null,
     selectedMarkScore: null,
     debounceTimer: null,
-    showAllTasks: false
+    showAllTasks: false,
+    idToEdit: null
   }),
 
   computed: {
@@ -197,7 +213,8 @@ export default {
       tableHeaders.push({
         label: `Всего\u00a0(${this.totalScore})`,
         key: 'total',
-        tdClass: 'app__chart_container border-left text-center',
+        tdClass:
+          'app__chart_container font-weight-bold border-left text-center',
         thClass: 'border-left align-middle',
         sortable: true
       })
@@ -233,6 +250,10 @@ export default {
   },
 
   methods: {
+    openModal(id) {
+      this.idToEdit = id
+      this.$nextTick(() => this.$bvModal.show('fake-student-modal'))
+    },
     deleteStudent(data) {
       this.$store.dispatch(DELETE_STUDENT_FROM_GROUP, {
         studentId: data.item.id,

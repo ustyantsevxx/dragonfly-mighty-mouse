@@ -1,12 +1,25 @@
 <template>
   <main>
     <b-container>
-      <b-row>
-        <b-col>
-          <h1 class="m-0" v-mobile-class="'text-center'">Мои дисциплины</h1>
-          <hr />
-        </b-col>
-      </b-row>
+      <b-card class="shadow-sm border-0 mb-4">
+        <b-row align-h="between" align-v="center">
+          <b-col sm="auto">
+            <h1 class="mb-0" v-mobile-class="'text-center mb-3'">
+              Мои дисциплины
+            </h1>
+          </b-col>
+          <b-col cols="12" sm="auto">
+            <b-btn
+              block
+              variant="success"
+              v-if="isTeacher"
+              v-b-modal.modal-subject
+            >
+              Добавить дисциплину
+            </b-btn>
+          </b-col>
+        </b-row>
+      </b-card>
 
       <b-row class="mb-3">
         <b-col sm="12" md="7" lg="8">
@@ -46,7 +59,7 @@
         <b-col sm="12" md="5" lg="4">
           <b-card
             class="border-0 shadow-sm mb-3"
-            v-if="subjects && subjects.length > 1"
+            v-if="subjects && coursesList.length > 1"
           >
             <div class="mb-2 font-weight-bold">Курс обучения</div>
             <b-nav pills>
@@ -85,15 +98,6 @@
                 />
               </b-input-group>
             </div>
-            <b-btn
-              variant="success"
-              block
-              :class="{ 'mt-3': subjects && subjects.length }"
-              v-if="isTeacher"
-              v-b-modal.modal-subject
-            >
-              Добавить дисциплину
-            </b-btn>
           </b-card>
         </b-col>
       </b-row>

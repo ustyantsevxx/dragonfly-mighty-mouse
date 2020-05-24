@@ -1,75 +1,76 @@
 <template>
   <main>
     <b-container v-if="subj && groups && tasks">
-      <b-link class="text-decoration-none d-block mb-2" to="/subjects">
+      <b-link class="text-decoration-none d-block mb-3" to="/subjects">
         <b-icon icon="arrow-left"></b-icon>
         Назад к списку
       </b-link>
 
-      <b-row>
-        <b-col>
-          <h1 class="app__subject_name">
-            <div
-              v-if="isTeacher"
-              title="Редактировать дисциплину"
-              class="g__pointer"
-              @click="openSubjectModal()"
-            >
-              <span class="text-nowrap mr-1">{{ subj.name }}</span>
-              <b-icon icon="pencil" class="g__hover_icon" />
+      <b-card class="shadow-sm border-0">
+        <b-row>
+          <b-col>
+            <h1 class="app__subject_name">
+              <div
+                v-if="isTeacher"
+                title="Редактировать дисциплину"
+                class="g__pointer"
+                @click="openSubjectModal()"
+              >
+                <span class="text-nowrap mr-1">{{ subj.name }}</span>
+                <b-icon icon="pencil" class="g__hover_icon" />
+              </div>
+              <template v-else>{{ subj.name }}</template>
+            </h1>
+          </b-col>
+        </b-row>
+
+        <b-row>
+          <b-col class="app__badges mt-2 d-flex flex-wrap">
+            <div class="mr-2 mb-2">
+              <b-badge class="app__badge" variant="info">
+                {{ subj.course }} курс
+              </b-badge>
             </div>
-            <template v-else>{{ subj.name }}</template>
-          </h1>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col class="app__badges mt-2 d-flex flex-wrap">
-          <div class="mr-2 mb-2">
-            <b-badge class="app__badge" variant="info">
-              {{ subj.course }} курс
-            </b-badge>
-          </div>
-          <div class="text-nowrap mr-2 mb-2">
-            <template v-if="tasks">
-              <b-badge
-                variant="success"
-                class="app__badge"
-                :class="{
-                  app__task_count_right_part: visibleTasksCount !== tasks.length
-                }"
-              >
-                {{ num2str(tasks.length, taskForms) }}
+            <div class="text-nowrap mr-2 mb-2">
+              <template v-if="tasks">
+                <b-badge
+                  variant="success"
+                  class="app__badge"
+                  :class="{
+                    app__border_radius_right_0:
+                      visibleTasksCount !== tasks.length
+                  }"
+                >
+                  {{ num2str(tasks.length, taskForms) }}
+                </b-badge>
+                <b-badge
+                  variant="danger"
+                  class="app__badge app__border_radius_left_0"
+                  v-if="isTeacher && visibleTasksCount != tasks.length"
+                >
+                  {{ visibleTasksCount }} доступно
+                </b-badge>
+              </template>
+            </div>
+            <div>
+              <b-badge class="app__badge" v-if="groups && isTeacher">
+                {{ num2str(groups.length, ['группа', 'группы', 'групп']) }}
               </b-badge>
-              <b-badge
-                variant="danger"
-                class="app__badge app__task_count_left_part"
-                v-if="isTeacher && visibleTasksCount != tasks.length"
-              >
-                {{ visibleTasksCount }} доступно
-              </b-badge>
-            </template>
-          </div>
-          <div>
-            <b-badge class="app__badge" v-if="groups && isTeacher">
-              {{ num2str(groups.length, ['группа', 'группы', 'групп']) }}
-            </b-badge>
-          </div>
-        </b-col>
-      </b-row>
+            </div>
+          </b-col>
+        </b-row>
+      </b-card>
 
-      <hr class="mb-4" />
-
-      <b-nav fill pills class="mb-4">
+      <b-nav fill pills class="my-3 shadow-sm">
         <b-nav-item
-          link-classes="app__link"
+          link-classes="app__link app__border_radius_right_0"
           exact-active-class="app__link_active"
           to="tasks"
         >
           Лабораторные работы
         </b-nav-item>
         <b-nav-item
-          link-classes="app__link"
+          link-classes="app__link app__border_radius_left_0"
           exact-active-class="app__link_active"
           :to="isTeacher ? 'groups' : 'my-group'"
         >
@@ -185,6 +186,7 @@ export default {
   color: black;
   transition: background-color 0.17s ease-in-out;
   border-radius: 0.25rem;
+  background-color: white;
 
   &:hover {
     color: black;
@@ -198,13 +200,15 @@ export default {
   }
 }
 
-.app__task_count_right_part {
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-}
+@include media-breakpoint-up(sm) {
+  .app__border_radius_right_0 {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
 
-.app__task_count_left_part {
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
+  .app__border_radius_left_0 {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
 }
 </style>

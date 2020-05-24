@@ -14,9 +14,9 @@
       sort-by="name"
       responsive="sm"
       bordered
-      striped
       v-if="marks && tasks"
       small
+      details-td-class="p-0"
       thead-tr-class="text-reset"
       @sort-changed="closePopover"
       class="app__marks_table mt-3"
@@ -24,6 +24,7 @@
       <template #head()="data">
         <div :title="data.field.name">{{ data.label }}</div>
       </template>
+
       <template #cell(index)="data">
         <span
           :class="{ 'text-primary font-weight-bold': data.item.fake }"
@@ -32,22 +33,39 @@
           {{ data.index + 1 }}
         </span>
       </template>
+
       <template #cell(name)="data">
         <div
           @click="isTeacher && data.toggleDetails()"
-          title="Развернуть"
-          :class="{ 'text-danger': data.detailsShowing, g__pointer: isTeacher }"
+          :title="data.detailsShowing ? 'Скрыть детали' : 'Показать детали'"
+          :class="{
+            'text-primary': data.detailsShowing,
+            g__pointer: isTeacher
+          }"
         >
           {{ data.value }}
         </div>
       </template>
 
       <template #row-details="data">
-        <div class="p-1">
-          <b-link>{{ data.item.email }}</b-link>
-          <b-btn size="sm" variant="danger" @click="deleteStudent(data)">
-            Удалить студента
+        <div class="p-3 bg-light">
+          <div class="mb-2" v-if="data.item.email">
+            <b-link :href="`mailto:${data.item.email}`">
+              {{ data.item.email }}
+            </b-link>
+          </div>
+          <b-btn variant="dark" size="sm" class="mr-2" v-if="data.item.fake">
+            Редактировать запись
           </b-btn>
+          <confirm-button
+            v-else
+            size="sm"
+            variant="danger"
+            @click="deleteStudent(data)"
+            confirm-text="Действие необратимо. Продолжить?"
+          >
+            Удалить студента
+          </confirm-button>
         </div>
       </template>
 
@@ -62,6 +80,7 @@
           </div>
         </div>
       </template>
+
       <template #cell(total)="data">
         <div class="app__chart" :style="getChartCellStyle(data.value)"></div>
         <div class="app__chart_value">{{ data.value }}</div>
@@ -102,6 +121,7 @@ import {
   DELETE_MARK,
   DELETE_STUDENT_FROM_GROUP
 } from '@/store/actions.type'
+import ConfirmButton from '@/components/ConfirmationButton'
 import { debounce } from 'debounce'
 
 export default {
@@ -111,6 +131,7 @@ export default {
       required: true
     }
   },
+  components: { ConfirmButton },
 
   data: () => ({
     popoverTarget: 'popover-initial',
@@ -192,7 +213,7 @@ export default {
         let row = {
           name,
           fake: student.fake,
-          email: student.email ?? '',
+          email: student.email,
           id: student.id,
           total: 0,
           marks: []
@@ -267,9 +288,8 @@ export default {
       if (value >= this.totalScore) return 100
       return (value / this.totalScore) * 100
     },
-    getScaleColor(percentage, maxHue = 120, minHue = 0) {
-      const hue = (percentage / 100) * (maxHue - minHue) + minHue
-      return `hsl(${hue}, 100%, 50%)`
+    getScaleColor(perc) {
+      return perc >= 100 ? '#335eea' : `hsl(${(perc / 100) * 120}, 100%, 50%)`
     },
     getChartCellStyle(value) {
       return {

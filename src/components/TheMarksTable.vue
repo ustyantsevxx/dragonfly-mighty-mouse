@@ -24,7 +24,14 @@
       <template #head()="data">
         <div :title="data.field.name">{{ data.label }}</div>
       </template>
-      <template #cell(index)="data">{{ data.index + 1 }}</template>
+      <template #cell(index)="data">
+        <span
+          :class="{ 'text-primary font-weight-bold': data.item.fake }"
+          :title="data.item.fake ? 'Фиктивная запись' : 'Реальный студент'"
+        >
+          {{ data.index + 1 }}
+        </span>
+      </template>
       <template #cell(name)="data">
         <div
           @click="isTeacher && data.toggleDetails()"
@@ -238,7 +245,8 @@ export default {
         id: this.selectedMark.id,
         score: this.selectedMarkScore
       })
-    }, 300),
+      this.closePopover()
+    }, 600),
     async deleteMark() {
       await this.$store.dispatch(DELETE_MARK, this.selectedMark.id)
       this.closePopover()

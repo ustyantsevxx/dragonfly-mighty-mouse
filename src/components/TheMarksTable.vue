@@ -43,9 +43,12 @@
       </template>
 
       <template #row-details="data">
-        <b-btn size="sm" variant="danger" @click="deleteStudent(data)">
-          Удалить студента
-        </b-btn>
+        <div class="p-1">
+          <b-link>{{ data.item.email }}</b-link>
+          <b-btn size="sm" variant="danger" @click="deleteStudent(data)">
+            Удалить студента
+          </b-btn>
+        </div>
       </template>
 
       <template #cell()="data">
@@ -189,6 +192,7 @@ export default {
         let row = {
           name,
           fake: student.fake,
+          email: student.email ?? '',
           id: student.id,
           total: 0,
           marks: []

@@ -66,6 +66,7 @@ const actions = {
       await db.collection('users').doc(creds.user.uid).set({
         name: opt.name,
         surname: opt.surname,
+        email: opt.email,
         isTeacher: opt.isTeacher
       })
     })
@@ -119,6 +120,9 @@ const actions = {
         data.password
       )
       await auth.currentUser.updateEmail(data.newEmail)
+      await db.collection('users').doc(auth.currentUser.uid).update({
+        email: data.newEmail
+      })
       await auth.currentUser.sendEmailVerification()
       commit('setAuthData', user.user)
       commit('setToastMsg', { msg: 'Запрос на смену эл. почты отправлен' })

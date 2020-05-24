@@ -145,15 +145,15 @@ export default {
     modalMixin({
       newGroupName: null,
       newFakeStudentName: null,
-      newFakeStudentSurname: null
+      newFakeStudentSurname: null,
+      studentCollapse: false
     })
   ],
 
   data: () => ({
     loadAdd: false,
     loadEdit: false,
-    loadFakeStudentAdd: false,
-    studentCollapse: false
+    loadFakeStudentAdd: false
   }),
 
   watch: {

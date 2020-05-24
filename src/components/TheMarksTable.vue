@@ -95,18 +95,30 @@
 
     <!-- invisible -->
     <div class="d-none" id="popover-initial"></div>
-    <b-popover custom-class="" :target="popoverTarget" ref="popover">
-      <div>
-        <b-spinbutton
-          v-model="selectedMarkScore"
-          @change="debounce_updateMark"
-          class="mb-2"
-          size="sm"
-          min="0"
-        />
-        <b-button @click="deleteMark()" block size="sm" variant="danger">
-          Удалить
-        </b-button>
+    <b-popover
+      custom-class="shadow-sm p-1"
+      :target="popoverTarget"
+      ref="popover"
+    >
+      <div class="d-flex justify-content-center align-items-center">
+        <div>
+          <b-spinbutton
+            v-model="selectedMarkScore"
+            @change="debounce_updateMark"
+            class="border-0"
+            size="sm"
+            min="0"
+          />
+        </div>
+        <div class="g__pointer app__del_icon border-left px-2" title="Удалить">
+          <b-icon
+            @click="deleteMark()"
+            variant="danger"
+            icon="x"
+            title="Удалить"
+            scale="1.5"
+          />
+        </div>
       </div>
     </b-popover>
 
@@ -295,9 +307,9 @@ export default {
         score: this.selectedMarkScore
       })
       this.closePopover()
-    }, 600),
+    }, 500),
     async deleteMark() {
-      await this.$store.dispatch(DELETE_MARK, this.selectedMark.id)
+      this.$store.dispatch(DELETE_MARK, this.selectedMark.id)
       this.closePopover()
     },
     closePopover() {
@@ -383,6 +395,19 @@ export default {
 
     &:hover {
       background-size: 0.65em 1em;
+    }
+  }
+
+  .popover-body {
+    padding: 0 !important;
+    border: 0 !important;
+  }
+
+  .app__del_icon {
+    &:hover {
+      .bi {
+        transform: scale(1.2) !important;
+      }
     }
   }
 }

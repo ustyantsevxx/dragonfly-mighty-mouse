@@ -19,7 +19,7 @@
       bordered
       small
       details-td-class="p-0"
-      thead-tr-class="text-reset"
+      thead-tr-class="text-reset g__noselect"
     >
       <template #head()="data">
         <div :title="data.field.name">{{ data.label }}</div>

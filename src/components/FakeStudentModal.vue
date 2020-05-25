@@ -46,7 +46,17 @@
     </b-collapse>
 
     <b-btn-group class="w-100 mt-3">
-      <b-btn variant="info" block @click="buttonAction()">
+      <b-btn
+        variant="info"
+        block
+        @click="buttonAction()"
+        :disabled="!$parent.students.filter(x => !x.fake).length"
+        :title="
+          !$parent.students.filter(x => !x.fake).length
+            ? 'В группе нет настоящих студентов'
+            : ''
+        "
+      >
         <span v-if="checkedStudent">
           Объединить с
           {{ `${checkedStudent.surname} ${checkedStudent.name}` }}
@@ -59,6 +69,9 @@
         <b-popover triggers="hover" target="info-button">
           Перенести все отметки с данной записи на реального студента и удалить
           фиктивную запись.
+          <br />
+          Внимание: при этом будут удалены все отметки настоящего студента и
+          заменены отметками с данной записи
         </b-popover>
       </b-btn>
     </b-btn-group>

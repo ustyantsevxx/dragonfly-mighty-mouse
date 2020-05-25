@@ -14,12 +14,12 @@
                 class="app__task_header"
                 :class="{ app__hidden_task: !task.visible }"
               >
-                <b class="app__task_number mr-1">{{ task.number }}.</b>
+                <b class="app__task_number mr-2">{{ task.number }}.</b>
                 <span class="app__task_name g__text_overflow">
                   {{ task.name }}
                 </span>
                 <span
-                  class="app__task_description g__text_overflow d-none d-sm-block"
+                  class="app__task_description g__text_overflow d-none d-sm-block pl-4 pr-2"
                 >
                   {{ taskDescriptionMapped(task.description) }}
                 </span>
@@ -222,9 +222,8 @@ export default {
       }
 
       .app__task_description {
-        margin-left: 1em;
         flex: 1;
-        color: transparentize($secondary, 0.3) !important;
+        color: transparentize($secondary, 0.5) !important;
       }
 
       .app__score_badge {

@@ -22,7 +22,17 @@
       thead-tr-class="text-reset g__noselect bg-light"
     >
       <template #head()="data">
-        <div :title="data.field.name">{{ data.label }}</div>
+        <div :id="data.field.key">
+          {{ data.label }}
+        </div>
+        <b-tooltip
+          v-if="data.field.tooltipEnable"
+          :container="data.field.key"
+          triggers="hover"
+          :target="data.field.key"
+        >
+          {{ data.field.name }}
+        </b-tooltip>
       </template>
 
       <template #cell(index)="data">
@@ -213,6 +223,7 @@ export default {
           label: `Лаб-${t.number}`,
           key: t.id,
           name: t.name,
+          tooltipEnable: true,
           score: t.score,
           sortable: true,
           thClass: `text-nowrap align-middle  ${

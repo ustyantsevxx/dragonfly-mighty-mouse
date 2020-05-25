@@ -110,14 +110,12 @@
             min="0"
           />
         </div>
-        <div class="g__pointer app__del_icon border-left px-2" title="Удалить">
-          <b-icon
-            @click="deleteMark()"
-            variant="danger"
-            icon="x"
-            title="Удалить"
-            scale="1.5"
-          />
+        <div
+          @click="deleteMark()"
+          class="g__pointer app__del_icon border-left px-2"
+          title="Удалить"
+        >
+          <b-icon variant="danger" icon="x" title="Удалить" scale="1.5" />
         </div>
       </div>
     </b-popover>
@@ -251,6 +249,7 @@ export default {
         }
         let studentsMarks = this.marks.filter(m => m.student.id === student.id)
         studentsMarks.forEach(mark => {
+          if (!mark.task) return
           row[mark.task.id] = {
             id: mark.id,
             score: mark.score

@@ -217,6 +217,10 @@ export default {
       padding: 12px 20px;
       cursor: pointer;
 
+      &:focus {
+        outline: none !important;
+      }
+
       .app__task_description {
         margin-left: 1em;
         flex: 1;

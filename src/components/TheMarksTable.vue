@@ -11,15 +11,15 @@
     <b-table
       v-if="marks && tasks"
       @sort-changed="closePopover"
-      class="app__marks_table mt-3"
+      class="app__marks_table mt-3 shadow-sm"
       :fields="tableHeaders"
       :items="tableItems"
       sort-by="name"
       responsive="sm"
-      bordered
       small
+      bordered
       details-td-class="p-0"
-      thead-tr-class="text-reset g__noselect"
+      thead-tr-class="text-reset g__noselect bg-light"
     >
       <template #head()="data">
         <div :title="data.field.name">{{ data.label }}</div>
@@ -396,6 +396,15 @@ export default {
     &:hover {
       background-size: 0.65em 1em;
     }
+  }
+
+  .table.b-table > thead > tr > .table-b-table-default {
+    background-color: $light;
+  }
+
+  .table-bordered thead th,
+  .table-bordered thead td {
+    border-bottom-width: 0;
   }
 
   .popover-body {

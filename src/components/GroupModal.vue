@@ -18,7 +18,7 @@
             @click="editGroup()"
             :load="loadEdit"
             variant="info"
-            :disabled="newGroupName === group.name || $v.$invalid"
+            :disabled="newGroupName === group.name || $v.newGroupName.$invalid"
           >
             Обновить
           </loading-button>
@@ -68,9 +68,12 @@
 
       <b-row class="mt-3">
         <b-col>
-          <b-button-group v-if="!studentCollapse || $v.$invalid" class="w-100">
+          <b-button-group
+            v-if="!studentCollapse || !studentValid"
+            class="w-100"
+          >
             <b-btn
-              v-if="!studentCollapse || $v.$invalid"
+              v-if="!studentCollapse || !studentValid"
               variant="info"
               block
               v-b-toggle.fake-student-collapse
@@ -110,7 +113,7 @@
         @click="addGroup()"
         :load="loadAdd"
         variant="success"
-        :disabled="$v.$invalid"
+        :disabled="$v.newGroupName.$invalid"
       >
         Добавить
       </loading-button>
@@ -168,6 +171,12 @@ export default {
       return this.groupId
         ? this.$store.state.groups.find(g => g.id === this.groupId)
         : null
+    },
+    studentValid() {
+      return (
+        !this.$v.newFakeStudentName.$invalid &&
+        !this.$v.newFakeStudentSurname.$invalid
+      )
     }
   },
 
@@ -195,7 +204,7 @@ export default {
         name: this.newGroupName
       })
       this.newGroupName = this.group.name
-      this.$v.$reset()
+      this.$v.newGroupName.$reset()
       this.loadEdit = false
     },
     toggleGroupJoinable(state) {

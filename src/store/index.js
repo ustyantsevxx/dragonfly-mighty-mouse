@@ -3,21 +3,25 @@ import Vuex from 'vuex'
 import { vuexfireMutations } from 'vuexfire'
 Vue.use(Vuex)
 
-import user from './user.module'
-import student from './student.module'
-import teacher from './teacher.module'
+import user from './auth.module'
+import groupsModule from './groups.module'
+import tasksModule from './tasks.module'
+import marksModule from './marks.module'
+import subjectsModule from './subjects.module'
 import firestoreBindings from './bindings.module'
 
 export default new Vuex.Store({
   modules: {
     user,
-    student,
-    teacher
+    groupsModule,
+    tasksModule,
+    marksModule,
+    subjectsModule
   },
 
   state: {
     toastMsg: null,
-    // next props will be binded by 'firestoreBindings' actions
+    // binded:
     subjects: null,
     groups: null,
     tasks: null,

@@ -57,7 +57,7 @@ const actions = {
     })
   },
 
-  async [REGISTER](_, opt) {
+  [REGISTER](_, opt) {
     return tryDoOrToastError(async () => {
       let creds = await auth.createUserWithEmailAndPassword(
         opt.email,
@@ -72,7 +72,7 @@ const actions = {
     })
   },
 
-  async [LOGIN_WITH_GOOGLE]() {
+  [LOGIN_WITH_GOOGLE]() {
     return tryDoOrToastError(async () => {
       let googleProvider = new firebase.auth.GoogleAuthProvider()
       await auth.signInWithPopup(googleProvider)

@@ -43,7 +43,8 @@ export default {
 
   [BIND_GROUPS]: firestoreAction(
     ({ bindFirestoreRef, rootState }, subjectId) => {
-      if (rootState.groups) return
+      if (subjectId === rootState.boundSubjectId) return
+
       if (rootState.user.isTeacher)
         return bindFirestoreRef(
           'groups',
@@ -68,7 +69,8 @@ export default {
 
   [BIND_TASKS]: firestoreAction(
     ({ bindFirestoreRef, rootState }, subjectId) => {
-      if (rootState.tasks) return
+      if (subjectId === rootState.boundSubjectId) return
+
       if (rootState.user.isTeacher)
         return bindFirestoreRef(
           'tasks',
@@ -87,7 +89,12 @@ export default {
   ),
 
   [BIND_MARKS]: firestoreAction(({ rootState, bindFirestoreRef }, options) => {
-    if (rootState.marks && !options.force) return
+    if (
+      rootState.marks &&
+      !options.force &&
+      options.subjectId === rootState.boundSubjectId
+    )
+      return
     return bindFirestoreRef(
       'marks',
       db

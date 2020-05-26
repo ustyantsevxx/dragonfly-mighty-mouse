@@ -8,7 +8,7 @@ import groupsModule from './groups.module'
 import tasksModule from './tasks.module'
 import marksModule from './marks.module'
 import subjectsModule from './subjects.module'
-import firestoreBindings from './bindings.module'
+import firestoreBindings from './bindings'
 
 export default new Vuex.Store({
   modules: {
@@ -25,13 +25,15 @@ export default new Vuex.Store({
     subjects: null,
     groups: null,
     tasks: null,
-    marks: null
+    marks: null,
+    boundSubjectId: null
   },
 
   mutations: {
     ...vuexfireMutations,
     setToastMsg: (s, msg) => (s.toastMsg = msg),
-    unsetToastMsg: s => (s.toastMsg = null)
+    unsetToastMsg: s => (s.toastMsg = null),
+    setBoundSubjectId: (s, id) => (s.boundSubjectId = id)
   },
 
   actions: firestoreBindings

@@ -27,7 +27,7 @@
     </b-form-group>
 
     <template v-if="group">
-      <div class="font-weight-bold mb-2">Управление студентами</div>
+      <div class="font-weight-bold mb-2">Добавление студентов</div>
       <b-row align-h="between">
         <b-col>
           <b-check
@@ -47,26 +47,29 @@
         </b-col>
       </b-row>
 
+      <div class="app__separator my-3">или</div>
+
       <b-collapse
         id="fake-student-collapse"
         @input="resetStudentData()"
         v-model="studentCollapse"
       >
-        <hr />
-        <b-input
-          :state="inputState($v.newFakeStudentSurname)"
-          v-model.trim="$v.newFakeStudentSurname.$model"
-          placeholder="Фамилия"
-          class="mb-2"
-        />
-        <b-input
-          :state="inputState($v.newFakeStudentName)"
-          v-model.trim="$v.newFakeStudentName.$model"
-          placeholder="Имя "
-        />
+        <div class="mb-3">
+          <b-input
+            :state="inputState($v.newFakeStudentSurname)"
+            v-model.trim="$v.newFakeStudentSurname.$model"
+            placeholder="Фамилия"
+            class="mb-2"
+          />
+          <b-input
+            :state="inputState($v.newFakeStudentName)"
+            v-model.trim="$v.newFakeStudentName.$model"
+            placeholder="Имя "
+          />
+        </div>
       </b-collapse>
 
-      <b-row class="mt-3">
+      <b-row>
         <b-col>
           <b-button-group
             v-if="!studentCollapse || !studentValid"
@@ -79,7 +82,7 @@
               v-b-toggle.fake-student-collapse
             >
               <b-icon v-if="!studentCollapse" icon="plus" />
-              {{ !studentCollapse ? 'Добавить вручную' : 'Отменить' }}
+              {{ !studentCollapse ? 'Добавить вручную' : 'Свернуть' }}
             </b-btn>
             <b-btn id="info-button" variant="outline-info">
               ?
@@ -90,9 +93,15 @@
               </b-popover>
             </b-btn>
           </b-button-group>
-          <b-btn v-else @click="addFakeStudent()" variant="success" block>
+          <loading-button
+            v-else
+            :load="loadFakeStudentAdd"
+            @click="addFakeStudent()"
+            variant="success"
+            block
+          >
             Добавить
-          </b-btn>
+          </loading-button>
         </b-col>
       </b-row>
     </template>
@@ -221,12 +230,14 @@ export default {
       }
     },
     async addFakeStudent() {
+      this.loadFakeStudentAdd = true
       await this.$store.dispatch(ADD_FAKE_STUDENT_TO_GROUP, {
         name: this.newFakeStudentName,
         surname: this.newFakeStudentSurname,
         groupId: this.groupId
       })
       this.resetStudentData()
+      this.loadFakeStudentAdd = false
     },
     copyLink() {
       let a = document.querySelector('#invite-link')
@@ -251,3 +262,30 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.app__separator {
+  display: flex;
+  color: rgba(0, 0, 0, 0.2);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 100%;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    transform: translateY(2px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  &::before {
+    margin-right: 0.2em;
+  }
+
+  &::after {
+    margin-left: 0.2em;
+  }
+}
+</style>

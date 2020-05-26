@@ -18,7 +18,7 @@
               size="lg"
               variant="light"
             >
-              <img class="mr-3" src="@/assets/gh-logo.png" />
+              <img class="mr-3" src="@/assets/images/gh-logo.png" />
               Исходный код
             </b-btn>
           </b-jumbotron>

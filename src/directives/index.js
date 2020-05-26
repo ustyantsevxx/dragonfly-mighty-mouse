@@ -1,4 +1,4 @@
-import { isMobile } from '@/assets/functions'
+import { isMobile } from '@/assets/js/functions'
 
 export const mobileClass = {
   inserted(el, { value }) {

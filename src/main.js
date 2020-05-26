@@ -2,8 +2,8 @@ import Vue from 'vue'
 import App from '@/App.vue'
 import router from '@/router'
 import store from '@/store'
-import { isMobile } from '@/assets/functions'
-import { mobileClass } from '@/assets/directives'
+import { isMobile } from '@/assets/js/functions'
+import { mobileClass } from '@/directives'
 
 Vue.config.productionTip = false
 Vue.prototype.isMobile = isMobile
@@ -24,7 +24,7 @@ import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
 
 import 'file-icons-js/css/style.css'
-import '@/assets/global.scss'
+import '@/assets/scss/global.scss'
 import '@/registerServiceWorker'
 
 firebase.initializeApp({
@@ -51,7 +51,6 @@ auth.onAuthStateChanged(async user => {
     userData = await db.collection('users').doc(user.uid).get()
     userData = userData.data()
   }
-
   store.commit('setAuthData', user)
   store.commit('setUserData', userData)
 

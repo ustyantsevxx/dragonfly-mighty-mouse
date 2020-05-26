@@ -38,7 +38,7 @@
                   :disabled="!!loading"
                   :load="loadGoogleLogin"
                 >
-                  <img class="app__google_img" src="@/assets/glogo.webp" />
+                  <img class="app__google_img" src="@/assets/images/glogo.webp" />
                 </loading-button>
               </div>-->
             </b-form>

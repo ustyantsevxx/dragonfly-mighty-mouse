@@ -119,7 +119,7 @@
 
 <script>
 import TaskModal from '@/components/TaskModal'
-import { num2str } from '@/assets/functions'
+import { num2str } from '@/assets/js/functions'
 import icons from 'file-icons-js'
 import WysiwygEditor from '@/components/WysiwygEditor'
 import { TOGGLE_TASK_VISIBILITY } from '@/store/actions.type'

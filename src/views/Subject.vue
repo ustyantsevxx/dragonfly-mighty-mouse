@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import { num2str } from '@/assets/functions'
+import { num2str } from '@/assets/js/functions'
 import PageLoader from '@/components/PageLoader'
 import SubjectModal from '@/components/SubjectModal'
 import { mapState } from 'vuex'

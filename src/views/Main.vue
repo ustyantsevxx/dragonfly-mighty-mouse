@@ -5,7 +5,7 @@
         <b-col>
           <b-jumbotron>
             <template #header>
-              <span class="font-weight-bold">Dragonfly</span>
+              <span class="font-weight-bold">Dragonfly.vue</span>
               v0.1.0-alpha
             </template>
             <template #lead>

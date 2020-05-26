@@ -130,7 +130,7 @@ export default {
 
   computed: {
     uploadProgress() {
-      return this.$store.state.tasks.filesUploadProgress
+      return this.$store.state.tasksModule.filesUploadProgress
     },
     maxForProgressBar() {
       if (!this.task) return this.files.length

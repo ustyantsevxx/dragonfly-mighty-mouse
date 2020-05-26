@@ -9,6 +9,7 @@
     </b-check>
 
     <b-table
+      :busy="busy"
       v-if="marks && tasks"
       @sort-changed="closePopover"
       class="app__marks_table mt-3 shadow-sm"
@@ -31,7 +32,7 @@
           triggers="hover"
           :target="data.field.key"
         >
-          {{ data.field.name }}
+          {{ data.field.name }} ({{ data.field.score }})
         </b-tooltip>
       </template>
 
@@ -101,12 +102,18 @@
         <div class="app__chart" :style="getChartCellStyle(data.value)"></div>
         <div class="app__chart_value">{{ data.value }}</div>
       </template>
+
+      <template v-slot:table-busy>
+        <div class="text-center my-3">
+          <b-spinner class="align-middle" />
+        </div>
+      </template>
     </b-table>
 
     <!-- invisible -->
     <div class="d-none" id="popover-initial"></div>
     <b-popover
-      custom-class="shadow-sm p-1"
+      custom-class="shadow-sm p-1 app__popover"
       :target="popoverTarget"
       ref="popover"
     >
@@ -115,7 +122,7 @@
           <b-spinbutton
             v-model="selectedMarkScore"
             @change="debounce_updateMark"
-            class="border-0"
+            class="border-0 app__spinbutton"
             size="sm"
             min="0"
           />
@@ -150,7 +157,7 @@
 <script>
 import { mapState } from 'vuex'
 import {
-  MARK_TASK,
+  ADD_MARK,
   UPDATE_MARK,
   DELETE_MARK,
   DELETE_STUDENT_FROM_GROUP
@@ -202,11 +209,16 @@ export default {
       return this.group.students
     },
 
+    busy() {
+      return this.tableItems.some(item => !item.id)
+    },
+
     tableHeaders() {
       let tableHeaders = [
         {
           label: '#',
-          key: 'index'
+          key: 'index',
+          tdClass: 'text-center'
         },
         {
           label: 'Студент',
@@ -250,6 +262,7 @@ export default {
         let name = student.surname + ' '
         if (!this.isMobile() && student) name += student.name
         else if (student.name) name += student.name[0] + '.'
+        if (!student.surname || !student.name) name = ''
         let row = {
           name,
           fake: student.fake,
@@ -308,7 +321,7 @@ export default {
           this.$nextTick(() => this.$refs.popover.$emit('open'))
         )
       } else {
-        this.$store.dispatch(MARK_TASK, markData)
+        this.$store.dispatch(ADD_MARK, markData)
       }
     },
     debounce_updateMark: debounce(function () {
@@ -348,6 +361,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.app__popover {
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+
+  .app__spinbutton {
+    box-shadow: none !important;
+  }
+}
+
 /deep/ {
   .app__chart_container {
     position: relative;

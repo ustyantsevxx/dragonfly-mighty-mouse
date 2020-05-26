@@ -190,7 +190,7 @@ export default {
       newPassword: { required, minLength: minLength(6) },
       confirmPassword: { required, same: sameAs('newPassword') }
     },
-    oldPassword: { required }
+    oldPassword: { required, minLength: minLength(6) }
   }
 }
 </script>

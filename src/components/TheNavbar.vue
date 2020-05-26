@@ -1,7 +1,7 @@
 <template>
   <b-navbar toggleable="sm" type="dark" class="app__navbar shadow-sm" sticky>
     <b-navbar-brand to="/" exact active-class="c">
-      Dragonfly
+      Dragonfly.vue
     </b-navbar-brand>
     <b-navbar-toggle target="collapse" />
     <b-collapse id="collapse" is-nav>
@@ -11,17 +11,6 @@
       <b-navbar-nav class="ml-auto">
         <b-nav-item v-if="!signed" to="/login">Войти</b-nav-item>
         <template v-else>
-          <b-nav-item>
-            <b-btn
-              @click="
-                $store.state.user.isTeacher = !$store.state.user.isTeacher
-              "
-              size="sm"
-              variant="dark"
-            >
-              переметнуться
-            </b-btn>
-          </b-nav-item>
           <b-nav-item to="/account">{{ name + ' ' + surname }}</b-nav-item>
           <b-nav-item @click="signOut">Выйти</b-nav-item>
         </template>

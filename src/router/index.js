@@ -8,7 +8,7 @@ const routes = [
   {
     path: '/',
     component: () => import('@/views/Main'),
-    meta: { title: 'Dragonfly Mighty Mouse' }
+    meta: { title: 'Dragonfly.vue' }
   },
   {
     path: '*',

@@ -1,4 +1,5 @@
 module.exports = {
+  productionSourceMap: false,
   outputDir: 'firebase/dist',
   pwa: {
     name: 'Dragonfly',

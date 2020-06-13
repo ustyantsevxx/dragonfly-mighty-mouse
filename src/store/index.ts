@@ -4,19 +4,19 @@ import { vuexfireMutations } from 'vuexfire'
 Vue.use(Vuex)
 
 import user from './auth.module'
-import groupsModule from './groups.module'
-import tasksModule from './tasks.module'
-import marksModule from './marks.module'
-import subjectsModule from './subjects.module'
-import firestoreBindings from './bindings'
+// import groupsModule from './groups.module'
+// import tasksModule from './tasks.module'
+// import marksModule from './marks.module'
+// import subjectsModule from './subjects.module'
+// import firestoreBindings from './bindings'
 
 export default new Vuex.Store({
   modules: {
-    user,
-    groupsModule,
-    tasksModule,
-    marksModule,
-    subjectsModule
+    user
+    // groupsModule,
+    // tasksModule,
+    // marksModule,
+    // subjectsModule
   },
 
   state: {
@@ -34,7 +34,7 @@ export default new Vuex.Store({
     setToastMsg: (s, msg) => (s.toastMsg = msg),
     unsetToastMsg: s => (s.toastMsg = null),
     setBoundSubjectId: (s, id) => (s.boundSubjectId = id)
-  },
+  }
 
-  actions: firestoreBindings
+  // actions: firestoreBindings
 })

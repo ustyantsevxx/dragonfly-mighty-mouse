@@ -19,7 +19,7 @@
   </b-navbar>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState } from 'vuex'
 import { LOGOUT } from '@/store/actions.type'
 

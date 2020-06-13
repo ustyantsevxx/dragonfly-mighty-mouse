@@ -7,8 +7,8 @@
   </div>
 </template>
 
-<script>
-import Navbar from '@/components/TheNavbar'
+<script lang="ts">
+import Navbar from '@/components/TheNavbar.vue'
 import { BIND_SUBJECTS } from '@/store/actions.type'
 
 export default {
@@ -27,8 +27,8 @@ export default {
   },
 
   beforeCreate() {
-    if (this.$store.state.subjects === null && this.$store.state.user.uid)
-      this.$store.dispatch(BIND_SUBJECTS)
+    // if (this.$store.state.subjects === null && this.$store.state.user.uid)
+    //   this.$store.dispatch(BIND_SUBJECTS)
   },
 
   methods: {

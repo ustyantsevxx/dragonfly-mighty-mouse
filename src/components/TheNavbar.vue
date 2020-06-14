@@ -25,8 +25,8 @@ import UserModule from '@/store/user.module'
 
 @Component
 export default class extends Vue {
-  get signed(): boolean {
-    return UserModule.uid !== undefined
+  get signed() {
+    return UserModule.id
   }
 
   get name() {

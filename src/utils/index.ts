@@ -1,6 +1,6 @@
-export const num2str = (n, forms) => {
+export const num2str = (n: number, forms: string[]) => {
   n = Math.abs(n) % 100
-  let n1 = n % 10
+  const n1 = n % 10
   let index
   if (n > 10 && n < 20) index = 2
   else if (n1 > 1 && n1 < 5) index = 1

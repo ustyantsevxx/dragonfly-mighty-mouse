@@ -103,8 +103,8 @@
   </main>
 </template>
 
-<script>
-import { num2str } from '@/assets/js/functions'
+<script lang="ts">
+import { num2str } from '@/utils'
 import PageLoader from '@/components/PageLoader'
 import SubjectModal from '@/components/SubjectModal'
 import { mapState } from 'vuex'

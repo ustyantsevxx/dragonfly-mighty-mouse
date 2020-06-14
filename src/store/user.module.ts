@@ -1,5 +1,4 @@
 import firebase from 'firebase/app'
-import { User } from '@/models'
 import { db, auth } from '@/main'
 import store from '@/store'
 import {
@@ -11,7 +10,7 @@ import {
 } from 'vuex-module-decorators'
 
 export interface IUserState {
-  uid: string
+  id: string
   name: string
   surname: string
   email: string
@@ -21,21 +20,56 @@ export interface IUserState {
 
 @Module({ dynamic: true, store, name: 'user' })
 class UserModule extends VuexModule {
-  uid: string | undefined | null = null
-  name: string | undefined | null = null
-  surname: string | undefined | null = null
-  email: string | undefined | null = null
-  isTeacher: boolean | undefined | null = null
-  emailVerified: boolean | undefined | null = null
+  id = ''
+  name = ''
+  surname = ''
+  email = ''
+  isTeacher = false
+  isEmailVerified = false
 
   @Mutation
-  SetUserData(user: User) {
-    this.uid = user.uid
-    this.name = user.name
-    this.surname = user.surname
-    this.email = user.email
-    this.isTeacher = user.isTeacher
-    this.emailVerified = user.emailVerified
+  SET_ID(id: string) {
+    this.id = id
+  }
+
+  @Mutation
+  SET_NAME(name: string) {
+    this.name = name
+  }
+
+  @Mutation
+  SET_SURNAME(surname: string) {
+    this.surname = surname
+  }
+
+  @Mutation
+  SET_EMAIL(email: string) {
+    this.email = email
+  }
+
+  @Mutation
+  SET_IS_TEACHER(isTeacher: boolean) {
+    this.isTeacher = isTeacher
+  }
+
+  @Mutation
+  SET_IS_EMAIL_VERIFIED(isEmailVerified: boolean) {
+    this.isEmailVerified = isEmailVerified
+  }
+
+  @Action
+  async SetUser(user: any) {
+    if (user) {
+      const userRef = await db.collection('users').doc(user.uid).get()
+      const userData: any = userRef.data()
+
+      this.SET_ID(user.uid)
+      this.SET_IS_EMAIL_VERIFIED(user.emailVerified)
+      this.SET_EMAIL(userData.email)
+      this.SET_NAME(userData.name)
+      this.SET_SURNAME(userData.surname)
+      this.SET_IS_TEACHER(userData.isTeacher)
+    }
   }
 
   @Action
@@ -54,7 +88,7 @@ class UserModule extends VuexModule {
   }
 
   @Action
-  Logout(): void {
+  Logout() {
     location.reload()
     auth.signOut()
   }

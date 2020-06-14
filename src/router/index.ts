@@ -1,71 +1,71 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import Router, { RouteConfig } from 'vue-router'
 import store from '@/store'
 import { auth } from '@/main'
 Vue.use(Router)
 
-const routes = [
+const routes: RouteConfig[] = [
   {
     path: '/',
-    component: () => import('@/views/Main'),
+    component: () => import('@/views/Main.vue'),
     meta: { title: 'Dragonfly.vue' }
   },
   {
     path: '*',
-    component: () => import('@/views/Error'),
+    component: () => import('@/views/Error.vue'),
     meta: { title: 'Ошибка 404' }
   },
   {
     path: '/login',
-    component: () => import('@/views/Login'),
+    component: () => import('@/views/Login.vue'),
     meta: { requiresGuest: true, title: 'Вход' }
   },
   {
     path: '/register',
-    component: () => import('@/views/Register'),
+    component: () => import('@/views/Register.vue'),
     meta: { requiresGuest: true, title: 'Регистрация' }
   },
   {
     path: '/restore',
-    component: () => import('@/views/RestorePassword'),
+    component: () => import('@/views/RestorePassword.vue'),
     meta: { requiresGuest: true, title: 'Восстановление пароля' }
   },
   {
     path: '/account',
-    component: () => import('@/views/Account'),
+    component: () => import('@/views/Account.vue'),
     meta: { requiresAuth: true, title: 'Мой профиль' }
   },
   {
     path: '/subjects',
-    component: () => import('@/views/SubjectList'),
+    component: () => import('@/views/SubjectList.vue'),
     meta: { requiresAuth: true, title: 'Мои дисциплины' }
   },
   {
     path: '/subjects/:id',
     redirect: '/subjects/:id/tasks',
-    component: () => import('@/views/Subject'),
+    component: () => import('@/views/Subject.vue'),
     meta: { requiresAuth: true },
     children: [
       {
         path: 'tasks',
-        component: () => import('@/components/TheTaskList'),
+        component: () => import('@/components/TheTaskList.vue'),
         meta: { requiresAuth: true, dynamicTitle: true }
       },
       {
         path: 'groups',
-        component: () => import('@/components/TheGroupList'),
+        component: () => import('@/components/TheGroupList.vue'),
         meta: { requiresAuth: true, requiresTeacher: true, dynamicTitle: true }
       },
       {
         path: 'my-group',
-        component: () => import('@/components/TheGroupList'),
+        component: () => import('@/components/TheGroupList.vue'),
         meta: { requiresAuth: true, requiresStudent: true, dynamicTitle: true }
       }
     ]
   },
   {
     path: '/join-group/:id',
-    component: () => import('@/views/JoinGroup'),
+    component: () => import('@/views/JoinGroup.vue'),
     meta: {
       requiresAuth: true,
       requiresStudent: true,
@@ -74,7 +74,7 @@ const routes = [
   }
 ]
 
-let router = new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,

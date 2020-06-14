@@ -2,18 +2,11 @@ import Vue from 'vue'
 import App from '@/App.vue'
 import router from '@/router'
 import store from '@/store/index'
-import { isMobile } from '@/assets/js/functions'
+import { isMobile } from '@/utils'
 import { mobileClass } from '@/directives'
 import UserModule from '@/store/user.module'
-import { User } from '@/models'
-
-Vue.config.productionTip = false
-Vue.prototype.isMobile = isMobile
-Vue.directive('mobile-class', mobileClass)
 
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
-Vue.use(BootstrapVue)
-Vue.use(BootstrapVueIcons)
 import 'bootstrap/scss/bootstrap.scss'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
@@ -23,11 +16,17 @@ import 'firebase/storage'
 import 'firebase/firestore'
 
 import Vuelidate from 'vuelidate'
-Vue.use(Vuelidate)
 
 import 'file-icons-js/css/style.css'
 import '@/assets/scss/global.scss'
 import '@/registerServiceWorker'
+
+Vue.config.productionTip = false
+Vue.prototype.isMobile = isMobile
+Vue.directive('mobile-class', mobileClass)
+Vue.use(Vuelidate)
+Vue.use(BootstrapVue)
+Vue.use(BootstrapVueIcons)
 
 firebase.initializeApp({
   apiKey: process.env.VUE_APP__FIREBASE_API_KEY,
@@ -47,24 +46,7 @@ export const auth = firebase.auth()
 let app: any
 
 auth.onAuthStateChanged(async user => {
-  let userData
-
-  if (user) {
-    userData = await db.collection('users').doc(user.uid).get()
-    userData = userData.data()
-  }
-
-  const userToStore: User = {
-    uid: user?.uid,
-    name: userData?.name,
-    surname: userData?.surname,
-    email: userData?.email,
-    isTeacher: userData?.isTeacher,
-    emailVerified: user?.emailVerified
-  }
-
-  UserModule.SetUserData(userToStore)
-
+  await UserModule.SetUser(user)
   if (!app)
     app = new Vue({
       router,

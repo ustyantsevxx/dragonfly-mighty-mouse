@@ -85,6 +85,7 @@ export default {
       })
       if (!signed) this.password = null
     },
+
     async googleSignIn() {
       this.loadGoogleLogin = true
       await this.$store.dispatch(LOGIN_WITH_GOOGLE)

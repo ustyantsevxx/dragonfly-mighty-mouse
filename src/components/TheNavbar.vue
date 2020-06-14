@@ -20,23 +20,26 @@
 </template>
 
 <script lang="ts">
-import { mapState } from 'vuex'
-import { LOGOUT } from '@/store/actions.type'
+import { Vue, Component } from 'vue-property-decorator'
+import UserModule from '@/store/user.module'
 
-export default {
-  computed: {
-    ...mapState({
-      name: s => s.user.name,
-      surname: s => s.user.surname,
-      signed: s => s.user.uid,
-      isTeacher: s => s.user.isTeacher
-    })
-  },
-  methods: {
-    signOut() {
-      if (this.$router.currentRoute.path !== '/') this.$router.push('/')
-      this.$store.dispatch(LOGOUT)
-    }
+@Component
+export default class extends Vue {
+  get signed(): boolean {
+    return UserModule.uid !== undefined
+  }
+
+  get name() {
+    return UserModule.name
+  }
+
+  get surname() {
+    return UserModule.surname
+  }
+
+  signOut() {
+    if (this.$router.currentRoute.path !== '/') this.$router.push('/')
+    UserModule.Logout()
   }
 }
 </script>

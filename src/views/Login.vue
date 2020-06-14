@@ -52,6 +52,7 @@
 <script>
 import LoadingButton from '@/components/LoadingButton'
 import { LOGIN, LOGIN_WITH_GOOGLE } from '@/store/actions.type'
+import UserModule from '@/store/user.module'
 
 export default {
   components: { LoadingButton },
@@ -78,7 +79,7 @@ export default {
   methods: {
     async sign() {
       this.loadLogin = true
-      let signed = await this.$store.dispatch(LOGIN, {
+      const signed = await UserModule.Login({
         email: this.email,
         password: this.password
       })

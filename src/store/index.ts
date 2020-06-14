@@ -1,40 +1,21 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { vuexfireMutations } from 'vuexfire'
+import { IUserState } from '@/store/user.module'
+
 Vue.use(Vuex)
 
-import user from './auth.module'
-// import groupsModule from './groups.module'
-// import tasksModule from './tasks.module'
-// import marksModule from './marks.module'
-// import subjectsModule from './subjects.module'
-// import firestoreBindings from './bindings'
+interface IRootState {
+  user: IUserState
+}
 
-export default new Vuex.Store({
-  modules: {
-    user
-    // groupsModule,
-    // tasksModule,
-    // marksModule,
-    // subjectsModule
-  },
+export default new Vuex.Store<IRootState>({})
 
-  state: {
-    toastMsg: null,
-    // binded:
-    subjects: null,
-    groups: null,
-    tasks: null,
-    marks: null,
-    boundSubjectId: null
-  },
+// mutations: {
+//   ...vuexfireMutations,
+//   setToastMsg: (s, msg) => (s.toastMsg = msg),
+//   unsetToastMsg: s => (s.toastMsg = null),
+//   setBoundSubjectId: (s, id) => (s.boundSubjectId = id)
+// }
 
-  mutations: {
-    ...vuexfireMutations,
-    setToastMsg: (s, msg) => (s.toastMsg = msg),
-    unsetToastMsg: s => (s.toastMsg = null),
-    setBoundSubjectId: (s, id) => (s.boundSubjectId = id)
-  }
-
-  // actions: firestoreBindings
-})
+// // actions: firestoreBindings

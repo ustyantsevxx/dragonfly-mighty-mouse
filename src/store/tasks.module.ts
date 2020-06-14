@@ -52,18 +52,18 @@ const actions = {
   },
 
   async [UPLOAD_TASK_FILES]({ state }, files) {
-    let pinnedFiles = []
+    const pinnedFiles = []
     let filesHere = false
-    for (let file of files) {
+    for (const file of files) {
       if (!filesHere) {
         state.filesUploadProgress = 0
         filesHere = true
       }
-      let ref = storage.ref(
+      const ref = storage.ref(
         `lab_files/${Math.random().toString(7)}/${file.name}`
       )
       await ref.put(file)
-      let link = await ref.getDownloadURL()
+      const link = await ref.getDownloadURL()
       pinnedFiles.push({
         name: file.name,
         link,
@@ -76,7 +76,7 @@ const actions = {
   },
 
   async [DELETE_TASK_FILES](_, paths) {
-    for (let path of paths) await storage.ref(path).delete()
+    for (const path of paths) await storage.ref(path).delete()
   },
 
   [TOGGLE_TASK_VISIBILITY](_, data) {

@@ -16,7 +16,7 @@ export default {
         db.collection('subjects').where('teacherId', '==', rootState.user.uid)
       )
     else {
-      let groupsWithStudent = await db
+      const groupsWithStudent = await db
         .collection('groups')
         .where(
           'students',
@@ -25,7 +25,7 @@ export default {
         )
         .get()
 
-      let subjectIdList = groupsWithStudent.docs.map(c => c.data().subject.id)
+      const subjectIdList = groupsWithStudent.docs.map(c => c.data().subject.id)
 
       if (subjectIdList.length)
         return bindFirestoreRef(

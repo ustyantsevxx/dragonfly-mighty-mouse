@@ -4,6 +4,8 @@ import router from '@/router'
 import store from '@/store/index'
 import { isMobile } from '@/assets/js/functions'
 import { mobileClass } from '@/directives'
+import UserModule from '@/store/user.module'
+import { User } from '@/models'
 
 Vue.config.productionTip = false
 Vue.prototype.isMobile = isMobile
@@ -42,7 +44,7 @@ export const db = firebase.firestore()
 export const storage = firebase.storage()
 export const auth = firebase.auth()
 
-let app
+let app: any
 
 auth.onAuthStateChanged(async user => {
   let userData
@@ -51,8 +53,17 @@ auth.onAuthStateChanged(async user => {
     userData = await db.collection('users').doc(user.uid).get()
     userData = userData.data()
   }
-  store.commit('setAuthData', user)
-  store.commit('setUserData', userData)
+
+  const userToStore: User = {
+    uid: user?.uid,
+    name: userData?.name,
+    surname: userData?.surname,
+    email: userData?.email,
+    isTeacher: userData?.isTeacher,
+    emailVerified: user?.emailVerified
+  }
+
+  UserModule.SetUserData(userToStore)
 
   if (!app)
     app = new Vue({

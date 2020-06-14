@@ -63,7 +63,7 @@ const actions = {
   },
 
   async [ADD_FAKE_STUDENT_TO_GROUP](_, options) {
-    let newFakeStudent = await db.collection('fake-students').add({
+    const newFakeStudent = await db.collection('fake-students').add({
       name: options.name,
       surname: options.surname,
       fake: true

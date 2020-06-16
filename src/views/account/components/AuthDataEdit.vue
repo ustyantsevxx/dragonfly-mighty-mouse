@@ -98,10 +98,10 @@
 </template>
 
 <script lang="ts">
-import { minLength, required, sameAs, email } from 'vuelidate/lib/validators'
-import LoadingButton from '@/components/LoadingButton.vue'
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import userModule from '../store/user.module'
+import LoadingButton from '@/components/LoadingButton.vue'
+import { minLength, required, sameAs, email } from 'vuelidate/lib/validators'
+import UserModule from '@/store/modules/user.module'
 
 @Component({
   components: { LoadingButton },
@@ -133,11 +133,11 @@ export default class extends Vue {
   }
 
   get isEmailVerified() {
-    return userModule.isEmailVerified
+    return UserModule.isEmailVerified
   }
 
   get email() {
-    return userModule.email
+    return UserModule.email
   }
 
   get isInvalid() {
@@ -169,18 +169,18 @@ export default class extends Vue {
   }
 
   verifyEmail() {
-    userModule.VerifyEmail()
+    UserModule.VerifyEmail()
   }
 
   updateEmail() {
-    return userModule.UpdateEmail({
+    return UserModule.UpdateEmail({
       password: this.oldPassword,
       newEmail: this.newEmail
     })
   }
 
   updatePassword() {
-    return userModule.UpdatePassword({
+    return UserModule.UpdatePassword({
       old: this.oldPassword,
       new: this.p.newPassword
     })

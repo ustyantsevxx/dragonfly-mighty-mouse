@@ -10,7 +10,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import Navbar from '@/components/TheNavbar.vue'
-import ToastsModule from './store/toasts.module'
+import ToastsModule from '@/store/modules/toasts.module'
 
 @Component({
   components: { Navbar }

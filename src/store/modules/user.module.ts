@@ -168,10 +168,7 @@ class UserModule extends VuexModule implements IUserState {
   @Action
   UpdateEmail(options: { password: string; newEmail: string }) {
     return this.TryDoOrToastError(async () => {
-      const user = await AUTH.signInWithEmailAndPassword(
-        this.email,
-        options.password
-      )
+      await AUTH.signInWithEmailAndPassword(this.email, options.password)
       await AUTH.currentUser?.updateEmail(options.newEmail)
       await FIRESTORE.collection('users').doc(this.id).update({
         email: options.newEmail
@@ -185,10 +182,7 @@ class UserModule extends VuexModule implements IUserState {
   @Action
   UpdatePassword(passwords: { old: string; new: string }) {
     return this.TryDoOrToastError(async () => {
-      const user = await AUTH.signInWithEmailAndPassword(
-        this.email,
-        passwords.old
-      )
+      await AUTH.signInWithEmailAndPassword(this.email, passwords.old)
       await AUTH.currentUser?.updatePassword(passwords.new)
       ToastsModule.Toast({ message: 'Пароль успешно изменен' })
     })

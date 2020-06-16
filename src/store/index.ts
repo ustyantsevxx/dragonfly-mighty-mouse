@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { vuexfireMutations } from 'vuexfire'
-import { IUserState } from '@/store/user.module'
-import { IToastsState } from './toasts.module'
+import { IUserState } from '@/store/modules/user.module'
+import { IToastsState } from '@/store/modules/toasts.module'
 
 Vue.use(Vuex)
 

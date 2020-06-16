@@ -4,7 +4,7 @@ import router from '@/router'
 import store from '@/store/index'
 import { isMobile } from '@/utils'
 import { mobileClass } from '@/directives'
-import UserModule from '@/store/user.module'
+import UserModule from '@/store/modules/user.module'
 
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import 'bootstrap/scss/bootstrap.scss'

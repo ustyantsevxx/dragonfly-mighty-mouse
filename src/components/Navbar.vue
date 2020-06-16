@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import UserModule from '@/store/user.module'
+import UserModule from '@/store/modules/user.module'
 
 @Component
 export default class extends Vue {

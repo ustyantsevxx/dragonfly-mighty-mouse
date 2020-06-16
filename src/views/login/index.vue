@@ -52,7 +52,7 @@
 <script>
 import LoadingButton from '@/components/LoadingButton'
 import { LOGIN, LOGIN_WITH_GOOGLE } from '@/store/actions.type'
-import UserModule from '@/store/user.module'
+import UserModule from '@/store/modules/user.module'
 
 export default {
   components: { LoadingButton },

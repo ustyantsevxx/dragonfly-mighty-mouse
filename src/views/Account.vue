@@ -55,65 +55,70 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component, Watch } from 'vue-property-decorator'
 import { required } from 'vuelidate/lib/validators'
-import AuthDataEdit from '@/components/TheAuthDataEdit'
-import LoadingButton from '@/components/LoadingButton'
-import modalMixin from '@/mixins/modal'
-import { UPDATE_PROFILE } from '@/store/actions.type'
+import AuthDataEdit from '@/components/TheAuthDataEdit.vue'
+import LoadingButton from '@/components/LoadingButton.vue'
+import UserModule from '@/store/user.module'
 
-export default {
+@Component({
   components: { AuthDataEdit, LoadingButton },
-
-  mixins: [
-    modalMixin({
-      newName: null,
-      newSurname: null,
-      loadUpdate: false
-    })
-  ],
-
-  computed: {
-    name() {
-      return this.$store.state.user.name
-    },
-    surname() {
-      return this.$store.state.user.surname
-    },
-    notChanged() {
-      return this.newName === this.name && this.newSurname === this.surname
-    }
-  },
-
-  watch: {
-    newName() {
-      if (this.newName === this.name) this.$v.newName.$reset()
-    },
-    newSurname() {
-      if (this.newSurname === this.surname) this.$v.newSurname.$reset()
-    }
-  },
+  validations: {
+    newName: { required },
+    newSurname: { required }
+  }
+})
+export default class extends Vue {
+  newName = ''
+  newSurname = ''
+  loadUpdate = false
 
   beforeMount() {
     this.newName = this.name
     this.newSurname = this.surname
-  },
+  }
 
-  methods: {
-    async updateData() {
-      this.loadUpdate = true
-      await this.$store.dispatch(UPDATE_PROFILE, {
-        name: this.newName,
-        surname: this.newSurname
-      })
-      this.$v.$reset()
-      this.loadUpdate = false
-    }
-  },
+  get name() {
+    return UserModule.name
+  }
 
-  validations: {
-    newName: { required },
-    newSurname: { required }
+  get surname() {
+    return UserModule.surname
+  }
+
+  get notChanged() {
+    return this.newName === this.name && this.newSurname === this.surname
+  }
+
+  get inputState() {
+    return (val: any) => (val.$dirty ? !val.$error : null)
+  }
+
+  @Watch('newName')
+  onNewNameChange() {
+    if (this.newName === this.name) this.$v.newName.$reset()
+  }
+
+  @Watch('newSurame')
+  onNewSurnameChange() {
+    if (this.newSurname === this.surname) this.$v.newSurname.$reset()
+  }
+
+  async updateData() {
+    this.loadUpdate = true
+    await UserModule.UpdateProfile({
+      name: this.newName,
+      surname: this.newSurname
+    })
+    this.$v.$reset()
+    this.loadUpdate = false
+  }
+
+  resetData() {
+    this.newName = this.name
+    this.newSurname = this.surname
+    this.$v.$reset()
   }
 }
 </script>

@@ -1,5 +1,5 @@
 import firebase from 'firebase/app'
-import { db } from '@/main'
+import { FIRESTORE } from '@/main'
 import {
   DELETE_MARK,
   ADD_GROUP,
@@ -21,55 +21,55 @@ const getters = {}
 
 const actions = {
   async [ADD_GROUP](_, groupData) {
-    const group = await db.collection('groups').add({
+    const group = await FIRESTORE.collection('groups').add({
       name: groupData.name,
       students: [],
-      subject: db.collection('subjects').doc(groupData.subjectId),
+      subject: FIRESTORE.collection('subjects').doc(groupData.subjectId),
       joinable: true
     })
     return group.id
   },
 
   async [UPDATE_GROUP](_, groupData) {
-    await db.collection('groups').doc(groupData.id).update({
+    await FIRESTORE.collection('groups').doc(groupData.id).update({
       name: groupData.name
     })
   },
 
   [TOGGLE_GROUP_JOINABLE](_, data) {
-    db.collection('groups').doc(data.id).update({
+    FIRESTORE.collection('groups').doc(data.id).update({
       joinable: data.state
     })
   },
 
   async [DELETE_GROUP](_, id) {
-    await db.collection('groups').doc(id).delete()
+    await FIRESTORE.collection('groups').doc(id).delete()
   },
 
   async [DELETE_STUDENT_FROM_GROUP]({ dispatch }, options) {
-    await db
-      .collection('groups')
+    await FIRESTORE.collection('groups')
       .doc(options.groupId)
       .update({
         students: firebase.firestore.FieldValue.arrayRemove(
-          db
-            .collection(options.fake ? 'fake-students' : 'users')
-            .doc(options.studentId)
+          FIRESTORE.collection(options.fake ? 'fake-students' : 'users').doc(
+            options.studentId
+          )
         )
       })
     options.marksToDelete.forEach(id => dispatch(DELETE_MARK, id))
     if (options.fake)
-      await db.collection('fake-students').doc(options.studentId).delete()
+      await FIRESTORE.collection('fake-students')
+        .doc(options.studentId)
+        .delete()
   },
 
   async [ADD_FAKE_STUDENT_TO_GROUP](_, options) {
-    const newFakeStudent = await db.collection('fake-students').add({
+    const newFakeStudent = await FIRESTORE.collection('fake-students').add({
       name: options.name,
       surname: options.surname,
       fake: true
     })
-    await db
-      .collection('groups')
+    await FIRESTORE.collection('groups')
       .doc(options.groupId)
       .update({
         students: firebase.firestore.FieldValue.arrayUnion(newFakeStudent)
@@ -77,7 +77,7 @@ const actions = {
   },
 
   async [UPDATE_FAKE_STUDENT](_, options) {
-    await db.collection('fake-students').doc(options.id).update({
+    await FIRESTORE.collection('fake-students').doc(options.id).update({
       name: options.name,
       surname: options.surname
     })
@@ -93,10 +93,10 @@ const actions = {
       .map(m => m.id)
 
     for (const mark of fakeStudentsMarks) {
-      db.collection('marks')
+      FIRESTORE.collection('marks')
         .doc(mark)
         .update({
-          student: db.collection('users').doc(options.realId)
+          student: FIRESTORE.collection('users').doc(options.realId)
         })
     }
 
@@ -111,12 +111,14 @@ const actions = {
   },
 
   async [GET_GROUP_INFO]({ rootState }, id) {
-    let group = await db.collection('groups').doc(id).get()
+    let group = await FIRESTORE.collection('groups').doc(id).get()
     group = group.data()
     if (!group) return false
     let subject = await group.subject.get()
     subject = { ...subject.data(), id: subject.id }
-    let teacher = await db.collection('users').doc(subject.teacherId).get()
+    let teacher = await FIRESTORE.collection('users')
+      .doc(subject.teacherId)
+      .get()
     teacher = teacher.data()
     return {
       groupName: group.name,
@@ -128,12 +130,11 @@ const actions = {
   },
 
   async [JOIN_GROUP]({ rootState }, id) {
-    await db
-      .collection('groups')
+    await FIRESTORE.collection('groups')
       .doc(id)
       .update({
         students: firebase.firestore.FieldValue.arrayUnion(
-          db.collection('users').doc(rootState.user.uid)
+          FIRESTORE.collection('users').doc(rootState.user.uid)
         )
       })
   }

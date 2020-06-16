@@ -1,5 +1,5 @@
 import { ADD_SUBJECT, UPDATE_SUBJECT, DELETE_SUBJECT } from './actions.type'
-import { db } from '@/main'
+import { FIRESTORE } from '@/main'
 
 const state = {}
 const mutations = {}
@@ -7,7 +7,7 @@ const getters = {}
 
 const actions = {
   async [ADD_SUBJECT]({ rootState }, subj) {
-    db.collection('subjects').add({
+    FIRESTORE.collection('subjects').add({
       name: subj.name,
       course: subj.course,
       teacherId: rootState.user.uid
@@ -15,14 +15,14 @@ const actions = {
   },
 
   async [UPDATE_SUBJECT](_, data) {
-    await db.collection('subjects').doc(data.id).update({
+    await FIRESTORE.collection('subjects').doc(data.id).update({
       name: data.name,
       course: data.course
     })
   },
 
   async [DELETE_SUBJECT](_, id) {
-    await db.collection('subjects').doc(id).delete()
+    await FIRESTORE.collection('subjects').doc(id).delete()
   }
 }
 

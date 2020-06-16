@@ -1,5 +1,5 @@
 import firebase from 'firebase/app'
-import { db, auth } from '@/main'
+import { FIRESTORE, AUTH } from '@/main'
 import store from '@/store'
 import {
   VuexModule,
@@ -8,6 +8,7 @@ import {
   Action,
   getModule
 } from 'vuex-module-decorators'
+import ToastsModule from './toasts.module'
 
 export interface IUserState {
   id: string
@@ -15,11 +16,11 @@ export interface IUserState {
   surname: string
   email: string
   isTeacher: boolean
-  emailVerified: boolean
+  isEmailVerified: boolean
 }
 
 @Module({ dynamic: true, store, name: 'user' })
-class UserModule extends VuexModule {
+class UserModule extends VuexModule implements IUserState {
   id = ''
   name = ''
   surname = ''
@@ -58,9 +59,24 @@ class UserModule extends VuexModule {
   }
 
   @Action
+  private async TryDoOrToastError<T>(fn: () => Promise<T>) {
+    try {
+      await fn()
+      return true
+    } catch (e) {
+      ToastsModule.Toast({
+        error: true,
+        message: e.message,
+        needsTranslation: true
+      })
+      return false
+    }
+  }
+
+  @Action
   async SetUser(user: any) {
     if (user) {
-      const userRef = await db.collection('users').doc(user.uid).get()
+      const userRef = await FIRESTORE.collection('users').doc(user.uid).get()
       const userData: any = userRef.data()
 
       this.SET_ID(user.uid)
@@ -73,112 +89,110 @@ class UserModule extends VuexModule {
   }
 
   @Action
-  async Login(options: { email: string; password: string }): Promise<boolean> {
-    try {
-      await auth.signInWithEmailAndPassword(options.email, options.password)
-      return true
-    } catch (e) {
-      this.context.commit('setToastMsg', {
-        error: true,
-        msg: e.message,
-        translate: true
-      })
-      return false
-    }
+  Login(options: { email: string; password: string }): Promise<boolean> {
+    return this.TryDoOrToastError(async () => {
+      await AUTH.signInWithEmailAndPassword(options.email, options.password)
+    })
+  }
+
+  @Action
+  LoginWithGoogle() {
+    return this.TryDoOrToastError(async () => {
+      const googleProvider = new firebase.auth.GoogleAuthProvider()
+      await AUTH.signInWithPopup(googleProvider)
+    })
   }
 
   @Action
   Logout() {
     location.reload()
-    auth.signOut()
+    AUTH.signOut()
+  }
+
+  @Action
+  Register(options: {
+    email: string
+    password: string
+    name: string
+    surname: string
+    isTeacher: boolean
+  }) {
+    return this.TryDoOrToastError(async () => {
+      const creds: any = await AUTH.createUserWithEmailAndPassword(
+        options.email,
+        options.password
+      )
+      await FIRESTORE.collection('users').doc(creds.user.uid).set({
+        name: options.name,
+        surname: options.surname,
+        email: options.email,
+        isTeacher: options.isTeacher
+      })
+    })
+  }
+
+  @Action
+  RestorePassword(options: { email: string }) {
+    return this.TryDoOrToastError(async () => {
+      await AUTH.sendPasswordResetEmail(options.email, {
+        url: 'https://project-scimitar.web.app/login'
+      })
+      ToastsModule.Toast({ message: 'Ссылка востановления отправлена' })
+    })
+  }
+
+  @Action
+  VerifyEmail() {
+    return this.TryDoOrToastError(async () => {
+      await AUTH.currentUser?.sendEmailVerification()
+      ToastsModule.Toast({ message: 'Ссылка подтверждения отправлена' })
+    })
+  }
+
+  @Action
+  UpdateProfile(options: { name: string; surname: string }) {
+    return this.TryDoOrToastError(async () => {
+      const userRef = FIRESTORE.collection('users').doc(this.id)
+      await userRef.update({
+        name: options.name,
+        surname: options.surname
+      })
+      const changedUserDoc = await userRef.get()
+      const data: any = changedUserDoc.data()
+      this.SET_NAME(data.name)
+      this.SET_SURNAME(data.surname)
+      ToastsModule.Toast({ message: 'Имя успешно изменено' })
+    })
+  }
+
+  @Action
+  UpdateEmail(options: { password: string; newEmail: string }) {
+    return this.TryDoOrToastError(async () => {
+      const user = await AUTH.signInWithEmailAndPassword(
+        this.email,
+        options.password
+      )
+      await AUTH.currentUser?.updateEmail(options.newEmail)
+      await FIRESTORE.collection('users').doc(this.id).update({
+        email: options.newEmail
+      })
+      await AUTH.currentUser?.sendEmailVerification()
+      this.SET_EMAIL(options.newEmail)
+      ToastsModule.Toast({ message: 'Запрос на смену эл. почты отправлен' })
+    })
+  }
+
+  @Action
+  UpdatePassword(passwords: { old: string; new: string }) {
+    return this.TryDoOrToastError(async () => {
+      const user = await AUTH.signInWithEmailAndPassword(
+        this.email,
+        passwords.old
+      )
+      await AUTH.currentUser?.updatePassword(passwords.new)
+      ToastsModule.Toast({ message: 'Пароль успешно изменен' })
+    })
   }
 }
 
 export default getModule(UserModule)
-
-// const actions = {
-//
-
-//   // [REGISTER](_, opt) {
-//   //   return tryDoOrToastError(async () => {
-//   //     let creds = await auth.createUserWithEmailAndPassword(
-//   //       opt.email,
-//   //       opt.password
-//   //     )
-//   //     await db.collection('users').doc(creds.user.uid).set({
-//   //       name: opt.name,
-//   //       surname: opt.surname,
-//   //       email: opt.email,
-//   //       isTeacher: opt.isTeacher
-//   //     })
-//   //   })
-//   // },
-
-//   // [LOGIN_WITH_GOOGLE]() {
-//   //   return tryDoOrToastError(async () => {
-//   //     let googleProvider = new firebase.auth.GoogleAuthProvider()
-//   //     await auth.signInWithPopup(googleProvider)
-//   //   })
-//   // },
-
-//
-
-//   // [RESTORE_PASSWORD]({ commit }, opt) {
-//   //   return tryDoOrToastError(async () => {
-//   //     await auth.sendPasswordResetEmail(opt.email, {
-//   //       url: 'https://project-scimitar.web.app/login'
-//   //     })
-//   //     commit('setToastMsg', { msg: 'Ссылка востановления отправлена' })
-//   //   })
-//   // },
-
-//   // [VERIFY_EMAIL]({ commit }) {
-//   //   return tryDoOrToastError(async () => {
-//   //     await auth.currentUser.sendEmailVerification()
-//   //     commit('setToastMsg', { msg: 'Ссылка подтверждения отправлена' })
-//   //   })
-//   // },
-
-//   // [UPDATE_PROFILE]({ commit, state }, data) {
-//   //   return tryDoOrToastError(async () => {
-//   //     let userDoc = db.collection('users').doc(state.uid)
-//   //     await userDoc.update({
-//   //       name: data.name,
-//   //       surname: data.surname
-//   //     })
-//   //     let fetchedData = await userDoc.get()
-//   //     commit('setUserData', fetchedData.data())
-//   //     commit('setToastMsg', { msg: 'Имя успешно изменено' })
-//   //   })
-//   // },
-
-//   // [UPDATE_EMAIL]({ commit, state }, data) {
-//   //   return tryDoOrToastError(async () => {
-//   //     let user = await auth.signInWithEmailAndPassword(
-//   //       state.email,
-//   //       data.password
-//   //     )
-//   //     await auth.currentUser.updateEmail(data.newEmail)
-//   //     await db.collection('users').doc(auth.currentUser.uid).update({
-//   //       email: data.newEmail
-//   //     })
-//   //     await auth.currentUser.sendEmailVerification()
-//   //     commit('setAuthData', user.user)
-//   //     commit('setToastMsg', { msg: 'Запрос на смену эл. почты отправлен' })
-//   //   })
-//   // },
-
-//   // [UPDATE_PASSWORD]({ commit, state }, passwords) {
-//   //   return tryDoOrToastError(async () => {
-//   //     let user = await auth.signInWithEmailAndPassword(
-//   //       state.email,
-//   //       passwords.old
-//   //     )
-//   //     await auth.currentUser.updatePassword(passwords.new)
-//   //     commit('setAuthData', user.user)
-//   //     commit('setToastMsg', { msg: 'Пароль успешно изменен' })
-//   //   })
-//   // }
-// }
-
-// export default { state, getters, mutations, actions }

@@ -10,34 +10,41 @@
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import Navbar from '@/components/TheNavbar.vue'
+import ToastsModule from './store/toasts.module'
 
 @Component({
   components: { Navbar }
 })
 export default class App extends Vue {
-  get toastMsg(): any {
-    return this.$store.state.toastMsg
+  // beforeCreate() {
+  //   if (this.$store.state.subjects === null && this.$store.state.user.uid)
+  //     this.$store.dispatch(BIND_SUBJECTS)
+  // }
+
+  get toasted() {
+    return ToastsModule.toasted
   }
 
-  @Watch('toastMsg')
-  onToastMsgChange(): void {
-    if (this.toastMsg) this.toast()
+  @Watch('toasted')
+  onToastMsgChange() {
+    if (this.toasted) this.toast()
   }
 
-  async toast(): Promise<void> {
-    let russianMsg = this.toastMsg.translate
-      ? await this.translate(this.toastMsg.msg)
-      : this.toastMsg.msg
+  async toast() {
+    let russianMsg = ToastsModule.needsTranslation
+      ? await this.translate(ToastsModule.message)
+      : ToastsModule.message
     this.$bvToast.toast(russianMsg, {
-      variant: this.toastMsg.error ? 'danger' : 'success',
+      variant: ToastsModule.error ? 'danger' : 'success',
       solid: true,
       noCloseButton: true,
       toaster: 'b-toaster-top-center',
       toastClass: 'border-0',
       bodyClass: 'text-center'
     })
-    this.$store.commit('unsetToastMsg')
+    ToastsModule.UnToast()
   }
+
   async translate(text: string): Promise<string> {
     try {
       const url =
@@ -50,10 +57,5 @@ export default class App extends Vue {
       return text
     }
   }
-
-  // beforeCreate() {
-  //   if (this.$store.state.subjects === null && this.$store.state.user.uid)
-  //     this.$store.dispatch(BIND_SUBJECTS)
-  // }
 }
 </script>

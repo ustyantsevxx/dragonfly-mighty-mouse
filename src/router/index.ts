@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router, { RouteConfig } from 'vue-router'
 import store from '@/store'
-import { auth } from '@/main'
+import { AUTH } from '@/main'
 Vue.use(Router)
 
 const routes: RouteConfig[] = [
@@ -82,7 +82,7 @@ const router = new Router({
 })
 
 router.beforeEach((to, _from, next) => {
-  const signed = !!auth.currentUser
+  const signed = !!AUTH.currentUser
   const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
   const requiresGuest = to.matched.some(r => r.meta.requiresGuest)
   const requiresTeacher = to.matched.some(r => r.meta.requiresTeacher)

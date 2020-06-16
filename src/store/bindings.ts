@@ -1,5 +1,5 @@
 import firebase from 'firebase/app'
-import { db } from '@/main'
+import { FIRESTORE } from '@/main'
 import { firestoreAction } from 'vuexfire'
 import {
   BIND_SUBJECTS,
@@ -13,15 +13,18 @@ export default {
     if (rootState.user.isTeacher)
       return bindFirestoreRef(
         'subjects',
-        db.collection('subjects').where('teacherId', '==', rootState.user.uid)
+        FIRESTORE.collection('subjects').where(
+          'teacherId',
+          '==',
+          rootState.user.uid
+        )
       )
     else {
-      const groupsWithStudent = await db
-        .collection('groups')
+      const groupsWithStudent = await FIRESTORE.collection('groups')
         .where(
           'students',
           'array-contains',
-          db.collection('users').doc(rootState.user.uid)
+          FIRESTORE.collection('users').doc(rootState.user.uid)
         )
         .get()
 
@@ -30,13 +33,11 @@ export default {
       if (subjectIdList.length)
         return bindFirestoreRef(
           'subjects',
-          db
-            .collection('subjects')
-            .where(
-              firebase.firestore.FieldPath.documentId(),
-              'in',
-              subjectIdList
-            )
+          FIRESTORE.collection('subjects').where(
+            firebase.firestore.FieldPath.documentId(),
+            'in',
+            subjectIdList
+          )
         )
     }
   }),
@@ -48,20 +49,20 @@ export default {
       if (rootState.user.isTeacher)
         return bindFirestoreRef(
           'groups',
-          db
-            .collection('groups')
-            .where('subject', '==', db.collection('subjects').doc(subjectId))
+          FIRESTORE.collection('groups').where(
+            'subject',
+            '==',
+            FIRESTORE.collection('subjects').doc(subjectId)
+          )
         )
       else {
         return bindFirestoreRef(
           'groups',
-          db
-            .collection('groups')
-            .where(
-              'students',
-              'array-contains',
-              db.collection('users').doc(rootState.user.uid)
-            )
+          FIRESTORE.collection('groups').where(
+            'students',
+            'array-contains',
+            FIRESTORE.collection('users').doc(rootState.user.uid)
+          )
         )
       }
     }
@@ -74,13 +75,12 @@ export default {
       if (rootState.user.isTeacher)
         return bindFirestoreRef(
           'tasks',
-          db.collection('tasks').where('subjectId', '==', subjectId)
+          FIRESTORE.collection('tasks').where('subjectId', '==', subjectId)
         )
       else {
         return bindFirestoreRef(
           'tasks',
-          db
-            .collection('tasks')
+          FIRESTORE.collection('tasks')
             .where('subjectId', '==', subjectId)
             .where('visible', '==', true)
         )
@@ -97,13 +97,11 @@ export default {
       return
     return bindFirestoreRef(
       'marks',
-      db
-        .collection('marks')
-        .where(
-          'subject',
-          '==',
-          db.collection('subjects').doc(options.subjectId)
-        )
+      FIRESTORE.collection('marks').where(
+        'subject',
+        '==',
+        FIRESTORE.collection('subjects').doc(options.subjectId)
+      )
     )
   })
 }

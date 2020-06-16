@@ -1,4 +1,4 @@
-import { db, storage } from '@/main'
+import { FIRESTORE, STORAGE } from '@/main'
 import {
   DELETE_TASK_FILES,
   UPLOAD_TASK_FILES,
@@ -18,7 +18,7 @@ const getters = {}
 const actions = {
   async [ADD_TASK]({ dispatch, state }, newTask) {
     const pinnedFiles = await dispatch(UPLOAD_TASK_FILES, newTask.files)
-    await db.collection('tasks').add({
+    await FIRESTORE.collection('tasks').add({
       name: newTask.name,
       number: newTask.number,
       description: newTask.description,
@@ -33,8 +33,7 @@ const actions = {
   async [UPDATE_TASK]({ state, dispatch }, task) {
     dispatch(DELETE_TASK_FILES, task.oldFilesToDelete)
     const newFiles = await dispatch(UPLOAD_TASK_FILES, task.newFilesToUpload)
-    await db
-      .collection('tasks')
+    await FIRESTORE.collection('tasks')
       .doc(task.id)
       .update({
         name: task.name,
@@ -48,7 +47,7 @@ const actions = {
   },
 
   async [DELETE_TASK](_, id) {
-    await db.collection('tasks').doc(id).delete()
+    await FIRESTORE.collection('tasks').doc(id).delete()
   },
 
   async [UPLOAD_TASK_FILES]({ state }, files) {
@@ -59,7 +58,7 @@ const actions = {
         state.filesUploadProgress = 0
         filesHere = true
       }
-      const ref = storage.ref(
+      const ref = STORAGE.ref(
         `lab_files/${Math.random().toString(7)}/${file.name}`
       )
       await ref.put(file)
@@ -76,11 +75,11 @@ const actions = {
   },
 
   async [DELETE_TASK_FILES](_, paths) {
-    for (const path of paths) await storage.ref(path).delete()
+    for (const path of paths) await STORAGE.ref(path).delete()
   },
 
   [TOGGLE_TASK_VISIBILITY](_, data) {
-    db.collection('tasks').doc(data.id).update({
+    FIRESTORE.collection('tasks').doc(data.id).update({
       visible: data.state
     })
   }

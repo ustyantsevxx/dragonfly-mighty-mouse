@@ -39,13 +39,13 @@ firebase.initializeApp({
   measurementId: process.env.VUE_APP__FIREBASE_MEASUREMENT_ID
 })
 
-export const db = firebase.firestore()
-export const storage = firebase.storage()
-export const auth = firebase.auth()
+export const FIRESTORE = firebase.firestore()
+export const STORAGE = firebase.storage()
+export const AUTH = firebase.auth()
 
 let app: any
 
-auth.onAuthStateChanged(async user => {
+AUTH.onAuthStateChanged(async user => {
   await UserModule.SetUser(user)
   if (!app)
     app = new Vue({

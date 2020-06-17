@@ -4,14 +4,12 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    active: {
-      default: true,
-      type: Boolean
-    }
-  }
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+@Component
+export default class extends Vue {
+  @Prop({ default: true }) active?: boolean
 }
 </script>
 

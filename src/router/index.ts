@@ -7,71 +7,73 @@ Vue.use(Router)
 const routes: RouteConfig[] = [
   {
     path: '/',
-    component: () => import('@/views/Main.vue'),
+    component: () => import('@/views/index.vue'),
     meta: { title: 'Dragonfly.vue' }
-  },
-  {
-    path: '*',
-    component: () => import('@/views/Error.vue'),
-    meta: { title: 'Ошибка 404' }
-  },
-  {
-    path: '/login',
-    component: () => import('@/views/Login.vue'),
-    meta: { requiresGuest: true, title: 'Вход' }
-  },
-  {
-    path: '/register',
-    component: () => import('@/views/Register.vue'),
-    meta: { requiresGuest: true, title: 'Регистрация' }
-  },
-  {
-    path: '/restore',
-    component: () => import('@/views/RestorePassword.vue'),
-    meta: { requiresGuest: true, title: 'Восстановление пароля' }
-  },
-  {
-    path: '/account',
-    component: () => import('@/views/Account.vue'),
-    meta: { requiresAuth: true, title: 'Мой профиль' }
-  },
-  {
-    path: '/subjects',
-    component: () => import('@/views/SubjectList.vue'),
-    meta: { requiresAuth: true, title: 'Мои дисциплины' }
-  },
-  {
-    path: '/subjects/:id',
-    redirect: '/subjects/:id/tasks',
-    component: () => import('@/views/Subject.vue'),
-    meta: { requiresAuth: true },
-    children: [
-      {
-        path: 'tasks',
-        component: () => import('@/components/TheTaskList.vue'),
-        meta: { requiresAuth: true, dynamicTitle: true }
-      },
-      {
-        path: 'groups',
-        component: () => import('@/components/TheGroupList.vue'),
-        meta: { requiresAuth: true, requiresTeacher: true, dynamicTitle: true }
-      },
-      {
-        path: 'my-group',
-        component: () => import('@/components/TheGroupList.vue'),
-        meta: { requiresAuth: true, requiresStudent: true, dynamicTitle: true }
-      }
-    ]
-  },
-  {
-    path: '/join-group/:id',
-    component: () => import('@/views/JoinGroup.vue'),
-    meta: {
-      requiresAuth: true,
-      requiresStudent: true,
-      title: 'Приглашение в группу'
-    }
   }
+  // {
+  //   path: '*',
+  //   component: () => import('@/views/not-found/index.vue'),
+  //   meta: { title: 'Ошибка 404' }
+  // },
+  // {
+  //   path: '/login',
+  //   component: () => import('@/views/login/index.vue'),
+  //   meta: { requiresGuest: true, title: 'Вход' }
+  // },
+  // {
+  //   path: '/register',
+  //   component: () => import('@/views/register/index.vue'),
+  //   meta: { requiresGuest: true, title: 'Регистрация' }
+  // },
+  // {
+  //   path: '/restore',
+  //   component: () => import('@/views/restore/index.vue'),
+  //   meta: { requiresGuest: true, title: 'Восстановление пароля' }
+  // },
+  // {
+  //   path: '/account',
+  //   component: () => import('@/views/account/index.vue'),
+  //   meta: { requiresAuth: true, title: 'Мой профиль' }
+  // },
+  // {
+  //   path: '/subjects',
+  //   component: () => import('@/views/subjects/index.vue'),
+  //   meta: { requiresAuth: true, title: 'Мои дисциплины' }
+  // },
+  // {
+  //   path: '/subjects/:id',
+  //   redirect: '/subjects/:id/tasks',
+  //   component: () => import('@/views/subject/index.vue'),
+  //   meta: { requiresAuth: true },
+  //   children: [
+  //     {
+  //       path: 'tasks',
+  //       component: () => import('@/views/subject/components/TaskList.vue'),
+  //       meta: { requiresAuth: true, dynamicTitle: true }
+  //     },
+  //     {
+  //       path: 'groups',
+  //       component: () =>
+  //         import('@/views/subject/components/GroupList/index.vue'),
+  //       meta: { requiresAuth: true, requiresTeacher: true, dynamicTitle: true }
+  //     },
+  //     {
+  //       path: 'stats',
+  //       component: () =>
+  //         import('@/views/subject/components/GroupList/index.vue'),
+  //       meta: { requiresAuth: true, requiresStudent: true, dynamicTitle: true }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/groups/join/:id',
+  //   component: () => import('@/views/join-group/index.vue'),
+  //   meta: {
+  //     requiresAuth: true,
+  //     requiresStudent: true,
+  //     title: 'Приглашение в группу'
+  //   }
+  // }
 ]
 
 const router = new Router({

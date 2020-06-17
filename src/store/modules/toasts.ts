@@ -7,13 +7,6 @@ import {
   getModule
 } from 'vuex-module-decorators'
 
-export interface IToastsState {
-  toasted: boolean
-  message: string
-  error: boolean
-  needsTranslation: boolean
-}
-
 export interface IToastOptions {
   message: string
   error?: boolean
@@ -21,14 +14,14 @@ export interface IToastOptions {
 }
 
 @Module({ dynamic: true, store, name: 'toasts' })
-class ToastsModule extends VuexModule implements IToastsState {
+class ToastsModule extends VuexModule {
   toasted = false
   message = ''
   error = false
   needsTranslation = false
 
   @Mutation
-  SET_TOAST(options: IToastOptions) {
+  private SET_TOAST(options: IToastOptions) {
     this.toasted = true
     this.message = options.message
     this.error = options.error ?? false
@@ -36,7 +29,7 @@ class ToastsModule extends VuexModule implements IToastsState {
   }
 
   @Mutation
-  UNSET_TOAST() {
+  private UNSET_TOAST() {
     this.toasted = false
   }
 

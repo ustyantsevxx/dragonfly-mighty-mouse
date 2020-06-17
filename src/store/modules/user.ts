@@ -8,25 +8,16 @@ import {
   Action,
   getModule
 } from 'vuex-module-decorators'
-import ToastsModule from './toasts.module'
-
-export interface IUserState {
-  id: string
-  name: string
-  surname: string
-  email: string
-  isTeacher: boolean
-  isEmailVerified: boolean
-}
+import ToastsModule from '@/store/modules/toasts'
 
 @Module({ dynamic: true, store, name: 'user' })
-class UserModule extends VuexModule implements IUserState {
+class UserModule extends VuexModule {
   id = ''
   name = ''
   surname = ''
   email = ''
   isTeacher = false
-  isEmailVerified = false
+  emailVerified = false
 
   @Mutation
   SET_ID(id: string) {
@@ -54,8 +45,8 @@ class UserModule extends VuexModule implements IUserState {
   }
 
   @Mutation
-  SET_IS_EMAIL_VERIFIED(isEmailVerified: boolean) {
-    this.isEmailVerified = isEmailVerified
+  SET_EMAIL_VERIFIED(emailVerified: boolean) {
+    this.emailVerified = emailVerified
   }
 
   @Action
@@ -80,7 +71,7 @@ class UserModule extends VuexModule implements IUserState {
       const userData: any = userRef.data()
 
       this.SET_ID(user.uid)
-      this.SET_IS_EMAIL_VERIFIED(user.emailVerified)
+      this.SET_EMAIL_VERIFIED(user.emailVerified)
       this.SET_EMAIL(userData.email)
       this.SET_NAME(userData.name)
       this.SET_SURNAME(userData.surname)

@@ -72,7 +72,7 @@
         <b-nav-item
           link-classes="app__link app__border_radius_left_0"
           exact-active-class="app__link_active"
-          :to="isTeacher ? 'groups' : 'my-group'"
+          :to="isTeacher ? 'groups' : 'stats'"
         >
           <template v-if="isTeacher">Группы и баллы</template>
           <template v-else>Ведомость группы</template>
@@ -105,7 +105,7 @@
 
 <script lang="ts">
 import { num2str } from '@/utils'
-import PageLoader from '@/components/PageLoader'
+import PageLoader from '//components/PageLoader'
 import SubjectModal from '@/components/SubjectModal'
 import { mapState } from 'vuex'
 import { BIND_GROUPS, BIND_MARKS, BIND_TASKS } from '@/store/actions.type'

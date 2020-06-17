@@ -15,24 +15,15 @@
   </div>
 </template>
 
-<script>
-export default {
-  inheritAttrs: false,
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
-  data: () => ({ confirm: false }),
+@Component({ inheritAttrs: false })
+export default class extends Vue {
+  @Prop({ default: 'Уверены?' }) confirmText?: string
+  @Prop() text?: string
 
-  props: {
-    confirmText: {
-      type: String,
-      required: false,
-      default: 'Уверены?'
-    },
-    text: {
-      default: '',
-      type: String,
-      required: false
-    }
-  }
+  confirm = false
 }
 </script>
 

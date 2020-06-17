@@ -242,7 +242,7 @@ export default {
     copyLink() {
       let a = document.querySelector('#invite-link')
       a.setAttribute('type', 'text')
-      a.value = `${location.origin}/join-group/${this.group.id}`
+      a.value = `${location.origin}/groups/join/${this.group.id}`
       a.select()
       document.execCommand('copy')
       a.value = ''

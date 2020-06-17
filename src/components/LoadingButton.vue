@@ -20,15 +20,12 @@
   </b-btn>
 </template>
 
-<script>
-export default {
-  props: {
-    load: {
-      type: Boolean,
-      required: true,
-      default: false
-    }
-  }
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
+
+@Component
+export default class extends Vue {
+  @Prop({ required: true }) load!: boolean
 }
 </script>
 

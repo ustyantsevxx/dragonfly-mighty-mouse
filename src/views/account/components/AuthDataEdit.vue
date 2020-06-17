@@ -21,7 +21,7 @@
         <template #label>
           <div>
             <label for="email-field" class="m-0 mr-2">Эл. почта</label>
-            <b-badge v-if="!isEmailVerified" variant="danger">
+            <b-badge v-if="!emailVerified" variant="danger">
               <b-link
                 class="text-white"
                 href="/verify-email"
@@ -101,7 +101,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import LoadingButton from '@/components/LoadingButton.vue'
 import { minLength, required, sameAs, email } from 'vuelidate/lib/validators'
-import UserModule from '@/store/modules/user.module'
+import UserModule from '@/store/modules/user'
 
 @Component({
   components: { LoadingButton },
@@ -132,8 +132,8 @@ export default class extends Vue {
     this.newEmail = this.email
   }
 
-  get isEmailVerified() {
-    return UserModule.isEmailVerified
+  get emailVerified() {
+    return UserModule.emailVerified
   }
 
   get email() {

@@ -28,25 +28,21 @@
   </main>
 </template>
 
-<script>
-import LoadingButton from '@/components/LoadingButton'
-import { RESTORE_PASSWORD } from '@/store/actions.type'
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator'
+import LoadingButton from '@/components/LoadingButton.vue'
+import { UserModule } from '@/store/modules/user'
 
-export default {
-  components: { LoadingButton },
-  data: () => ({
-    email: null,
-    loadRestore: false
-  }),
-  methods: {
-    async restorePassword() {
-      this.loadRestore = true
-      let r = await this.$store.dispatch(RESTORE_PASSWORD, {
-        email: this.email
-      })
-      this.loadRestore = false
-      if (r) this.$router.push('/login')
-    }
+@Component({ components: { LoadingButton } })
+export default class extends Vue {
+  email = ''
+  loadRestore = false
+
+  async restorePassword() {
+    this.loadRestore = true
+    let r = await UserModule.RestorePassword({ email: this.email })
+    this.loadRestore = false
+    if (r) this.$router.push('/login')
   }
 }
 </script>

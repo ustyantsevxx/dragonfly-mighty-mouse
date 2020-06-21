@@ -9,7 +9,7 @@ const routes: RouteConfig[] = [
     path: '/',
     component: () => import('@/views/index.vue'),
     meta: { title: 'Dragonfly.vue' }
-  }
+  },
   // {
   //   path: '*',
   //   component: () => import('@/views/not-found/index.vue'),
@@ -35,11 +35,11 @@ const routes: RouteConfig[] = [
   //   component: () => import('@/views/account/index.vue'),
   //   meta: { requiresAuth: true, title: 'Мой профиль' }
   // },
-  // {
-  //   path: '/subjects',
-  //   component: () => import('@/views/subjects/index.vue'),
-  //   meta: { requiresAuth: true, title: 'Мои дисциплины' }
-  // },
+  {
+    path: '/subjects',
+    component: () => import('@/views/subjects/index.vue'),
+    meta: { requiresAuth: true, title: 'Мои дисциплины' }
+  }
   // {
   //   path: '/subjects/:id',
   //   redirect: '/subjects/:id/tasks',

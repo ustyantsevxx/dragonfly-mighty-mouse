@@ -14,7 +14,7 @@ export interface IToastOptions {
 }
 
 @Module({ dynamic: true, store, name: 'toasts' })
-class ToastsModule extends VuexModule {
+class Toasts extends VuexModule {
   toasted = false
   message = ''
   error = false
@@ -48,4 +48,4 @@ class ToastsModule extends VuexModule {
   }
 }
 
-export default getModule(ToastsModule)
+export const ToastsModule = getModule(Toasts)

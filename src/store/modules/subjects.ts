@@ -1,29 +1,43 @@
-import { ADD_SUBJECT, UPDATE_SUBJECT, DELETE_SUBJECT } from './actions.type'
+import store from '@/store'
 import { FIRESTORE } from '@/main'
+import { VuexModule, Module, Action, getModule } from 'vuex-module-decorators'
+import { UserModule } from './user'
 
-const state = {}
-const mutations = {}
-const getters = {}
+export interface ISubjectOptions {
+  name: string
+  course: number
+}
 
-const actions = {
-  async [ADD_SUBJECT]({ rootState }, subj) {
-    FIRESTORE.collection('subjects').add({
-      name: subj.name,
-      course: subj.course,
-      teacherId: rootState.user.uid
+@Module({ dynamic: true, store, name: 'subjects' })
+class Subjects extends VuexModule {
+  subjects: any[] = []
+
+  @Action
+  async BindSubjects() {
+    await store.dispatch('BIND_SUBJECTS')
+  }
+
+  @Action
+  async AddSubject(options: ISubjectOptions) {
+    await FIRESTORE.collection('subjects').add({
+      name: options.name,
+      course: options.course,
+      teacher: FIRESTORE.collection('users').doc(UserModule.id)
     })
-  },
+  }
 
-  async [UPDATE_SUBJECT](_, data) {
-    await FIRESTORE.collection('subjects').doc(data.id).update({
-      name: data.name,
-      course: data.course
+  @Action
+  async UpdateSubject(subjectId: string, options: ISubjectOptions) {
+    await FIRESTORE.collection('subjects').doc(subjectId).update({
+      name: options.name,
+      course: options.course
     })
-  },
+  }
 
-  async [DELETE_SUBJECT](_, id) {
-    await FIRESTORE.collection('subjects').doc(id).delete()
+  @Action
+  async DeleteSubject(subjectId: string) {
+    await FIRESTORE.collection('subjects').doc(subjectId).delete()
   }
 }
 
-export default { state, getters, mutations, actions }
+export const SubjectsModule = getModule(Subjects)

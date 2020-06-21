@@ -1,6 +1,6 @@
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
-import ToastsModule from '@/store/modules/toasts'
+import { ToastsModule } from '@/store/modules/toasts'
 
 @Component
 export default class App extends Vue {

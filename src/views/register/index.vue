@@ -85,60 +85,55 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component, Watch } from 'vue-property-decorator'
 import { minLength, required, email, sameAs } from 'vuelidate/lib/validators'
-import LoadingButton from '@/components/LoadingButton'
-import modalMixin from '@/mixins/modal'
-import { REGISTER } from '@/store/actions.type'
+import LoadingButton from '@/components/LoadingButton.vue'
+import { UserModule } from '../../store/modules/user'
+import { ValidationEvaluation } from 'vue/types/vue'
 
-export default {
+@Component({
   components: { LoadingButton },
-
-  mixins: [
-    modalMixin({
-      name: null,
-      surname: null,
-      email: null,
-      password: null,
-      confirmPassword: null,
-      isTeacher: false,
-      loadRegister: false
-    })
-  ],
-
-  computed: {
-    signed() {
-      return this.$store.state.user.uid
-    }
-  },
-
-  watch: {
-    signed() {
-      if (this.signed) location.replace('/')
-    }
-  },
-
-  methods: {
-    async signUp() {
-      this.loadRegister = true
-      await this.$store.dispatch(REGISTER, {
-        name: this.name,
-        surname: this.surname,
-        email: this.email,
-        password: this.password,
-        confirmPassword: this.confirmPassword,
-        isTeacher: this.isTeacher
-      })
-      this.loadRegister = false
-    }
-  },
-
   validations: {
     name: { required },
     surname: { required },
     email: { required, email },
     password: { required, minLength: minLength(6) },
     confirmPassword: { required, same: sameAs('password') }
+  }
+})
+export default class extends Vue {
+  name = ''
+  surname = ''
+  email = ''
+  password = ''
+  confirmPassword = ''
+  isTeacher = false
+  loadRegister = false
+
+  get signed() {
+    return this.$store.state.user.uid
+  }
+
+  @Watch('signed')
+  onSignedChange() {
+    if (this.signed) location.replace('/')
+  }
+
+  async signUp() {
+    this.loadRegister = true
+    await UserModule.Register({
+      name: this.name,
+      surname: this.surname,
+      email: this.email,
+      password: this.password,
+      isTeacher: this.isTeacher
+    })
+    this.loadRegister = false
+  }
+
+  inputState(val: ValidationEvaluation) {
+    return val.$dirty ? !val.$error : null
   }
 }
 </script>

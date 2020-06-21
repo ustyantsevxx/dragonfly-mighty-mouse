@@ -60,7 +60,7 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 import { required } from 'vuelidate/lib/validators'
 import AuthDataEdit from './components/AuthDataEdit.vue'
 import LoadingButton from '@/components/LoadingButton.vue'
-import UserModule from '@/store/modules/user'
+import { UserModule } from '@/store/modules/user'
 
 @Component({
   components: { AuthDataEdit, LoadingButton },

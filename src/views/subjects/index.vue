@@ -104,7 +104,7 @@
     </b-container>
 
     <!-- invisible -->
-    <subject-modal
+    <!-- <subject-modal
       id="modal-subject"
       ref="modal-subject"
       ok-variant="success"
@@ -112,48 +112,53 @@
       title="Добавление дисциплины"
       ok-title="Добавить"
       cancel-title="Отмена"
-    />
+    /> -->
     <!-- /invisible -->
   </main>
 </template>
 
-<script>
-import SubjectModal from '@/components/SubjectModal'
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator'
+import { UserModule } from '@/store/modules/user'
+//import SubjectModal from '@/components/SubjectModal'
 import TextHighlight from 'vue-text-highlight'
+import { SubjectsModule } from '../../store/modules/subjects'
 
-export default {
-  components: { TextHighlight, SubjectModal },
+@Component({ components: { TextHighlight } })
+export default class extends Vue {
+  filter = ''
+  tableHeaders = [
+    { key: 'name', label: 'Название', sortable: true },
+    { key: 'course', label: 'Курс', sortable: true }
+  ]
 
-  data: () => ({
-    filter: null,
-    tableHeaders: [
-      { key: 'name', label: 'Название', sortable: true },
-      { key: 'course', label: 'Курс', sortable: true }
-    ]
-  }),
+  async beforeCreate() {
+    await SubjectsModule.BindSubjects()
+  }
 
-  computed: {
-    subjects() {
-      return this.$store.state.subjects
-    },
-    subjectsByCourse() {
-      if (this.subjects) {
-        if (this.$route.query.course) {
-          let ar = [...this.subjects]
-          ar = ar.filter(x => x.course === +this.$route.query.course)
-          return ar
-        }
-        return this.subjects
-      } else return []
-    },
-    coursesList() {
+  get subjects() {
+    return SubjectsModule.subjects
+  }
+
+  get subjectsByCourse() {
+    if (this.subjects) {
+      if (this.$route.query.course) {
+        let ar = [...this.subjects]
+        ar = ar.filter(x => x.course === +this.$route.query.course)
+        return ar
+      }
       return this.subjects
-        ? [...new Set(this.subjects.map(x => x.course).sort())]
-        : []
-    },
-    isTeacher() {
-      return this.$store.state.user.isTeacher
-    }
+    } else return []
+  }
+
+  get coursesList() {
+    return this.subjects
+      ? [...new Set(this.subjects.map(x => x.course).sort())]
+      : []
+  }
+
+  get isTeacher() {
+    return UserModule.isTeacher
   }
 }
 </script>

@@ -101,7 +101,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import LoadingButton from '@/components/LoadingButton.vue'
 import { minLength, required, sameAs, email } from 'vuelidate/lib/validators'
-import UserModule from '@/store/modules/user'
+import { UserModule } from '@/store/modules/user'
 
 @Component({
   components: { LoadingButton },

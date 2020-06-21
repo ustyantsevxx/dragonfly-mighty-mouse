@@ -36,13 +36,13 @@
   </main>
 </template>
 
-<script>
-import { GET_GROUP_INFO, JOIN_GROUP } from '@/store/actions.type'
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator'
 
-export default {
-  data: () => ({
-    info: null
-  }),
+// TODO
+@Component
+export default class extends Vue {
+  info: null
 
   async beforeCreate() {
     this.info = await this.$store.dispatch(
@@ -52,13 +52,11 @@ export default {
     if (!this.info) location.assign(`/`)
     if (this.info.alreadyPresented)
       location.assign(`/subjects/${this.info.subject.id}`)
-  },
+  }
 
-  methods: {
-    async join() {
-      await this.$store.dispatch(JOIN_GROUP, this.$route.params.id)
-      location.assign(`/subjects/${this.info.subject.id}`)
-    }
+  async join() {
+    await this.$store.dispatch(JOIN_GROUP, this.$route.params.id)
+    location.assign(`/subjects/${this.info.subject.id}`)
   }
 }
 </script>

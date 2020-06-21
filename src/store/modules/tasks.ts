@@ -1,61 +1,88 @@
+import store from '@/store'
+import { firestoreAction } from 'vuexfire'
 import { FIRESTORE, STORAGE } from '@/main'
-import {
-  DELETE_TASK_FILES,
-  UPLOAD_TASK_FILES,
-  ADD_TASK,
-  UPDATE_TASK,
-  DELETE_TASK,
-  TOGGLE_TASK_VISIBILITY
-} from './actions.type'
+import { VuexModule, Module, Action, getModule } from 'vuex-module-decorators'
 
-const state = {
-  filesUploadProgress: -1
+export interface ITaskOptions {
+  name: string
+  number: number
+  description: string
+  score: number
+  files: any[]
+  visible: boolean
+  subjectId: string
 }
 
-const mutations = {}
-const getters = {}
+@Module({ dynamic: true, store, name: 'tasks' })
+class Tasks extends VuexModule {
+  filesUploadProgress = -1
 
-const actions = {
-  async [ADD_TASK]({ dispatch, state }, newTask) {
-    const pinnedFiles = await dispatch(UPLOAD_TASK_FILES, newTask.files)
+  // @Action
+  // BindTasks = firestoreAction(({ bindFirestoreRef, rootState }, subjectId) => {
+  //   if (subjectId === rootState.boundSubjectId) return
+
+  //   if (rootState.user.isTeacher)
+  //     return bindFirestoreRef(
+  //       'tasks',
+  //       FIRESTORE.collection('tasks').where('subjectId', '==', subjectId)
+  //     )
+  //   else {
+  //     return bindFirestoreRef(
+  //       'tasks',
+  //       FIRESTORE.collection('tasks')
+  //         .where('subjectId', '==', subjectId)
+  //         .where('visible', '==', true)
+  //     )
+  //   }
+  // })
+
+  @Action
+  async AddTask(options: ITaskOptions) {
+    const pinnedFiles = await this.UploadTaskFiles(options.files)
     await FIRESTORE.collection('tasks').add({
-      name: newTask.name,
-      number: newTask.number,
-      description: newTask.description,
-      score: newTask.score,
+      name: options.name,
+      number: options.number,
+      description: options.description,
+      score: options.score,
       files: pinnedFiles,
-      visible: newTask.visible,
-      subjectId: newTask.subjectId
+      visible: options.visible,
+      subject: FIRESTORE.collection('subjects').doc(options.subjectId)
     })
-    state.filesUploadProgress = -1
-  },
+    this.filesUploadProgress = -1
+  }
 
-  async [UPDATE_TASK]({ state, dispatch }, task) {
-    dispatch(DELETE_TASK_FILES, task.oldFilesToDelete)
-    const newFiles = await dispatch(UPLOAD_TASK_FILES, task.newFilesToUpload)
+  @Action
+  async UpdateTask(
+    taskId: string,
+    options: ITaskOptions & { oldFilesToDelete: any[]; newFilesToUpload: any[] }
+  ) {
+    this.DeleteTaskFiles(options.oldFilesToDelete)
+    const newFiles = await this.UploadTaskFiles(options.newFilesToUpload)
     await FIRESTORE.collection('tasks')
-      .doc(task.id)
+      .doc(taskId)
       .update({
-        name: task.name,
-        number: task.number,
-        description: task.description,
-        score: task.score,
-        files: task.files.concat(newFiles),
-        visible: task.visible
+        name: options.name,
+        number: options.number,
+        description: options.description,
+        score: options.score,
+        files: options.files.concat(newFiles),
+        visible: options.visible
       })
-    state.filesUploadProgress = -1
-  },
+    this.filesUploadProgress = -1
+  }
 
-  async [DELETE_TASK](_, id) {
-    await FIRESTORE.collection('tasks').doc(id).delete()
-  },
+  @Action
+  async DeleteTask(taskId: string) {
+    await FIRESTORE.collection('tasks').doc(taskId).delete()
+  }
 
-  async [UPLOAD_TASK_FILES]({ state }, files) {
+  @Action
+  async UploadTaskFiles(files: any[]) {
     const pinnedFiles = []
     let filesHere = false
     for (const file of files) {
       if (!filesHere) {
-        state.filesUploadProgress = 0
+        this.filesUploadProgress = 0
         filesHere = true
       }
       const ref = STORAGE.ref(
@@ -69,20 +96,22 @@ const actions = {
         path: ref.fullPath,
         size: file.size
       })
-      state.filesUploadProgress++
+      this.filesUploadProgress++
     }
     return pinnedFiles
-  },
+  }
 
-  async [DELETE_TASK_FILES](_, paths) {
+  @Action
+  async DeleteTaskFiles(paths: string[]) {
     for (const path of paths) await STORAGE.ref(path).delete()
-  },
+  }
 
-  [TOGGLE_TASK_VISIBILITY](_, data) {
-    FIRESTORE.collection('tasks').doc(data.id).update({
-      visible: data.state
+  @Action
+  ChangeTaskVisibility(options: { taskId: string; state: boolean }) {
+    FIRESTORE.collection('tasks').doc(options.taskId).update({
+      visible: options.state
     })
   }
 }
 
-export default { state, getters, mutations, actions }
+export const TasksModule = getModule(Tasks)

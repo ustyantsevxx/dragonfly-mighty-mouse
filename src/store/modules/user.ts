@@ -8,10 +8,10 @@ import {
   Action,
   getModule
 } from 'vuex-module-decorators'
-import ToastsModule from '@/store/modules/toasts'
+import { ToastsModule } from '@/store/modules/toasts'
 
 @Module({ dynamic: true, store, name: 'user' })
-class UserModule extends VuexModule {
+class User extends VuexModule {
   id = ''
   name = ''
   surname = ''
@@ -180,4 +180,4 @@ class UserModule extends VuexModule {
   }
 }
 
-export default getModule(UserModule)
+export const UserModule = getModule(User)

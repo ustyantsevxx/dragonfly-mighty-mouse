@@ -49,48 +49,41 @@
   </main>
 </template>
 
-<script>
-import LoadingButton from '@/components/LoadingButton'
-import { LOGIN, LOGIN_WITH_GOOGLE } from '@/store/actions.type'
-import UserModule from '@/store/modules/user'
+<script lang="ts">
+import { Vue, Component, Watch } from 'vue-property-decorator'
+import LoadingButton from '@/components/LoadingButton.vue'
+import { UserModule } from '@/store/modules/user'
 
-export default {
-  components: { LoadingButton },
+@Component({ components: { LoadingButton } })
+export default class extends Vue {
+  email = ''
+  password = ''
+  loadLogin = false
+  loadGoogleLogin = false
 
-  data: () => ({
-    email: null,
-    password: null,
-    loadLogin: false,
-    loadGoogleLogin: false
-  }),
+  get signed() {
+    return this.$store.state.user.uid
+  }
 
-  computed: {
-    signed() {
-      return this.$store.state.user.uid
-    }
-  },
+  @Watch('signed')
+  onSignedChange() {
+    if (this.signed) location.replace((this.$route.query.next as string) ?? '/')
+  }
 
-  watch: {
-    signed() {
-      if (this.signed) location.replace(this.$route.query.next || '/')
-    }
-  },
+  async sign() {
+    this.loadLogin = true
+    const signed = await UserModule.Login({
+      email: this.email,
+      password: this.password
+    })
+    this.loadLogin = false
+    if (!signed) this.password = ''
+  }
 
-  methods: {
-    async sign() {
-      this.loadLogin = true
-      const signed = await UserModule.Login({
-        email: this.email,
-        password: this.password
-      })
-      if (!signed) this.password = null
-    },
-
-    async googleSignIn() {
-      this.loadGoogleLogin = true
-      await this.$store.dispatch(LOGIN_WITH_GOOGLE)
-      this.loadGoogleLogin = false
-    }
+  async googleSignIn() {
+    this.loadGoogleLogin = true
+    await UserModule.LoginWithGoogle()
+    this.loadGoogleLogin = false
   }
 }
 </script>

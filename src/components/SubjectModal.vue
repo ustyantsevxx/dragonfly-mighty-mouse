@@ -5,7 +5,7 @@
     v-bind="$attrs"
     :ok-disabled="$v.$invalid"
     @ok="okAction"
-    @hide="resetData"
+    @hide="resetModal('modal-subject')"
   >
     <b-form-group label="Название" label-for="name-field">
       <b-form-input
@@ -51,70 +51,70 @@
   </b-modal>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
 import { required, between } from 'vuelidate/lib/validators'
-import modalMixin from '@/mixins/modal'
-import ConfirmButton from '@/components/ConfirmationButton'
-import LoadingButton from '@/components/LoadingButton'
-import {
-  ADD_SUBJECT,
-  UPDATE_SUBJECT,
-  DELETE_SUBJECT
-} from '@/store/actions.type'
+import ConfirmButton from '@/components/ConfirmationButton.vue'
+import LoadingButton from '@/components/LoadingButton.vue'
+import { ISubject, SubjectsModule } from '../store/modules/subjects'
+import { Validation } from 'vuelidate'
 
-export default {
+@Component({
   components: { ConfirmButton, LoadingButton },
-
-  props: {
-    subject: {
-      type: Object,
-      default: null
-    }
-  },
-
-  mixins: [
-    modalMixin({
-      name: null,
-      course: null,
-      loadButton: false
-    })
-  ],
-
-  methods: {
-    beforeShow() {
-      if (this.subject) {
-        this.name = this.subject.name
-        this.course = +this.subject.course
-      }
-    },
-    async okAction() {
-      this.loadButton = true
-      this.subject ? await this.editSubject() : await this.addSubject()
-      this.resetModal('modal-subject')
-      this.loadButton = false
-    },
-    async addSubject() {
-      await this.$store.dispatch(ADD_SUBJECT, {
-        name: this.name,
-        course: this.course
-      })
-    },
-    async editSubject() {
-      await this.$store.dispatch(UPDATE_SUBJECT, {
-        name: this.name,
-        course: this.course,
-        id: this.subject.id
-      })
-    },
-    deleteSubject() {
-      this.$store.dispatch(DELETE_SUBJECT, this.subject.id)
-      this.$router.push('/subjects')
-    }
-  },
-
   validations: {
     name: { required },
     course: { required, between: between(1, 10) }
+  }
+})
+export default class extends Vue {
+  @Prop() subject!: ISubject
+
+  name = ''
+  course = 1
+  loadButton = false
+
+  beforeShow() {
+    if (this.subject) {
+      this.name = this.subject.name
+      this.course = +this.subject.course
+    }
+  }
+
+  async okAction() {
+    this.loadButton = true
+    this.subject ? await this.editSubject() : await this.addSubject()
+    this.resetModal('modal-subject')
+    this.loadButton = false
+  }
+
+  inputState(val: Validation) {
+    return val.$dirty ? !val.$error : null
+  }
+
+  resetModal(modalRef: string) {
+    this.name = ''
+    this.course = 1
+    this.$bvModal.hide(modalRef)
+    this.$v.$reset()
+  }
+
+  async addSubject() {
+    await SubjectsModule.AddSubject({
+      name: this.name,
+      course: this.course
+    })
+  }
+
+  async editSubject() {
+    await SubjectsModule.UpdateSubject(this.subject.id, {
+      name: this.name,
+      course: this.course
+    })
+  }
+
+  async deleteSubject() {
+    await SubjectsModule.DeleteSubject(this.subject.id)
+    this.$router.push('/subjects')
   }
 }
 </script>

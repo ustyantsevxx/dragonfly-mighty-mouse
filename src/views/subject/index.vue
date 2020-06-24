@@ -79,17 +79,17 @@
         </b-nav-item>
       </b-nav>
 
-      <transition name="global-fade" mode="out-in">
+      <!-- <transition name="global-fade" mode="out-in">
         <keep-alive>
           <router-view />
         </keep-alive>
-      </transition>
+      </transition> -->
     </b-container>
 
     <page-loader v-else />
 
     <!-- invisible -->
-    <subject-modal
+    <!-- <subject-modal
       id="modal-subject"
       ref="modal-subject"
       :subject="subj"
@@ -98,27 +98,42 @@
       title="Изменение дисциплины"
       ok-title="Обновить"
       cancel-title="Отмена"
-    />
+    /> -->
     <!-- /invisible -->
   </main>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Watch } from 'vue-property-decorator'
 import { num2str } from '@/utils'
 import PageLoader from '@/components/PageLoader.vue'
-import SubjectModal from '@/components/SubjectModal.vue'
-import { UserModule } from '../../store/modules/user'
+//import SubjectModal from '@/components/SubjectModal.vue'
+import { UserModule } from '@/store/modules/user'
+import { SubjectsModule } from '@/store/modules/subjects'
+import { TasksModule } from '@/store/modules/tasks'
+import { GroupsModule } from '@/store/modules/groups'
+import { MarksModule } from '@/store/modules/marks'
 
-@Component({ components: { PageLoader, SubjectModal } })
+@Component({
+  components: {
+    PageLoader //SubjectModal
+  }
+})
 export default class extends Vue {
   taskForms = ['лабораторная', 'лабораторные', 'лабораторных']
 
+  beforeCreate() {
+    let id = this.$route.params.id
+    GroupsModule.BindGroups(id)
+    MarksModule.BindMarks({ subjectId: id, force: false })
+    TasksModule.BindTasks(id)
+    //this.$store.commit('setBoundSubjectId', id)
+  }
+
   get subj() {
-    //TODO
-    return 1 //this.$store.state.subjects
-    //   ? this.$store.state.subjects.find(x => x.id === this.$route.params.id)
-    //   : null
+    return SubjectsModule.subjects
+      ? SubjectsModule.subjects.find(x => x.id === this.$route.params.id)
+      : null
   }
 
   get isTeacher() {
@@ -126,49 +141,36 @@ export default class extends Vue {
   }
 
   get tasks() {
-    return 1
-    //TODO
+    return TasksModule.tasks
   }
 
   get groups() {
-    return 1
-    // TODO
+    return GroupsModule.groups
   }
 
   get visibleTasksCount() {
-    //TODO
-    return 1 //this.tasks.filter(x => x.visible).length
+    return this.tasks.filter(x => x.visible).length
   }
 
-  // watch: {
-  //   subj: {
-  //     handler() {
-  //       if (this.subj) this.changeTitle()
-  //     },
-  //     immediate: true
-  //   }
-  // },
+  @Watch('subj', { immediate: true })
+  onSubjChange() {
+    if (this.subj) this.changeTitle()
+  }
 
-  // beforeCreate() {
-  //   let id = this.$route.params.id
-  //   this.$store.dispatch(BIND_GROUPS, id)
-  //   this.$store.dispatch(BIND_MARKS, { subjectId: id, force: false })
-  //   this.$store.dispatch(BIND_TASKS, id)
-  //   this.$store.commit('setBoundSubjectId', id)
-  // },
+  num2str(n: number, forms: string[]) {
+    return num2str(n, forms)
+  }
 
-  // methods: {
-  //   num2str: (n, forms) => num2str(n, forms),
-  //   changeTitle() {
-  //     if (this.$route.path.includes('tasks'))
-  //       document.title = `Лабораторные | ${this.subj.name}`
-  //     else if (this.$route.path.includes('groups'))
-  //       document.title = `Группы и баллы | ${this.subj.name}`
-  //   },
-  //   openSubjectModal() {
-  //     this.$bvModal.show('modal-subject')
-  //   }
-  // }
+  changeTitle() {
+    if (this.$route.path.includes('tasks'))
+      document.title = `Лабораторные | ${this.subj?.name}`
+    else if (this.$route.path.includes('groups'))
+      document.title = `Группы и баллы | ${this.subj?.name}`
+  }
+
+  openSubjectModal() {
+    this.$bvModal.show('modal-subject')
+  }
 }
 </script>
 

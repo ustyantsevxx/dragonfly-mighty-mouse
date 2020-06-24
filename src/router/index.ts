@@ -10,61 +10,61 @@ const routes: RouteConfig[] = [
     component: () => import('@/views/index.vue'),
     meta: { title: 'Dragonfly.vue' }
   },
-  // {
-  //   path: '*',
-  //   component: () => import('@/views/not-found/index.vue'),
-  //   meta: { title: 'Ошибка 404' }
-  // },
-  // {
-  //   path: '/login',
-  //   component: () => import('@/views/login/index.vue'),
-  //   meta: { requiresGuest: true, title: 'Вход' }
-  // },
-  // {
-  //   path: '/register',
-  //   component: () => import('@/views/register/index.vue'),
-  //   meta: { requiresGuest: true, title: 'Регистрация' }
-  // },
-  // {
-  //   path: '/restore',
-  //   component: () => import('@/views/restore/index.vue'),
-  //   meta: { requiresGuest: true, title: 'Восстановление пароля' }
-  // },
-  // {
-  //   path: '/account',
-  //   component: () => import('@/views/account/index.vue'),
-  //   meta: { requiresAuth: true, title: 'Мой профиль' }
-  // },
+  {
+    path: '*',
+    component: () => import('@/views/not-found/index.vue'),
+    meta: { title: 'Ошибка 404' }
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/login/index.vue'),
+    meta: { requiresGuest: true, title: 'Вход' }
+  },
+  {
+    path: '/register',
+    component: () => import('@/views/register/index.vue'),
+    meta: { requiresGuest: true, title: 'Регистрация' }
+  },
+  {
+    path: '/restore',
+    component: () => import('@/views/restore/index.vue'),
+    meta: { requiresGuest: true, title: 'Восстановление пароля' }
+  },
+  {
+    path: '/account',
+    component: () => import('@/views/account/index.vue'),
+    meta: { requiresAuth: true, title: 'Мой профиль' }
+  },
   {
     path: '/subjects',
     component: () => import('@/views/subjects/index.vue'),
     meta: { requiresAuth: true, title: 'Мои дисциплины' }
+  },
+  {
+    path: '/subjects/:id',
+    //redirect: '/subjects/:id/tasks',
+    component: () => import('@/views/subject/index.vue'),
+    meta: { requiresAuth: true },
+    children: [
+      // {
+      //   path: 'tasks',
+      //   component: () => import('@/views/subject/components/TaskList.vue'),
+      //   meta: { requiresAuth: true, dynamicTitle: true }
+      // },
+      // {
+      //   path: 'groups',
+      //   component: () =>
+      //     import('@/views/subject/components/GroupList/index.vue'),
+      //   meta: { requiresAuth: true, requiresTeacher: true, dynamicTitle: true }
+      // },
+      // {
+      //   path: 'stats',
+      //   component: () =>
+      //     import('@/views/subject/components/GroupList/index.vue'),
+      //   meta: { requiresAuth: true, requiresStudent: true, dynamicTitle: true }
+      // }
+    ]
   }
-  // {
-  //   path: '/subjects/:id',
-  //   redirect: '/subjects/:id/tasks',
-  //   component: () => import('@/views/subject/index.vue'),
-  //   meta: { requiresAuth: true },
-  //   children: [
-  //     {
-  //       path: 'tasks',
-  //       component: () => import('@/views/subject/components/TaskList.vue'),
-  //       meta: { requiresAuth: true, dynamicTitle: true }
-  //     },
-  //     {
-  //       path: 'groups',
-  //       component: () =>
-  //         import('@/views/subject/components/GroupList/index.vue'),
-  //       meta: { requiresAuth: true, requiresTeacher: true, dynamicTitle: true }
-  //     },
-  //     {
-  //       path: 'stats',
-  //       component: () =>
-  //         import('@/views/subject/components/GroupList/index.vue'),
-  //       meta: { requiresAuth: true, requiresStudent: true, dynamicTitle: true }
-  //     }
-  //   ]
-  // },
   // {
   //   path: '/groups/join/:id',
   //   component: () => import('@/views/join-group/index.vue'),

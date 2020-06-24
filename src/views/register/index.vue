@@ -112,7 +112,7 @@ export default class extends Vue {
   loadRegister = false
 
   get signed() {
-    return this.$store.state.user.uid
+    return UserModule.signed
   }
 
   @Watch('signed')

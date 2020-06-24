@@ -34,7 +34,7 @@ class Toasts extends VuexModule {
   }
 
   @Action
-  Toast(options: IToastOptions) {
+  public Toast(options: IToastOptions) {
     this.SET_TOAST({
       message: options.message,
       error: options.error ?? false,
@@ -43,7 +43,7 @@ class Toasts extends VuexModule {
   }
 
   @Action
-  UnToast() {
+  public UnToast() {
     this.UNSET_TOAST()
   }
 }

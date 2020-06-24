@@ -10,6 +10,14 @@ import {
 } from 'vuex-module-decorators'
 import { ToastsModule } from '@/store/modules/toasts'
 
+export interface IUser {
+  id: string
+  name: string
+  surname: string
+  email: string
+  isTeacher: string
+}
+
 @Module({ dynamic: true, store, name: 'user' })
 class User extends VuexModule {
   id = ''
@@ -18,6 +26,10 @@ class User extends VuexModule {
   email = ''
   isTeacher = false
   emailVerified = false
+
+  get signed() {
+    return this.id !== ''
+  }
 
   @Mutation
   SET_ID(id: string) {
@@ -65,7 +77,7 @@ class User extends VuexModule {
   }
 
   @Action
-  async SetUser(user: any) {
+  public async SetUser(user: any) {
     if (user) {
       const userRef = await FIRESTORE.collection('users').doc(user.uid).get()
       const userData: any = userRef.data()
@@ -80,14 +92,14 @@ class User extends VuexModule {
   }
 
   @Action
-  Login(options: { email: string; password: string }): Promise<boolean> {
+  public Login(options: { email: string; password: string }) {
     return this.TryDoOrToastError(async () => {
       await AUTH.signInWithEmailAndPassword(options.email, options.password)
     })
   }
 
   @Action
-  LoginWithGoogle() {
+  public LoginWithGoogle() {
     return this.TryDoOrToastError(async () => {
       const googleProvider = new firebase.auth.GoogleAuthProvider()
       await AUTH.signInWithPopup(googleProvider)
@@ -95,13 +107,13 @@ class User extends VuexModule {
   }
 
   @Action
-  Logout() {
+  public async Logout() {
     location.reload()
-    AUTH.signOut()
+    await AUTH.signOut()
   }
 
   @Action
-  Register(options: {
+  public Register(options: {
     email: string
     password: string
     name: string
@@ -123,7 +135,7 @@ class User extends VuexModule {
   }
 
   @Action
-  RestorePassword(options: { email: string }) {
+  public RestorePassword(options: { email: string }) {
     return this.TryDoOrToastError(async () => {
       await AUTH.sendPasswordResetEmail(options.email, {
         url: 'https://project-scimitar.web.app/login'
@@ -133,7 +145,7 @@ class User extends VuexModule {
   }
 
   @Action
-  VerifyEmail() {
+  public VerifyEmail() {
     return this.TryDoOrToastError(async () => {
       await AUTH.currentUser?.sendEmailVerification()
       ToastsModule.Toast({ message: 'Ссылка подтверждения отправлена' })
@@ -141,7 +153,7 @@ class User extends VuexModule {
   }
 
   @Action
-  UpdateProfile(options: { name: string; surname: string }) {
+  public UpdateProfile(options: { name: string; surname: string }) {
     return this.TryDoOrToastError(async () => {
       const userRef = FIRESTORE.collection('users').doc(this.id)
       await userRef.update({

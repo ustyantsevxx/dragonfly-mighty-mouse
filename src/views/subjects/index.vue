@@ -82,11 +82,8 @@
             </b-nav>
           </b-card>
 
-          <b-card
-            v-if="isTeacher || (subjects && subjects.length)"
-            class="border-0 shadow-sm"
-          >
-            <div v-if="subjects && subjects.length">
+          <b-card v-if="subjects && subjects.length" class="border-0 shadow-sm">
+            <div>
               <b-input-group>
                 <b-input-group-prepend is-text>
                   <b-icon icon="search" />
@@ -104,7 +101,7 @@
     </b-container>
 
     <!-- invisible -->
-    <!-- <subject-modal
+    <subject-modal
       id="modal-subject"
       ref="modal-subject"
       ok-variant="success"
@@ -112,7 +109,7 @@
       title="Добавление дисциплины"
       ok-title="Добавить"
       cancel-title="Отмена"
-    /> -->
+    />
     <!-- /invisible -->
   </main>
 </template>
@@ -120,21 +117,17 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { UserModule } from '@/store/modules/user'
-//import SubjectModal from '@/components/SubjectModal'
+import SubjectModal from '@/components/SubjectModal.vue'
 import TextHighlight from 'vue-text-highlight'
 import { SubjectsModule } from '../../store/modules/subjects'
 
-@Component({ components: { TextHighlight } })
+@Component({ components: { TextHighlight, SubjectModal } })
 export default class extends Vue {
   filter = ''
   tableHeaders = [
     { key: 'name', label: 'Название', sortable: true },
     { key: 'course', label: 'Курс', sortable: true }
   ]
-
-  async beforeCreate() {
-    await SubjectsModule.BindSubjects()
-  }
 
   get subjects() {
     return SubjectsModule.subjects

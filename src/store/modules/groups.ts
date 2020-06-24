@@ -1,143 +1,131 @@
 import firebase from 'firebase/app'
+import store from '@/store'
+import { firestoreAction } from 'vuexfire'
 import { FIRESTORE } from '@/main'
-import {
-  DELETE_MARK,
-  ADD_GROUP,
-  UPDATE_GROUP,
-  TOGGLE_GROUP_JOINABLE,
-  DELETE_GROUP,
-  DELETE_STUDENT_FROM_GROUP,
-  ADD_FAKE_STUDENT_TO_GROUP,
-  UPDATE_FAKE_STUDENT,
-  UNION_FAKE_STUDENT_WITH_REAL,
-  JOIN_GROUP,
-  GET_GROUP_INFO,
-  BIND_MARKS
-} from './actions.type'
+import { VuexModule, Module, Action, getModule } from 'vuex-module-decorators'
+import { UserModule, IUser } from './user'
+import { ISubject } from './subjects'
+import { MarksModule } from './marks'
 
-const state = {}
-const mutations = {}
-const getters = {}
+export interface IGroup {
+  id: string
+  name: string
+  students: IUser[]
+  subject: ISubject
+  joinable: boolean
+}
 
-const actions = {
-  async [ADD_GROUP](_, groupData) {
+export interface IGroupOptions {
+  name?: string
+  joinable?: boolean
+  subjectId?: string
+}
+
+@Module({ dynamic: true, store, name: 'groups' })
+class Groups extends VuexModule {
+  groups: IGroup[] = []
+
+  @Action
+  BindGroups(subjectId: string) {
+    return (firestoreAction(({ bindFirestoreRef }) => {
+      //if (subjectId === rootState.boundSubjectId) return
+
+      if (UserModule.isTeacher)
+        return bindFirestoreRef(
+          'groups',
+          FIRESTORE.collection('groups').where(
+            'subject',
+            '==',
+            FIRESTORE.collection('subjects').doc(subjectId)
+          )
+        )
+      else {
+        return bindFirestoreRef(
+          'groups',
+          FIRESTORE.collection('groups').where(
+            'students',
+            'array-contains',
+            FIRESTORE.collection('users').doc(UserModule.id)
+          )
+        )
+      }
+    }) as any)(this.context)
+  }
+
+  @Action
+  public async AddGroup(options: IGroupOptions) {
     const group = await FIRESTORE.collection('groups').add({
-      name: groupData.name,
+      name: options.name,
       students: [],
-      subject: FIRESTORE.collection('subjects').doc(groupData.subjectId),
+      subject: FIRESTORE.collection('subjects').doc(options.subjectId),
       joinable: true
     })
     return group.id
-  },
+  }
 
-  async [UPDATE_GROUP](_, groupData) {
-    await FIRESTORE.collection('groups').doc(groupData.id).update({
-      name: groupData.name
-    })
-  },
+  @Action
+  public async UpdateGroup(groupId: string, options: IGroupOptions) {
+    await FIRESTORE.collection('groups').doc(groupId).update(options)
+  }
 
-  [TOGGLE_GROUP_JOINABLE](_, data) {
-    FIRESTORE.collection('groups').doc(data.id).update({
-      joinable: data.state
-    })
-  },
+  @Action
+  public async DeleteGroup(groupId: string) {
+    await FIRESTORE.collection('groups').doc(groupId).delete()
+  }
 
-  async [DELETE_GROUP](_, id) {
-    await FIRESTORE.collection('groups').doc(id).delete()
-  },
-
-  async [DELETE_STUDENT_FROM_GROUP]({ dispatch }, options) {
+  @Action
+  public async DeleteStudentFromGroup(options: {
+    student: { isFake: boolean; id: string; marksIds: string[] }
+    groupId: string
+  }) {
     await FIRESTORE.collection('groups')
       .doc(options.groupId)
       .update({
         students: firebase.firestore.FieldValue.arrayRemove(
-          FIRESTORE.collection(options.fake ? 'fake-students' : 'users').doc(
-            options.studentId
-          )
+          FIRESTORE.collection(
+            options.student.isFake ? 'fake-students' : 'users'
+          ).doc(options.student.id)
         )
       })
-    options.marksToDelete.forEach(id => dispatch(DELETE_MARK, id))
-    if (options.fake)
+
+    options.student.marksIds.forEach(id => MarksModule.DeleteMark(id))
+
+    if (options.student.isFake)
       await FIRESTORE.collection('fake-students')
-        .doc(options.studentId)
+        .doc(options.student.id)
         .delete()
-  },
+  }
 
-  async [ADD_FAKE_STUDENT_TO_GROUP](_, options) {
-    const newFakeStudent = await FIRESTORE.collection('fake-students').add({
-      name: options.name,
-      surname: options.surname,
-      fake: true
-    })
-    await FIRESTORE.collection('groups')
-      .doc(options.groupId)
-      .update({
-        students: firebase.firestore.FieldValue.arrayUnion(newFakeStudent)
-      })
-  },
-
-  async [UPDATE_FAKE_STUDENT](_, options) {
-    await FIRESTORE.collection('fake-students').doc(options.id).update({
-      name: options.name,
-      surname: options.surname
-    })
-  },
-
-  async [UNION_FAKE_STUDENT_WITH_REAL]({ rootState, dispatch }, options) {
-    const fakeStudentsMarks = await rootState.marks
-      .filter(mark => mark.student.id === options.fakeId)
-      .map(m => m.id)
-
-    const realMarks = await rootState.marks
-      .filter(mark => mark.student.id === options.realId)
-      .map(m => m.id)
-
-    for (const mark of fakeStudentsMarks) {
-      FIRESTORE.collection('marks')
-        .doc(mark)
-        .update({
-          student: FIRESTORE.collection('users').doc(options.realId)
-        })
-    }
-
-    dispatch(BIND_MARKS, { subjectId: options.subjectId, force: true })
-
-    await dispatch(DELETE_STUDENT_FROM_GROUP, {
-      studentId: options.fakeId,
-      marksToDelete: realMarks,
-      groupId: options.groupId,
-      fake: true
-    })
-  },
-
-  async [GET_GROUP_INFO]({ rootState }, id) {
-    let group = await FIRESTORE.collection('groups').doc(id).get()
-    group = group.data()
-    if (!group) return false
-    let subject = await group.subject.get()
+  @Action
+  public async GetGroupInfo(groupId: string) {
+    const groupRef = await FIRESTORE.collection('groups').doc(groupId).get()
+    const groupData: any = groupRef.data()
+    if (!groupData) return false
+    let subject = await groupData.subject.get()
     subject = { ...subject.data(), id: subject.id }
-    let teacher = await FIRESTORE.collection('users')
+    const teacherRef = await FIRESTORE.collection('users')
       .doc(subject.teacherId)
       .get()
-    teacher = teacher.data()
+    const teacherData: any = teacherRef.data()
     return {
-      groupName: group.name,
-      joinable: group.joinable,
-      teacherName: teacher.name + ' ' + teacher.surname,
+      groupName: groupData.name,
+      joinable: groupData.joinable,
+      teacherName: teacherData.name + ' ' + teacherData.surname,
       subject,
-      alreadyPresented: group.students.indexOf(rootState.user.uid) > -1
+      alreadyPresented: groupData.students.indexOf(UserModule.id) > -1
     }
-  },
+  }
 
-  async [JOIN_GROUP]({ rootState }, id) {
+  @Action
+  public async JoinGroup(groupId: string) {
     await FIRESTORE.collection('groups')
-      .doc(id)
+      .doc(groupId)
       .update({
         students: firebase.firestore.FieldValue.arrayUnion(
-          FIRESTORE.collection('users').doc(rootState.user.uid)
+          FIRESTORE.collection('users').doc(UserModule.id)
         )
       })
   }
 }
 
-export default { state, getters, mutations, actions }
+export const GroupsModule = getModule(Groups)

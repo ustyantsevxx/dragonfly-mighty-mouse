@@ -14,5 +14,5 @@ import Navbar from './components/Navbar.vue'
 import Toasts from './components/Toasts.vue'
 
 @Component({ components: { Navbar, Toasts } })
-export default class App extends Vue {}
+export default class extends Vue {}
 </script>

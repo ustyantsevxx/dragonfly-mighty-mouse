@@ -2,8 +2,10 @@ import store from '@/store'
 import { firestoreAction } from 'vuexfire'
 import { FIRESTORE, STORAGE } from '@/main'
 import { VuexModule, Module, Action, getModule } from 'vuex-module-decorators'
+import { UserModule } from './user'
 
-export interface ITaskOptions {
+export interface ITask {
+  id: string
   name: string
   number: number
   description: string
@@ -15,29 +17,32 @@ export interface ITaskOptions {
 
 @Module({ dynamic: true, store, name: 'tasks' })
 class Tasks extends VuexModule {
+  tasks: ITask[] = []
   filesUploadProgress = -1
 
-  // @Action
-  // BindTasks = firestoreAction(({ bindFirestoreRef, rootState }, subjectId) => {
-  //   if (subjectId === rootState.boundSubjectId) return
+  @Action
+  public async BindTasks(subjectId: string) {
+    return (firestoreAction(({ bindFirestoreRef }) => {
+      //if (subjectId === rootState.boundSubjectId) return
 
-  //   if (rootState.user.isTeacher)
-  //     return bindFirestoreRef(
-  //       'tasks',
-  //       FIRESTORE.collection('tasks').where('subjectId', '==', subjectId)
-  //     )
-  //   else {
-  //     return bindFirestoreRef(
-  //       'tasks',
-  //       FIRESTORE.collection('tasks')
-  //         .where('subjectId', '==', subjectId)
-  //         .where('visible', '==', true)
-  //     )
-  //   }
-  // })
+      if (UserModule.isTeacher)
+        return bindFirestoreRef(
+          'tasks',
+          FIRESTORE.collection('tasks').where('subjectId', '==', subjectId)
+        )
+      else {
+        return bindFirestoreRef(
+          'tasks',
+          FIRESTORE.collection('tasks')
+            .where('subjectId', '==', subjectId)
+            .where('visible', '==', true)
+        )
+      }
+    }) as any)(this.context)
+  }
 
   @Action
-  async AddTask(options: ITaskOptions) {
+  public async AddTask(options: ITask) {
     const pinnedFiles = await this.UploadTaskFiles(options.files)
     await FIRESTORE.collection('tasks').add({
       name: options.name,
@@ -52,9 +57,9 @@ class Tasks extends VuexModule {
   }
 
   @Action
-  async UpdateTask(
+  public async UpdateTask(
     taskId: string,
-    options: ITaskOptions & { oldFilesToDelete: any[]; newFilesToUpload: any[] }
+    options: ITask & { oldFilesToDelete: any[]; newFilesToUpload: any[] }
   ) {
     this.DeleteTaskFiles(options.oldFilesToDelete)
     const newFiles = await this.UploadTaskFiles(options.newFilesToUpload)
@@ -72,12 +77,12 @@ class Tasks extends VuexModule {
   }
 
   @Action
-  async DeleteTask(taskId: string) {
+  public async DeleteTask(taskId: string) {
     await FIRESTORE.collection('tasks').doc(taskId).delete()
   }
 
   @Action
-  async UploadTaskFiles(files: any[]) {
+  public async UploadTaskFiles(files: any[]) {
     const pinnedFiles = []
     let filesHere = false
     for (const file of files) {
@@ -102,13 +107,16 @@ class Tasks extends VuexModule {
   }
 
   @Action
-  async DeleteTaskFiles(paths: string[]) {
+  public async DeleteTaskFiles(paths: string[]) {
     for (const path of paths) await STORAGE.ref(path).delete()
   }
 
   @Action
-  ChangeTaskVisibility(options: { taskId: string; state: boolean }) {
-    FIRESTORE.collection('tasks').doc(options.taskId).update({
+  public async ChangeTaskVisibility(options: {
+    taskId: string
+    state: boolean
+  }) {
+    await FIRESTORE.collection('tasks').doc(options.taskId).update({
       visible: options.state
     })
   }

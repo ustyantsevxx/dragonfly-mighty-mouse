@@ -1,6 +1,6 @@
 <template>
   <main>
-    <b-container v-if="subj && groups && tasks">
+    <b-container v-if="subject && groups && tasks">
       <b-link class="text-decoration-none d-block mb-3" to="/subjects">
         <b-icon icon="arrow-left"></b-icon>
         Назад к списку
@@ -16,10 +16,10 @@
                 class="g__pointer"
                 @click="openSubjectModal()"
               >
-                <span class="text-nowrap mr-1">{{ subj.name }}</span>
+                <span class="text-nowrap mr-1">{{ subject.name }}</span>
                 <b-icon icon="pencil" class="g__hover_icon" />
               </div>
-              <template v-else>{{ subj.name }}</template>
+              <template v-else>{{ subject.name }}</template>
             </h1>
           </b-col>
         </b-row>
@@ -28,7 +28,7 @@
           <b-col class="app__badges mt-2 d-flex flex-wrap">
             <div class="mr-2 mb-2">
               <b-badge class="app__badge" variant="info">
-                {{ subj.course }} курс
+                {{ subject.course }} курс
               </b-badge>
             </div>
             <div class="text-nowrap mr-2 mb-2">
@@ -89,16 +89,16 @@
     <page-loader v-else />
 
     <!-- invisible -->
-    <!-- <subject-modal
+    <subject-modal
       id="modal-subject"
       ref="modal-subject"
-      :subject="subj"
+      :subject="subject"
       ok-variant="info"
       cancel-variant="light"
       title="Изменение дисциплины"
       ok-title="Обновить"
       cancel-title="Отмена"
-    /> -->
+    />
     <!-- /invisible -->
   </main>
 </template>
@@ -107,18 +107,14 @@
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { num2str } from '@/utils'
 import PageLoader from '@/components/PageLoader.vue'
-//import SubjectModal from '@/components/SubjectModal.vue'
+import SubjectModal from '@/components/SubjectModal.vue'
 import { UserModule } from '@/store/modules/user'
 import { SubjectsModule } from '@/store/modules/subjects'
 import { TasksModule } from '@/store/modules/tasks'
 import { GroupsModule } from '@/store/modules/groups'
 import { MarksModule } from '@/store/modules/marks'
 
-@Component({
-  components: {
-    PageLoader //SubjectModal
-  }
-})
+@Component({ components: { PageLoader, SubjectModal } })
 export default class extends Vue {
   taskForms = ['лабораторная', 'лабораторные', 'лабораторных']
 
@@ -130,7 +126,7 @@ export default class extends Vue {
     //this.$store.commit('setBoundSubjectId', id)
   }
 
-  get subj() {
+  get subject() {
     return SubjectsModule.subjects
       ? SubjectsModule.subjects.find(x => x.id === this.$route.params.id)
       : null
@@ -152,9 +148,9 @@ export default class extends Vue {
     return this.tasks.filter(x => x.visible).length
   }
 
-  @Watch('subj', { immediate: true })
+  @Watch('subject', { immediate: true })
   onSubjChange() {
-    if (this.subj) this.changeTitle()
+    if (this.subject) this.changeTitle()
   }
 
   num2str(n: number, forms: string[]) {
@@ -163,9 +159,9 @@ export default class extends Vue {
 
   changeTitle() {
     if (this.$route.path.includes('tasks'))
-      document.title = `Лабораторные | ${this.subj?.name}`
+      document.title = `Лабораторные | ${this.subject?.name}`
     else if (this.$route.path.includes('groups'))
-      document.title = `Группы и баллы | ${this.subj?.name}`
+      document.title = `Группы и баллы | ${this.subject?.name}`
   }
 
   openSubjectModal() {

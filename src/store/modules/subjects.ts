@@ -11,11 +11,6 @@ export interface ISubject {
   course: number
 }
 
-export interface ISubjectOptions {
-  name: string
-  course: number
-}
-
 @Module({ dynamic: true, store, name: 'subjects' })
 class Subjects extends VuexModule {
   subjects: ISubject[] = []
@@ -59,7 +54,7 @@ class Subjects extends VuexModule {
   }
 
   @Action
-  public async AddSubject(options: ISubjectOptions) {
+  public async AddSubject(options: Omit<ISubject, 'id'>) {
     await FIRESTORE.collection('subjects').add({
       name: options.name,
       course: options.course,
@@ -68,16 +63,16 @@ class Subjects extends VuexModule {
   }
 
   @Action
-  public async UpdateSubject(subjectId: string, options: ISubjectOptions) {
-    await FIRESTORE.collection('subjects').doc(subjectId).update({
+  public async UpdateSubject(options: ISubject) {
+    await FIRESTORE.collection('subjects').doc(options.id).update({
       name: options.name,
       course: options.course
     })
   }
 
   @Action
-  public async DeleteSubject(subjectId: string) {
-    await FIRESTORE.collection('subjects').doc(subjectId).delete()
+  public async DeleteSubject(id: string) {
+    await FIRESTORE.collection('subjects').doc(id).delete()
   }
 }
 

@@ -106,7 +106,8 @@ export default class extends Vue {
   }
 
   async editSubject() {
-    await SubjectsModule.UpdateSubject(this.subject.id, {
+    await SubjectsModule.UpdateSubject({
+      id: this.subject.id,
       name: this.name,
       course: this.course
     })

@@ -3,12 +3,13 @@ import firebase from 'firebase/app'
 import { FIRESTORE } from '@/main'
 import { firestoreAction } from 'vuexfire'
 import { VuexModule, Module, Action, getModule } from 'vuex-module-decorators'
-import { UserModule } from '@/store/modules/user'
+import { UserModule, IUser } from '@/store/modules/user'
 
 export interface ISubject {
   id: string
   name: string
   course: number
+  teacher: IUser
 }
 
 @Module({ dynamic: true, store, name: 'subjects' })
@@ -54,7 +55,7 @@ class Subjects extends VuexModule {
   }
 
   @Action
-  public async AddSubject(options: Omit<ISubject, 'id'>) {
+  public async AddSubject(options: Partial<ISubject>) {
     await FIRESTORE.collection('subjects').add({
       name: options.name,
       course: options.course,
@@ -63,7 +64,7 @@ class Subjects extends VuexModule {
   }
 
   @Action
-  public async UpdateSubject(options: ISubject) {
+  public async UpdateSubject(options: Partial<ISubject>) {
     await FIRESTORE.collection('subjects').doc(options.id).update({
       name: options.name,
       course: options.course

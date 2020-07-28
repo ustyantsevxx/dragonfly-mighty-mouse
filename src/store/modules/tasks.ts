@@ -3,6 +3,7 @@ import { firestoreAction } from 'vuexfire'
 import { FIRESTORE, STORAGE } from '@/main'
 import { VuexModule, Module, Action, getModule } from 'vuex-module-decorators'
 import { UserModule } from './user'
+import { ISubject } from './subjects'
 
 export interface ITask {
   id: string
@@ -12,7 +13,7 @@ export interface ITask {
   score: number
   files: any[]
   visible: boolean
-  subjectId: string
+  subject: ISubject
 }
 
 @Module({ dynamic: true, store, name: 'tasks' })
@@ -42,8 +43,8 @@ class Tasks extends VuexModule {
   }
 
   @Action
-  public async AddTask(options: ITask) {
-    const pinnedFiles = await this.UploadTaskFiles(options.files)
+  public async AddTask(options: Partial<ITask>) {
+    const pinnedFiles = await this.UploadTaskFiles(options.files ?? [])
     await FIRESTORE.collection('tasks').add({
       name: options.name,
       number: options.number,
@@ -51,7 +52,7 @@ class Tasks extends VuexModule {
       score: options.score,
       files: pinnedFiles,
       visible: options.visible,
-      subject: FIRESTORE.collection('subjects').doc(options.subjectId)
+      subject: FIRESTORE.collection('subjects').doc(options.subject?.id)
     })
     this.filesUploadProgress = -1
   }
@@ -59,7 +60,10 @@ class Tasks extends VuexModule {
   @Action
   public async UpdateTask(
     taskId: string,
-    options: ITask & { oldFilesToDelete: any[]; newFilesToUpload: any[] }
+    options: Partial<ITask> & {
+      oldFilesToDelete: any[]
+      newFilesToUpload: any[]
+    }
   ) {
     this.DeleteTaskFiles(options.oldFilesToDelete)
     const newFiles = await this.UploadTaskFiles(options.newFilesToUpload)
@@ -70,7 +74,7 @@ class Tasks extends VuexModule {
         number: options.number,
         description: options.description,
         score: options.score,
-        files: options.files.concat(newFiles),
+        files: options.files?.concat(newFiles),
         visible: options.visible
       })
     this.filesUploadProgress = -1

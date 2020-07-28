@@ -7,24 +7,16 @@ import { IUser } from './user'
 import { ISubject } from './subjects'
 import { ITask } from './tasks'
 
+// не нужно убирать IOptions потому что данные трансформируются из рефа в интерфейс.
+// сохранять в базу нужно id
+
 export interface IMark {
   id: string
   score: number
-  student: IUser
+  student: IUser & { fake: boolean }
   group: IGroup
   task: ITask
   subject: ISubject
-}
-
-export interface IMarkOptions {
-  student: {
-    id: string
-    isFake: boolean
-  }
-  taskId: string
-  groupId: string
-  subjectId: string
-  score: string
 }
 
 @Module({ dynamic: true, store, name: 'marks' })
@@ -52,13 +44,13 @@ class Marks extends VuexModule {
   }
 
   @Action
-  public async AddMark(options: IMarkOptions) {
-    const collection = options.student.isFake ? 'fake-students' : 'users'
+  public async AddMark(options: Partial<IMark>) {
+    const collection = options.student?.fake ? 'fake-students' : 'users'
     FIRESTORE.collection('marks').add({
-      student: FIRESTORE.collection(collection).doc(options.student.id),
-      task: FIRESTORE.collection('tasks').doc(options.taskId),
-      group: FIRESTORE.collection('groups').doc(options.groupId),
-      subject: FIRESTORE.collection('subjects').doc(options.subjectId),
+      student: FIRESTORE.collection(collection).doc(options.student?.id),
+      task: FIRESTORE.collection('tasks').doc(options?.taskId),
+      group: FIRESTORE.collection('groups').doc(options?.groupId),
+      subject: FIRESTORE.collection('subjects').doc(options?.subjectId),
       score: options.score
     })
   }

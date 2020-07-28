@@ -42,8 +42,16 @@ const deleteMarksWithTask = functions.firestore
     await batch.commit()
   })
 
+const axios = require('axios')
+
+const hello = functions.https.onRequest(async (req, resp) => {
+  const a = await axios.get('https://tele2.ru')
+  resp.send(a.status)
+})
+
 export {
   deleteTasksAndGroupsWithSubject,
   deleteAllFilesWithTask,
-  deleteMarksWithTask
+  deleteMarksWithTask,
+  hello
 }

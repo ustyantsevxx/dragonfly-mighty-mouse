@@ -14,7 +14,7 @@ module.exports = {
   css: {
     loaderOptions: {
       sass: {
-        prependData: `
+        additionalData: `
           @import "@/assets/scss/settings";
           @import "bootstrap/scss/_functions";
           @import "bootstrap/scss/_variables";

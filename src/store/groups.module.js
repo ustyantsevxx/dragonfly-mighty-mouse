@@ -1,4 +1,3 @@
-import firebase from 'firebase/app'
 import { db } from '@/main'
 import {
   DELETE_MARK,
@@ -51,7 +50,7 @@ const actions = {
       .collection('groups')
       .doc(options.groupId)
       .update({
-        students: firebase.firestore.FieldValue.arrayRemove(
+        students: db.FieldValue.arrayRemove(
           db
             .collection(options.fake ? 'fake-students' : 'users')
             .doc(options.studentId)
@@ -72,7 +71,7 @@ const actions = {
       .collection('groups')
       .doc(options.groupId)
       .update({
-        students: firebase.firestore.FieldValue.arrayUnion(newFakeStudent)
+        students: db.FieldValue.arrayUnion(newFakeStudent)
       })
   },
 
@@ -132,7 +131,7 @@ const actions = {
       .collection('groups')
       .doc(id)
       .update({
-        students: firebase.firestore.FieldValue.arrayUnion(
+        students: db.FieldValue.arrayUnion(
           db.collection('users').doc(rootState.user.uid)
         )
       })

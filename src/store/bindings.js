@@ -1,4 +1,3 @@
-import firebase from 'firebase/app'
 import { db } from '@/main'
 import { firestoreAction } from 'vuexfire'
 import {
@@ -32,11 +31,7 @@ export default {
           'subjects',
           db
             .collection('subjects')
-            .where(
-              firebase.firestore.FieldPath.documentId(),
-              'in',
-              subjectIdList
-            )
+            .where(db.firestore.FieldPath.documentId(), 'in', subjectIdList)
         )
     }
   }),

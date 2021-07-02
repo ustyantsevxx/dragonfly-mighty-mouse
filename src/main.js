@@ -38,7 +38,6 @@ firebase.initializeApp({
   measurementId: process.env.VUE_APP__FIREBASE_MEASUREMENT_ID
 })
 
-export const db = firebase.firestore()
 export const storage = firebase.storage()
 export const auth = firebase.auth()
 

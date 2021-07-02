@@ -1,5 +1,4 @@
 import store from './index'
-import firebase from 'firebase/app'
 import { db, auth } from '@/main.js'
 import {
   LOGIN,
@@ -74,7 +73,7 @@ const actions = {
 
   [LOGIN_WITH_GOOGLE]() {
     return tryDoOrToastError(async () => {
-      let googleProvider = new firebase.auth.GoogleAuthProvider()
+      let googleProvider = new db.auth.GoogleAuthProvider()
       await auth.signInWithPopup(googleProvider)
     })
   },
